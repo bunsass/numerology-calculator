@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="vi" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ứng dụng Thần Số Học - Kim Tự Tháp Đỉnh Cao</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .light {
+      background: linear-gradient(135deg, #e9d5ff, #f3e8ff);
+    }
+    .dark {
+      background: linear-gradient(135deg, #1f2937, #4b0082);
+      color: #e5e7eb;
+    }
+    .input-field {
+      transition: all 0.3s ease;
+      color: #000000;
+    }
+    .input-field:focus {
+      border-color: #a855f7;
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+    }
+    .dark .input-field {
+      color: #ffffff;
+      background-color: #2d3748;
+    }
+    .dark .input-field::placeholder {
+      color: #d1d5db;
+    }
+    .btn-calculate {
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+    .btn-calculate:hover {
+      transform: scale(1.05);
+      background-color: #9333ea;
+    }
+    .result-card {
+      background: linear-gradient(145deg, #ffffff, #f3e8ff);
+      transition: transform 0.3s ease;
+      padding: 1.5rem;
+    }
+    .dark .result-card {
+      background: linear-gradient(145deg, #2d3748, #4a5568);
+      color: #edf2f7;
+    }
+    .result-card:hover {
+      transform: translateY(-5px);
+    }
+    .toggle-btn {
+      transition: background-color 0.3s ease;
+    }
+    .dark .toggle-btn {
+      background-color: #4b0082;
+    }
+    .light .text-gray-800 {
+      color: #1f2937;
+    }
+    #result {
+      font-size: 0.95rem;
+    }
+    .details-hidden {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .details-shown {
+      display: block;
+      opacity: 1;
+    }
+    .spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #a855f7;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @media (max-width: 640px) {
+      .result-card {
+        padding: 1rem;
+      }
+      #result {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+  <div class="bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-90 p-8 rounded-2xl shadow-2xl w-full max-w-xl mx-4">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold text-center text-purple-800 dark:text-purple-300">Thần Số Học - Khám Phá Đỉnh Cao</h1>
+      <button id="themeToggle" class="toggle-btn bg-purple-600 dark:bg-purple-900 text-white p-2 rounded-full focus:outline-none">
+        <svg id="themeIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="space-y-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Họ và tên đầy đủ</label>
+        <input type="text" id="fullName" placeholder="Nhập họ và tên (không dấu)" class="input-field block w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ngày sinh</label>
+        <div class="flex space-x-3">
+          <input type="number" id="day" placeholder="Ngày" min="1" max="31" class="input-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white">
+          <input type="number" id="month" placeholder="Tháng" min="1" max="12" class="input-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white">
+          <input type="number" id="year" placeholder="Năm" min="1900" max="2025" class="input-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white">
+        </div>
+      </div>
+      <button id="calculateBtn" class="btn-calculate w-full bg-purple-600 text-white p-3 rounded-lg font-semibold flex items-center justify-center">
+        Tính Toán <span id="spinner" class="spinner hidden ml-2"></span>
+      </button>
+      <button id="resetBtn" class="w-full bg-gray-400 text-white p-3 rounded-lg font-semibold hover:bg-gray-500 transition-colors">Reset</button>
+    </div>
+    <div id="result" class="mt-6 text-gray-800 dark:text-gray-100 space-y-4">
+      <div id="summary" class="result-card p-4 rounded-lg shadow-md"></div>
+      <button id="showMoreBtn" class="w-full bg-purple-600 text-white p-2 rounded-lg font-semibold mt-2 hidden">Show More</button>
+      <div id="details" class="details-hidden result-card p-4 rounded-lg shadow-md mt-4"></div>
+    </div>
+    <canvas id="pinnacleChart" class="mt-8" height="200"></canvas>
+  </div>
+  <script>
+    function reduceToSingleDigit(number) {
+      if (number === 11 || number === 22) return number;
+      while (number > 9) number = String(number).split('').reduce((sum, digit) => sum + Number(digit), 0);
+      return number;
+    }
+    function getLetterValue(letter) {
+      const values = {'A':1,'B':2,'C':3,'D':4,'E':5,'F':6,'G':7,'H':8,'I':9,'J':1,'K':2,'L':3,'M':4,'N':5,'O':6,'P':7,'Q':8,'R':9,'S':1,'T':2,'U':3,'V':4,'W':5,'X':6,'Y':7,'Z':8};
+      return values[letter.toUpperCase()] || 0;
+    }
+    function isVowel(letter, prevLetter, nextLetter) {
+      letter = letter.toUpperCase();
+      if (['A','E','I','O','U'].includes(letter)) return true;
+      if (letter === 'Y') return !prevLetter || !nextLetter || !['A','E','I','O','U'].includes(prevLetter.toUpperCase()) && !['A','E','I','O','U'].includes(nextLetter?.toUpperCase());
+      return false;
+    }
+    function calculatePinnacles(day, month, year, lifePathNumber) {
+      const pinnacle1 = reduceToSingleDigit(String(month).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(day).split('').reduce((sum, digit) => sum + Number(digit), 0));
+      const pinnacle2 = reduceToSingleDigit(String(day).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(year).split('').reduce((sum, digit) => sum + Number(digit), 0));
+      const pinnacle3 = reduceToSingleDigit(pinnacle1 + pinnacle2);
+      const pinnacle4 = reduceToSingleDigit(String(month).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(year).split('').reduce((sum, digit) => sum + Number(digit), 0));
+      const age1 = 36 - lifePathNumber; const age2 = age1 + 9; const age3 = age2 + 9;
+      return [{number:pinnacle1,age:`0–${age1} tuổi`},{number:pinnacle2,age:`${age1 + 1}–${age2} tuổi`},{number:pinnacle3,age:`${age2 + 1}–${age3} tuổi`},{number:pinnacle4,age:`${age3 + 1}+ tuổi`}];
+    }
+    function getLifePathMeaning(number) {
+      const meanings = {
+        1: "Lãnh đạo, độc lập. <strong>Cơ hội:</strong> Dẫn dắt dự án. <strong>Thách thức:</strong> Kiểm soát, tự cô lập. <strong>Lời khuyên:</strong> Tham gia nhóm làm việc.",
+        2: "Hợp tác, nhạy cảm. <strong>Cơ hội:</strong> Hòa giải mối quan hệ. <strong>Thách thức:</strong> Phụ thuộc, né xung đột. <strong>Lời khuyên:</strong> Quyết định độc lập.",
+        3: "Sáng tạo, vui vẻ. <strong>Cơ hội:</strong> Thể hiện nghệ thuật. <strong>Thách thức:</strong> Phân tâm, thiếu kỷ luật. <strong>Lời khuyên:</strong> Lập kế hoạch.",
+        4: "Ổn định, kỷ luật. <strong>Cơ hội:</strong> Xây nền tảng. <strong>Thách thức:</strong> Cứng nhắc, sợ thay đổi. <strong>Lời khuyên:</strong> Thử thay đổi nhỏ.",
+        5: "Tự do, phiêu lưu. <strong>Cơ hội:</strong> Khám phá thế giới. <strong>Thách thức:</strong> Bất ổn, thiếu cam kết. <strong>Lời khuyên:</strong> Đặt mục tiêu.",
+        6: "Trách nhiệm, gia đình. <strong>Cơ hội:</strong> Hỗ trợ cộng đồng. <strong>Thách thức:</strong> Kiệt sức do trách nhiệm. <strong>Lời khuyên:</strong> Nói 'không' khi cần.",
+        7: "Tâm linh, trí tuệ. <strong>Cơ hội:</strong> Nghiên cứu sâu sắc. <strong>Thách thức:</strong> Cô lập, nghi ngờ bản thân. <strong>Lời khuyên:</strong> Tham gia nhóm học tập.",
+        8: "Quyền lực, thành công. <strong>Cơ hội:</strong> Thành công tài chính. <strong>Thách thức:</strong> Tham lam, mất cân bằng. <strong>Lời khuyên:</strong> Thư giãn với gia đình.",
+        9: "Nhân đạo, hoàn thành. <strong>Cơ hội:</strong> Làm từ thiện. <strong>Thách thức:</strong> Cảm xúc quá tải. <strong>Lời khuyên:</strong> Thiền hoặc viết nhật ký.",
+        11: "Trực giác, truyền cảm hứng. <strong>Cơ hội:</strong> Dẫn dắt tinh thần. <strong>Thách thức:</strong> Áp lực, lo âu. <strong>Lời khuyên:</strong> Thở sâu, tìm cố vấn.",
+        22: "Kiến tạo vĩ đại. <strong>Cơ hội:</strong> Dự án lớn. <strong>Thách thức:</strong> Áp lực, nghi ngờ. <strong>Lời khuyên:</strong> Xây đội ngũ hỗ trợ."
+      };
+      return meanings[number] || "Không xác định";
+    }
+    function getPinnacleMeaning(number) {
+      const meanings = {
+        1: "Lãnh đạo, sáng tạo. <strong>Cơ hội:</strong> Khởi xướng dự án. <strong>Thách thức:</strong> Kiểm soát quá mức. <strong>Lời khuyên:</strong> Làm việc nhóm.",
+        2: "Hợp tác, hòa hợp. <strong>Cơ hội:</strong> Xây dựng mối quan hệ. <strong>Thách thức:</strong> Phụ thuộc. <strong>Lời khuyên:</strong> Quyết định độc lập.",
+        3: "Sáng tạo, vui vẻ. <strong>Cơ hội:</strong> Tỏa sáng nghệ thuật. <strong>Thách thức:</strong> Phân tâm. <strong>Lời khuyên:</strong> Dùng lịch trình.",
+        4: "Ổn định, kỷ luật. <strong>Cơ hội:</strong> Xây nền tảng. <strong>Thách thức:</strong> Cứng nhắc. <strong>Lời khuyên:</strong> Thay đổi nhỏ.",
+        5: "Tự do, thay đổi. <strong>Cơ hội:</strong> Trải nghiệm mới. <strong>Thách thức:</strong> Bất ổn. <strong>Lời khuyên:</strong> Lập kế hoạch.",
+        6: "Trách nhiệm, gia đình. <strong>Cơ hội:</strong> Hài hòa cộng đồng. <strong>Thách thức:</strong> Quá tải. <strong>Lời khuyên:</strong> Phân chia công việc.",
+        7: "Tâm linh, tri thức. <strong>Cơ hội:</strong> Khám phá bản thân. <strong>Thách thức:</strong> Cô lập. <strong>Lời khuyên:</strong> Tham gia thảo luận.",
+        8: "Quyền lực, tài chính. <strong>Cơ hội:</strong> Thăng tiến sự nghiệp. <strong>Thách thức:</strong> Mất cân bằng. <strong>Lời khuyên:</strong> Thiền định.",
+        9: "Nhân đạo, cống hiến. <strong>Cơ hội:</strong> Làm từ thiện. <strong>Thách thức:</strong> Quá tải cảm xúc. <strong>Lời khuyên:</strong> Thiền.",
+        11: "Trực giác, truyền cảm hứng. <strong>Cơ hội:</strong> Dẫn dắt tinh thần. <strong>Thách thức:</strong> Áp lực. <strong>Lời khuyên:</strong> Hít thở sâu.",
+        22: "Kiến tạo vĩ đại. <strong>Cơ hội:</strong> Dự án lớn. <strong>Thách thức:</strong> Áp lực lớn. <strong>Lời khuyên:</strong> Nhờ hỗ trợ."
+      };
+      return meanings[number] || "Không xác định";
+    }
+    function calculateAdditionalNumbers(fullName, day, month, year, lifePathNumber) {
+      let expressionSum = 0, hiddenPassion = {}, challenge1 = 0, challenge2 = 0, challenge3 = 0, challenge4 = 0;
+      const letters = fullName.split('');
+      for (let i = 0; i < letters.length; i++) {
+        const letter = letters[i];
+        if (/[a-zA-Z]/.test(letter)) {
+          const value = getLetterValue(letter);
+          expressionSum += value;
+          hiddenPassion[value] = (hiddenPassion[value] || 0) + 1;
+        }
+      }
+      const expressionNumber = reduceToSingleDigit(expressionSum);
+      const hiddenPassionNumber = Object.keys(hiddenPassion).reduce((a, b) => hiddenPassion[a] > hiddenPassion[b] ? a : b, 0);
+      const birthDayNumber = reduceToSingleDigit(day);
+      challenge1 = reduceToSingleDigit(Math.abs(lifePathNumber - birthDayNumber));
+      challenge2 = reduceToSingleDigit(Math.abs(lifePathNumber - expressionNumber));
+      challenge3 = reduceToSingleDigit(Math.abs(lifePathNumber - reduceToSingleDigit(month)));
+      challenge4 = reduceToSingleDigit(Math.abs(lifePathNumber - reduceToSingleDigit(year)));
+      return {expressionNumber, hiddenPassionNumber, birthDayNumber, challenge1, challenge2, challenge3, challenge4};
+    }
+    function getChallengeMeaning(number) {
+      const meanings = {
+        1: "Khẳng định bản thân, vượt qua tự ti.",
+        2: "Hợp tác, cân bằng nhu cầu cá nhân.",
+        3: "Tập trung, phát triển kỷ luật.",
+        4: "Ổn định, thích nghi với thay đổi.",
+        5: "Cam kết, cân bằng tự do.",
+        6: "Trách nhiệm, đặt giới hạn.",
+        7: "Giao tiếp, tin tưởng người khác.",
+        8: "Cân bằng, chú ý tinh thần.",
+        9: "Buông bỏ, chấp nhận tiến lên.",
+        11: "Áp lực, quản lý lo âu.",
+        22: "Tầm nhìn, nhờ hỗ trợ."
+      };
+      return meanings[number] || "Không xác định";
+    }
+    function drawPinnacleChart(pinnacles) {
+      const ctx = document.getElementById('pinnacleChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {labels:pinnacles.map(p=>p.age),datasets:[{label:'Con số đỉnh cao',data:pinnacles.map(p=>p.number),borderColor:'rgba(168, 85, 247, 1)',backgroundColor:'rgba(168, 85, 247, 0.3)',fill:true,tension:0.4,pointRadius:6,pointBackgroundColor:'rgba(255, 99, 132, 1)'}]},
+        options: {responsive:true,scales:{y:{beginAtZero:true,max:22,title:{display:true,text:'Con số',font:{size:12}}},x:{title:{display:true,text:'Giai đoạn cuộc đời',font:{size:12}}}},plugins:{legend:{display:false},title:{display:true,text:'Kim Tự Tháp Đỉnh Cao',font:{size:16},color:'#4b0082'}}}
+      });
+    }
+    function calculateNumerology() {
+      const fullName = document.getElementById('fullName').value.trim();
+      const day = parseInt(document.getElementById('day').value);
+      const month = parseInt(document.getElementById('month').value);
+      const year = parseInt(document.getElementById('year').value);
+      const resultDiv = document.getElementById('result');
+      const summaryDiv = document.getElementById('summary');
+      const detailsDiv = document.getElementById('details');
+      const calculateBtn = document.getElementById('calculateBtn');
+      const spinner = document.getElementById('spinner');
+      const showMoreBtn = document.getElementById('showMoreBtn');
+      if (!fullName || isNaN(day) || isNaN(month) || isNaN(year)) {
+        summaryDiv.innerHTML = '<p class="text-red-500 font-medium">Vui lòng nhập đầy đủ thông tin hợp lệ!</p>';
+        return;
+      }
+      calculateBtn.disabled = true;
+      spinner.classList.remove('hidden');
+      const dateSum = String(day).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(month).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(year).split('').reduce((sum, digit) => sum + Number(digit), 0);
+      const lifePathNumber = reduceToSingleDigit(dateSum);
+      let soulUrgeSum = 0, personalitySum = 0;
+      const letters = fullName.split('');
+      for (let i = 0; i < letters.length; i++) {
+        const letter = letters[i];
+        if (/[a-zA-Z]/.test(letter)) {
+          const prevLetter = i > 0 ? letters[i - 1] : null;
+          const nextLetter = i < letters.length - 1 ? letters[i + 1] : null;
+          const value = getLetterValue(letter);
+          if (isVowel(letter, prevLetter, nextLetter)) soulUrgeSum += value;
+          else personalitySum += value;
+        }
+      }
+      const soulUrgeNumber = reduceToSingleDigit(soulUrgeSum);
+      const personalityNumber = reduceToSingleDigit(personalitySum);
+      const additionalNumbers = calculateAdditionalNumbers(fullName, day, month, year, lifePathNumber);
+      const pinnacles = calculatePinnacles(day, month, year, lifePathNumber);
+      summaryDiv.innerHTML = `<h2 class="text-lg font-semibold text-purple-800 dark:text-purple-200">Kết Quả Tổng Quan</h2><p><strong>Con số chủ đạo:</strong> ${lifePathNumber}</p><p><strong>Con số linh hồn:</strong> ${soulUrgeNumber}</p><p><strong>Con số nhân cách:</strong> ${personalityNumber}</p><p><strong>Con số tương tác:</strong> ${additionalNumbers.expressionNumber}</p><p><strong>Con số linh hồn ẩn:</strong> ${additionalNumbers.hiddenPassionNumber}</p><p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber}</p><p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1}</p><p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2}</p><p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3}</p><p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4}</p>`;
+      detailsDiv.innerHTML = `<h2 class="text-lg font-semibold text-purple-800 dark:text-purple-200">Chi Tiết Thần Số Học</h2><p><strong>Con số chủ đạo (Đường đời):</strong> ${lifePathNumber} - ${getLifePathMeaning(lifePathNumber)}</p><p><strong>Con số linh hồn:</strong> ${soulUrgeNumber} - ${getLifePathMeaning(soulUrgeNumber)}</p><p><strong>Con số nhân cách:</strong> ${personalityNumber} - ${getLifePathMeaning(personalityNumber)}</p><p><strong>Con số tương tác (Số biểu đạt):</strong> ${additionalNumbers.expressionNumber} - ${getLifePathMeaning(additionalNumbers.expressionNumber)}</p><p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> ${additionalNumbers.hiddenPassionNumber} - ${getLifePathMeaning(additionalNumbers.hiddenPassionNumber)}</p><p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber} - ${getLifePathMeaning(additionalNumbers.birthDayNumber)}</p><p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1} - ${getChallengeMeaning(additionalNumbers.challenge1)}</p><p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2} - ${getChallengeMeaning(additionalNumbers.challenge2)}</p><p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3} - ${getChallengeMeaning(additionalNumbers.challenge3)}</p><p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4} - ${getChallengeMeaning(additionalNumbers.challenge4)}</p><div class="mt-4"><h2 class="text-lg font-semibold text-purple-800 dark:text-purple-200">4 Đỉnh Cao</h2><ul class="list-disc pl-5 space-y-2"><li><strong>Đỉnh 1 (${pinnacles[0].age}): Số ${pinnacles[0].number}</strong> - ${getPinnacleMeaning(pinnacles[0].number)}</li><li><strong>Đỉnh 2 (${pinnacles[1].age}): Số ${pinnacles[1].number}</strong> - ${getPinnacleMeaning(pinnacles[1].number)}</li><li><strong>Đỉnh 3 (${pinnacles[2].age}): Số ${pinnacles[2].number}</strong> - ${getPinnacleMeaning(pinnacles[2].number)}</li><li><strong>Đỉnh 4 (${pinnacles[3].age}): Số ${pinnacles[3].number}</strong> - ${getPinnacleMeaning(pinnacles[3].number)}</li></ul></div>`;
+      showMoreBtn.classList.remove('hidden');
+      detailsDiv.classList.remove('details-shown');
+      detailsDiv.classList.add('details-hidden');
+      drawPinnacleChart(pinnacles);
+      calculateBtn.disabled = false;
+      spinner.classList.add('hidden');
+    }
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    themeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      if (document.documentElement.classList.contains('dark')) themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+      else themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+    });
+    const showMoreBtn = document.getElementById('showMoreBtn');
+    const detailsDiv = document.getElementById('details');
+    showMoreBtn.addEventListener('click', () => {
+      detailsDiv.classList.toggle('details-hidden');
+      detailsDiv.classList.toggle('details-shown');
+      showMoreBtn.textContent = detailsDiv.classList.contains('details-shown') ? 'Show Less' : 'Show More';
+    });
+    const resetBtn = document.getElementById('resetBtn');
+    resetBtn.addEventListener('click', () => {
+      document.getElementById('fullName').value = '';
+      document.getElementById('day').value = '';
+      document.getElementById('month').value = '';
+      document.getElementById('year').value = '';
+      document.getElementById('summary').innerHTML = '';
+      document.getElementById('details').innerHTML = '';
+      document.getElementById('showMoreBtn').classList.add('hidden');
+      const pinnacleChart = Chart.getChart('pinnacleChart');
+      if (pinnacleChart) pinnacleChart.destroy();
+    });
+    const calculateBtn = document.getElementById('calculateBtn');
+    calculateBtn.addEventListener('click', calculateNumerology);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Enter') calculateNumerology(); });
+  </script>
+</body>
+</html>

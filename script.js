@@ -100,6 +100,24 @@ function getChallengeMeaning(number) {
   return meanings[number] || "Không xác định";
 }
 
+function getPinnacleAdvice(number) {
+  const advice = {
+    1: "Hãy tận dụng giai đoạn này để khẳng định bản thân và dẫn dắt các dự án mới.",
+    2: "Tập trung xây dựng các mối quan hệ và hợp tác, lắng nghe cảm xúc của bản thân.",
+    3: "Khám phá sự sáng tạo, thể hiện bản thân qua nghệ thuật hoặc giao tiếp.",
+    4: "Xây dựng nền tảng vững chắc, tập trung vào tổ chức và kỷ luật.",
+    5: "Chấp nhận thay đổi và khám phá cơ hội mới, nhưng giữ sự cân bằng.",
+    6: "Chăm sóc gia đình và cộng đồng, ưu tiên trách nhiệm và yêu thương.",
+    7: "Suy ngẫm và tìm kiếm sự tĩnh lặng để phát triển nội tâm và trí tuệ.",
+    8: "Tận dụng năng lượng để đạt thành công về tài chính và sự nghiệp, nhưng giữ cân bằng.",
+    9: "Hướng tới các mục tiêu nhân đạo, giúp đỡ người khác và sống vì lý tưởng cao cả.",
+    11: "Lắng nghe trực giác và truyền cảm hứng cho người khác qua sự sáng tạo.",
+    22: "Tập trung vào các dự án lớn, biến ý tưởng thành hiện thực với kế hoạch chi tiết.",
+    33: "Chia sẻ kiến thức và lòng từ bi, nhưng đừng quên chăm sóc bản thân."
+  };
+  return advice[number] || "Tận dụng giai đoạn này để phát triển bản thân theo hướng tích cực.";
+}
+
 function getDailySuggestions(number) {
   const suggestions = {
     1: {
@@ -154,6 +172,28 @@ function getDailySuggestions(number) {
   return suggestions[number] || { do: "Hôm nay là một ngày bình thường, hãy làm những gì bạn cảm thấy phù hợp.", avoid: "Tránh hành động vội vàng hoặc thiếu cân nhắc." };
 }
 
+function calculatePinnacleNumbers(day, month, year, lifePathNumber) {
+  const firstPinnacle = reduceToSingleDigit(day + month, true);
+  const yearSum = String(year).split('').reduce((sum, digit) => sum + Number(digit), 0);
+  const secondPinnacle = reduceToSingleDigit(day + yearSum, true);
+  const thirdPinnacle = reduceToSingleDigit(firstPinnacle + secondPinnacle, true);
+  const fourthPinnacle = reduceToSingleDigit(month + yearSum, true);
+  const firstPinnacleAgeStart = 36 - lifePathNumber;
+  const secondPinnacleAgeStart = firstPinnacleAgeStart + 9;
+  const thirdPinnacleAgeStart = secondPinnacleAgeStart + 9;
+  const fourthPinnacleAgeStart = thirdPinnacleAgeStart + 9;
+  return {
+    firstPinnacle,
+    secondPinnacle,
+    thirdPinnacle,
+    fourthPinnacle,
+    firstPinnacleAge: `${firstPinnacleAgeStart} - ${secondPinnacleAgeStart - 1}`,
+    secondPinnacleAge: `${secondPinnacleAgeStart} - ${thirdPinnacleAgeStart - 1}`,
+    thirdPinnacleAge: `${thirdPinnacleAgeStart} - ${fourthPinnacleAgeStart - 1}`,
+    fourthPinnacleAge: `${fourthPinnacleAgeStart} trở đi`
+  };
+}
+
 function calculateAdditionalNumbers(fullName, day, month, year, lifePathNumber) {
   let expressionSum = 0, hiddenPassion = {}, challenge1 = 0, challenge2 = 0, challenge3 = 0, challenge4 = 0;
   const letters = fullName.split('');
@@ -172,7 +212,7 @@ function calculateAdditionalNumbers(fullName, day, month, year, lifePathNumber) 
   challenge2 = reduceToSingleDigit(Math.abs(day - reduceToSingleDigit(year)));
   challenge3 = reduceToSingleDigit(Math.abs(challenge1 - challenge2));
   challenge4 = reduceToSingleDigit(Math.abs(month - reduceToSingleDigit(year)));
-  return {expressionNumber, hiddenPassionNumber, birthDayNumber, challenge1, challenge2, challenge3, challenge4};
+  return { expressionNumber, hiddenPassionNumber, birthDayNumber, challenge1, challenge2, challenge3, challenge4 };
 }
 
 function calculateDailyNumber(day, month, year) {
@@ -355,10 +395,45 @@ function calculateNumerology() {
     const soulUrgeNumber = reduceToSingleDigit(soulUrgeSum, true);
     const personalityNumber = reduceToSingleDigit(personalitySum, true);
     const additionalNumbers = calculateAdditionalNumbers(fullName, day, month, year, lifePathNumber);
+    const pinnacleNumbers = calculatePinnacleNumbers(day, month, year, lifePathNumber);
 
-    summaryDiv.innerHTML = `<h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Kết Quả Tổng Quan</h2><p><strong>Họ và tên:</strong> ${fullName}</p><p><strong>Ngày sinh:</strong> ${day}/${month}/${year}</p><p><strong>Con số chủ đạo (Số đường đời):</strong> ${lifePathNumber}</p><p><strong>Con số linh hồn:</strong> ${soulUrgeNumber}</p><p><strong>Con số nhân cách:</strong> ${personalityNumber}</p><p><strong>Con số tương tác:</strong> ${additionalNumbers.expressionNumber}</p><p><strong>Con số linh hồn ẩn:</strong> ${additionalNumbers.hiddenPassionNumber}</p><p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber}</p><p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1}</p><p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2}</p><p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3}</p><p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4}</p>`;
+    summaryDiv.innerHTML = `
+      <h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Kết Quả Tổng Quan</h2>
+      <p><strong>Họ và tên:</strong> ${fullName}</p>
+      <p><strong>Ngày sinh:</strong> ${day}/${month}/${year}</p>
+      <p><strong>Con số chủ đạo (Số đường đời):</strong> ${lifePathNumber}</p>
+      <p><strong>Con số linh hồn:</strong> ${soulUrgeNumber}</p>
+      <p><strong>Con số nhân cách:</strong> ${personalityNumber}</p>
+      <p><strong>Con số tương tác:</strong> ${additionalNumbers.expressionNumber}</p>
+      <p><strong>Con số linh hồn ẩn:</strong> ${additionalNumbers.hiddenPassionNumber}</p>
+      <p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber}</p>
+      <p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1}</p>
+      <p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2}</p>
+      <p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3}</p>
+      <p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4}</p>
+      <p><strong>Con số đỉnh cao 1 (Tuổi ${pinnacleNumbers.firstPinnacleAge}):</strong> ${pinnacleNumbers.firstPinnacle}</p>
+      <p><strong>Con số đỉnh cao 2 (Tuổi ${pinnacleNumbers.secondPinnacleAge}):</strong> ${pinnacleNumbers.secondPinnacle}</p>
+      <p><strong>Con số đỉnh cao 3 (Tuổi ${pinnacleNumbers.thirdPinnacleAge}):</strong> ${pinnacleNumbers.thirdPinnacle}</p>
+      <p><strong>Con số đỉnh cao 4 (Tuổi ${pinnacleNumbers.fourthPinnacleAge}):</strong> ${pinnacleNumbers.fourthPinnacle}</p>
+    `;
 
-    detailsDiv.innerHTML = `<h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Chi Tiết Thần Số Học</h2><p><strong>Con số chủ đạo (Số đường đời):</strong> ${lifePathNumber} - ${getNumberMeaning(lifePathNumber)}</p><p><strong>Con số linh hồn:</strong> ${soulUrgeNumber} - ${getNumberMeaning(soulUrgeNumber)}</p><p><strong>Con số nhân cách:</strong> ${personalityNumber} - ${getNumberMeaning(personalityNumber)}</p><p><strong>Con số tương tác (Số biểu đạt):</strong> ${additionalNumbers.expressionNumber} - ${getNumberMeaning(additionalNumbers.expressionNumber)}</p><p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> ${additionalNumbers.hiddenPassionNumber} - ${getNumberMeaning(additionalNumbers.hiddenPassionNumber)}</p><p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber} - ${getNumberMeaning(additionalNumbers.birthDayNumber)}</p><p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1} - ${getChallengeMeaning(additionalNumbers.challenge1)}</p><p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2} - ${getChallengeMeaning(additionalNumbers.challenge2)}</p><p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3} - ${getChallengeMeaning(additionalNumbers.challenge3)}</p><p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4} - ${getChallengeMeaning(additionalNumbers.challenge4)}</p>`;
+    detailsDiv.innerHTML = `
+      <h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Chi Tiết Thần Số Học</h2>
+      <p><strong>Con số chủ đạo (Số đường đời):</strong> ${lifePathNumber} - ${getNumberMeaning(lifePathNumber)}</p>
+      <p><strong>Con số linh hồn:</strong> ${soulUrgeNumber} - ${getNumberMeaning(soulUrgeNumber)}</p>
+      <p><strong>Con số nhân cách:</strong> ${personalityNumber} - ${getNumberMeaning(personalityNumber)}</p>
+      <p><strong>Con số tương tác (Số biểu đạt):</strong> ${additionalNumbers.expressionNumber} - ${getNumberMeaning(additionalNumbers.expressionNumber)}</p>
+      <p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> ${additionalNumbers.hiddenPassionNumber} - ${getNumberMeaning(additionalNumbers.hiddenPassionNumber)}</p>
+      <p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber} - ${getNumberMeaning(additionalNumbers.birthDayNumber)}</p>
+      <p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1} - ${getChallengeMeaning(additionalNumbers.challenge1)}</p>
+      <p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2} - ${getChallengeMeaning(additionalNumbers.challenge2)}</p>
+      <p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3} - ${getChallengeMeaning(additionalNumbers.challenge3)}</p>
+      <p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4} - ${getChallengeMeaning(additionalNumbers.challenge4)}</p>
+      <p><strong>Con số đỉnh cao 1 (Tuổi ${pinnacleNumbers.firstPinnacleAge}):</strong> ${pinnacleNumbers.firstPinnacle} - ${getNumberMeaning(pinnacleNumbers.firstPinnacle)} <strong>Lời khuyên:</strong> ${getPinnacleAdvice(pinnacleNumbers.firstPinnacle)}</p>
+      <p><strong>Con số đỉnh cao 2 (Tuổi ${pinnacleNumbers.secondPinnacleAge}):</strong> ${pinnacleNumbers.secondPinnacle} - ${getNumberMeaning(pinnacleNumbers.secondPinnacle)} <strong>Lời khuyên:</strong> ${getPinnacleAdvice(pinnacleNumbers.secondPinnacle)}</p>
+      <p><strong>Con số đỉnh cao 3 (Tuổi ${pinnacleNumbers.thirdPinnacleAge}):</strong> ${pinnacleNumbers.thirdPinnacle} - ${getNumberMeaning(pinnacleNumbers.thirdPinnacle)} <strong>Lời khuyên:</strong> ${getPinnacleAdvice(pinnacleNumbers.thirdPinnacle)}</p>
+      <p><strong>Con số đỉnh cao 4 (Tuổi ${pinnacleNumbers.fourthPinnacleAge}):</strong> ${pinnacleNumbers.fourthPinnacle} - ${getNumberMeaning(pinnacleNumbers.fourthPinnacle)} <strong>Lời khuyên:</strong> ${getPinnacleAdvice(pinnacleNumbers.fourthPinnacle)}</p>
+    `;
 
     const calcDetails = `
       <h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Cách Tính Chi Tiết</h2>
@@ -369,24 +444,29 @@ function calculateNumerology() {
       <p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> Con số chữ cái xuất hiện nhiều nhất.</p>
       <p><strong>Con số ngày sinh:</strong> Rút gọn ngày sinh.</p>
       <p><strong>Con số thách thức:</strong> Chênh lệch giữa các thành phần ngày sinh, rút gọn.</p>
+      <p><strong>Con số đỉnh cao 1:</strong> Cộng ngày sinh và tháng sinh, rút gọn (giữ nguyên 11, 22, 33 nếu áp dụng). Bắt đầu từ tuổi ${pinnacleNumbers.firstPinnacleAge}.</p>
+      <p><strong>Con số đỉnh cao 2:</strong> Cộng ngày sinh và tổng các chữ số của năm sinh, rút gọn. Bắt đầu từ tuổi ${pinnacleNumbers.secondPinnacleAge}.</p>
+      <p><strong>Con số đỉnh cao 3:</strong> Cộng con số đỉnh cao 1 và 2, rút gọn. Bắt đầu từ tuổi ${pinnacleNumbers.thirdPinnacleAge}.</p>
+      <p><strong>Con số đỉnh cao 4:</strong> Cộng tháng sinh và tổng các chữ số của năm sinh, rút gọn. Bắt đầu từ tuổi ${pinnacleNumbers.fourthPinnacleAge}.</p>
     `;
     calculationDetailsDiv.innerHTML = calcDetails;
 
     let meaningsHTML = '<h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Ý Nghĩa Các Con Số Trong Kết Quả</h2>';
-    meaningsHTML += '<p class="mb-2">Dưới đây là ý nghĩa chi tiết của các con số đã tính cho bạn.</p>';
+    meaningsHTML += '<p class="mb-2">Dưới đây là định nghĩa ngắn gọn về ý nghĩa của các con số được tính toán.</p>';
     meaningsHTML += '<ul class="list-disc pl-5 space-y-2">';
-    meaningsHTML += `<li><strong>Con số chủ đạo ${lifePathNumber}:</strong> ${getNumberMeaning(lifePathNumber)}</li>`;
-    meaningsHTML += `<li><strong>Con số linh hồn ${soulUrgeNumber}:</strong> ${getNumberMeaning(soulUrgeNumber)}</li>`;
-    meaningsHTML += `<li><strong>Con số nhân cách ${personalityNumber}:</strong> ${getNumberMeaning(personalityNumber)}</li>`;
-    meaningsHTML += `<li><strong>Con số tương tác ${additionalNumbers.expressionNumber}:</strong> ${getNumberMeaning(additionalNumbers.expressionNumber)}</li>`;
-    meaningsHTML += `<li><strong>Con số linh hồn ẩn ${additionalNumbers.hiddenPassionNumber}:</strong> ${getNumberMeaning(additionalNumbers.hiddenPassionNumber)}</li>`;
-    meaningsHTML += `<li><strong>Con số ngày sinh ${additionalNumbers.birthDayNumber}:</strong> ${getNumberMeaning(additionalNumbers.birthDayNumber)}</li>`;
+    meaningsHTML += `<li><strong>Con số chủ đạo (Số đường đời):</strong> Biểu thị con đường sống và mục đích chính trong cuộc đời của bạn.</li>`;
+    meaningsHTML += `<li><strong>Con số linh hồn:</strong> Thể hiện mong muốn nội tâm và động lực sâu xa bên trong bạn.</li>`;
+    meaningsHTML += `<li><strong>Con số nhân cách:</strong> Phản ánh cách bạn thể hiện bản thân ra bên ngoài và ấn tượng bạn tạo ra với người khác.</li>`;
+    meaningsHTML += `<li><strong>Con số tương tác (Số biểu đạt):</strong> Đại diện cho cách bạn tương tác và thể hiện tài năng của mình với thế giới.</li>`;
+    meaningsHTML += `<li><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> Chỉ ra đam mê tiềm ẩn hoặc phẩm chất nổi bật nhất trong bạn.</li>`;
+    meaningsHTML += `<li><strong>Con số ngày sinh:</strong> Liên quan đến đặc điểm và năng lượng của ngày bạn sinh ra.</li>`;
+    meaningsHTML += `<li><strong>Con số đỉnh cao:</strong> Đại diện cho các giai đoạn quan trọng trong cuộc đời, ảnh hưởng đến cơ hội và thử thách ở các độ tuổi khác nhau.</li>`;
     meaningsHTML += '</ul>';
     meaningsHTML += '<h3 class="font-semibold mt-4">Ý Nghĩa Các Con Số Thách Thức</h3><ul class="list-disc pl-5 space-y-2">';
-    meaningsHTML += `<li><strong>Thách thức 1 (${additionalNumbers.challenge1}):</strong> ${getChallengeMeaning(additionalNumbers.challenge1)}</li>`;
-    meaningsHTML += `<li><strong>Thách thức 2 (${additionalNumbers.challenge2}):</strong> ${getChallengeMeaning(additionalNumbers.challenge2)}</li>`;
-    meaningsHTML += `<li><strong>Thách thức 3 (${additionalNumbers.challenge3}):</strong> ${getChallengeMeaning(additionalNumbers.challenge3)}</li>`;
-    meaningsHTML += `<li><strong>Thách thức 4 (${additionalNumbers.challenge4}):</strong> ${getChallengeMeaning(additionalNumbers.challenge4)}</li>`;
+    meaningsHTML += `<li><strong>Con số thách thức 1:</strong> Những thử thách liên quan đến sự khác biệt giữa ngày và tháng sinh.</li>`;
+    meaningsHTML += `<li><strong>Con số thách thức 2:</strong> Những thử thách liên quan đến sự khác biệt giữa ngày sinh và năm sinh rút gọn.</li>`;
+    meaningsHTML += `<li><strong>Con số thách thức 3:</strong> Những thử thách từ sự khác biệt giữa hai con số thách thức đầu tiên.</li>`;
+    meaningsHTML += `<li><strong>Con số thách thức 4:</strong> Những thử thách liên quan đến sự khác biệt giữa tháng sinh và năm sinh rút gọn.</li>`;
     meaningsHTML += '</ul>';
     meaningsDiv.innerHTML = meaningsHTML;
 

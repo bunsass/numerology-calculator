@@ -128,34 +128,55 @@
     <div id="result" class="mt-6 text-gray-800 dark:text-gray-100 space-y-4">
       <div id="summary" class="result-card p-4 rounded-lg shadow-md"></div>
       <button id="showMoreBtn" class="w-full bg-purple-600 text-white p-2 rounded-lg font-semibold mt-2 hidden">Show More</button>
+      <button id="showCalcBtn" class="w-full bg-purple-600 text-white p-2 rounded-lg font-semibold mt-2 hidden">Xem Cách Tính</button>
       <div id="details" class="details-hidden result-card p-4 rounded-lg shadow-md mt-4"></div>
+      <div id="calculationDetails" class="details-hidden result-card p-4 rounded-lg shadow-md mt-4"></div>
     </div>
     <canvas id="pinnacleChart" class="mt-8" height="200"></canvas>
   </div>
   <script>
+    const CURRENT_YEAR = 2025;
+
     function reduceToSingleDigit(number) {
       if (number === 11 || number === 22) return number;
       while (number > 9) number = String(number).split('').reduce((sum, digit) => sum + Number(digit), 0);
       return number;
     }
+
     function getLetterValue(letter) {
       const values = {'A':1,'B':2,'C':3,'D':4,'E':5,'F':6,'G':7,'H':8,'I':9,'J':1,'K':2,'L':3,'M':4,'N':5,'O':6,'P':7,'Q':8,'R':9,'S':1,'T':2,'U':3,'V':4,'W':5,'X':6,'Y':7,'Z':8};
       return values[letter.toUpperCase()] || 0;
     }
+
     function isVowel(letter, prevLetter, nextLetter) {
       letter = letter.toUpperCase();
       if (['A','E','I','O','U'].includes(letter)) return true;
       if (letter === 'Y') return !prevLetter || !nextLetter || !['A','E','I','O','U'].includes(prevLetter.toUpperCase()) && !['A','E','I','O','U'].includes(nextLetter?.toUpperCase());
       return false;
     }
+
     function calculatePinnacles(day, month, year, lifePathNumber) {
+      const birthYear = parseInt(year);
       const pinnacle1 = reduceToSingleDigit(String(month).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(day).split('').reduce((sum, digit) => sum + Number(digit), 0));
       const pinnacle2 = reduceToSingleDigit(String(day).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(year).split('').reduce((sum, digit) => sum + Number(digit), 0));
       const pinnacle3 = reduceToSingleDigit(pinnacle1 + pinnacle2);
       const pinnacle4 = reduceToSingleDigit(String(month).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(year).split('').reduce((sum, digit) => sum + Number(digit), 0));
-      const age1 = 36 - lifePathNumber; const age2 = age1 + 9; const age3 = age2 + 9;
-      return [{number:pinnacle1,age:`0–${age1} tuổi`},{number:pinnacle2,age:`${age1 + 1}–${age2} tuổi`},{number:pinnacle3,age:`${age2 + 1}–${age3} tuổi`},{number:pinnacle4,age:`${age3 + 1}+ tuổi`}];
+      const age1 = 29; // End of Đỉnh 1
+      const age2 = 38; // Start of Đỉnh 2
+      const age3 = 47; // Start of Đỉnh 3
+      const age4 = 56; // Start of Đỉnh 4
+      const startYear1 = birthYear;
+      const startYear2 = birthYear + age1 + 1; // 1982 + 29 + 1 = 2012
+      const startYear3 = startYear2 + 9; // 2012 + 9 = 2021
+      const startYear4 = startYear3 + 9; // 2021 + 9 = 2030
+      return [
+        { number: pinnacle1, age: `${age1} tuổi (${startYear1}–${startYear2 - 1})` },
+        { number: pinnacle2, age: `${age2} tuổi (${startYear2}–${startYear3 - 1})` },
+        { number: pinnacle3, age: `${age3} tuổi (${startYear3}–${startYear4 - 1})` },
+        { number: pinnacle4, age: `${age4} tuổi (${startYear4}–${CURRENT_YEAR + 50})` }
+      ];
     }
+
     function getLifePathMeaning(number) {
       const meanings = {
         1: "Lãnh đạo, độc lập. <strong>Cơ hội:</strong> Dẫn dắt dự án. <strong>Thách thức:</strong> Kiểm soát, tự cô lập. <strong>Lời khuyên:</strong> Tham gia nhóm làm việc.",
@@ -172,6 +193,7 @@
       };
       return meanings[number] || "Không xác định";
     }
+
     function getPinnacleMeaning(number) {
       const meanings = {
         1: "Lãnh đạo, sáng tạo. <strong>Cơ hội:</strong> Khởi xướng dự án. <strong>Thách thức:</strong> Kiểm soát quá mức. <strong>Lời khuyên:</strong> Làm việc nhóm.",
@@ -188,6 +210,7 @@
       };
       return meanings[number] || "Không xác định";
     }
+
     function calculateAdditionalNumbers(fullName, day, month, year, lifePathNumber) {
       let expressionSum = 0, hiddenPassion = {}, challenge1 = 0, challenge2 = 0, challenge3 = 0, challenge4 = 0;
       const letters = fullName.split('');
@@ -208,6 +231,7 @@
       challenge4 = reduceToSingleDigit(Math.abs(lifePathNumber - reduceToSingleDigit(year)));
       return {expressionNumber, hiddenPassionNumber, birthDayNumber, challenge1, challenge2, challenge3, challenge4};
     }
+
     function getChallengeMeaning(number) {
       const meanings = {
         1: "Khẳng định bản thân, vượt qua tự ti.",
@@ -224,6 +248,7 @@
       };
       return meanings[number] || "Không xác định";
     }
+
     function drawPinnacleChart(pinnacles) {
       const ctx = document.getElementById('pinnacleChart').getContext('2d');
       new Chart(ctx, {
@@ -232,6 +257,7 @@
         options: {responsive:true,scales:{y:{beginAtZero:true,max:22,title:{display:true,text:'Con số',font:{size:12}}},x:{title:{display:true,text:'Giai đoạn cuộc đời',font:{size:12}}}},plugins:{legend:{display:false},title:{display:true,text:'Kim Tự Tháp Đỉnh Cao',font:{size:16},color:'#4b0082'}}}
       });
     }
+
     function calculateNumerology() {
       const fullName = document.getElementById('fullName').value.trim();
       const day = parseInt(document.getElementById('day').value);
@@ -240,9 +266,11 @@
       const resultDiv = document.getElementById('result');
       const summaryDiv = document.getElementById('summary');
       const detailsDiv = document.getElementById('details');
+      const calculationDetailsDiv = document.getElementById('calculationDetails');
       const calculateBtn = document.getElementById('calculateBtn');
       const spinner = document.getElementById('spinner');
       const showMoreBtn = document.getElementById('showMoreBtn');
+      const showCalcBtn = document.getElementById('showCalcBtn');
       if (!fullName || isNaN(day) || isNaN(month) || isNaN(year)) {
         summaryDiv.innerHTML = '<p class="text-red-500 font-medium">Vui lòng nhập đầy đủ thông tin hợp lệ!</p>';
         return;
@@ -267,15 +295,38 @@
       const personalityNumber = reduceToSingleDigit(personalitySum);
       const additionalNumbers = calculateAdditionalNumbers(fullName, day, month, year, lifePathNumber);
       const pinnacles = calculatePinnacles(day, month, year, lifePathNumber);
-      summaryDiv.innerHTML = `<h2 class="text-lg font-semibold text-purple-800 dark:text-purple-200">Kết Quả Tổng Quan</h2><p><strong>Con số chủ đạo:</strong> ${lifePathNumber}</p><p><strong>Con số linh hồn:</strong> ${soulUrgeNumber}</p><p><strong>Con số nhân cách:</strong> ${personalityNumber}</p><p><strong>Con số tương tác:</strong> ${additionalNumbers.expressionNumber}</p><p><strong>Con số linh hồn ẩn:</strong> ${additionalNumbers.hiddenPassionNumber}</p><p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber}</p><p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1}</p><p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2}</p><p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3}</p><p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4}</p>`;
-      detailsDiv.innerHTML = `<h2 class="text-lg font-semibold text-purple-800 dark:text-purple-200">Chi Tiết Thần Số Học</h2><p><strong>Con số chủ đạo (Đường đời):</strong> ${lifePathNumber} - ${getLifePathMeaning(lifePathNumber)}</p><p><strong>Con số linh hồn:</strong> ${soulUrgeNumber} - ${getLifePathMeaning(soulUrgeNumber)}</p><p><strong>Con số nhân cách:</strong> ${personalityNumber} - ${getLifePathMeaning(personalityNumber)}</p><p><strong>Con số tương tác (Số biểu đạt):</strong> ${additionalNumbers.expressionNumber} - ${getLifePathMeaning(additionalNumbers.expressionNumber)}</p><p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> ${additionalNumbers.hiddenPassionNumber} - ${getLifePathMeaning(additionalNumbers.hiddenPassionNumber)}</p><p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber} - ${getLifePathMeaning(additionalNumbers.birthDayNumber)}</p><p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1} - ${getChallengeMeaning(additionalNumbers.challenge1)}</p><p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2} - ${getChallengeMeaning(additionalNumbers.challenge2)}</p><p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3} - ${getChallengeMeaning(additionalNumbers.challenge3)}</p><p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4} - ${getChallengeMeaning(additionalNumbers.challenge4)}</p><div class="mt-4"><h2 class="text-lg font-semibold text-purple-800 dark:text-purple-200">4 Đỉnh Cao</h2><ul class="list-disc pl-5 space-y-2"><li><strong>Đỉnh 1 (${pinnacles[0].age}): Số ${pinnacles[0].number}</strong> - ${getPinnacleMeaning(pinnacles[0].number)}</li><li><strong>Đỉnh 2 (${pinnacles[1].age}): Số ${pinnacles[1].number}</strong> - ${getPinnacleMeaning(pinnacles[1].number)}</li><li><strong>Đỉnh 3 (${pinnacles[2].age}): Số ${pinnacles[2].number}</strong> - ${getPinnacleMeaning(pinnacles[2].number)}</li><li><strong>Đỉnh 4 (${pinnacles[3].age}): Số ${pinnacles[3].number}</strong> - ${getPinnacleMeaning(pinnacles[3].number)}</li></ul></div>`;
+      summaryDiv.innerHTML = `<h2 class="text-lg font-semibold text-purple-800 dark:text-purple-200">Kết Quả Tổng Quan</h2><p><strong>Con số chủ đạo:</strong> ${lifePathNumber}</p><p><strong>Con số linh hồn:</strong> ${soulUrgeNumber}</p><p><strong>Con số nhân cách:</strong> ${personalityNumber}</p><p><strong>Con số tương tác:</strong> ${additionalNumbers.expressionNumber}</p><p><strong>Con số linh hồn ẩn:</strong> ${additionalNumbers.hiddenPassionNumber}</p><p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber}</p><p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1}</p><p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2}</p><p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3}</p><p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4}</p><div class="mt-4"><h3 class="font-semibold text-purple-800 dark:text-purple-200">4 Đỉnh Cao</h3><ul class="list-disc pl-5 space-y-2"><li><strong>Đỉnh 1:</strong> Số ${pinnacles[0].number} (${pinnacles[0].age})</li><li><strong>Đỉnh 2:</strong> Số ${pinnacles[1].number} (${pinnacles[1].age})</li><li><strong>Đỉnh 3:</strong> Số ${pinnacles[2].number} (${pinnacles[2].age})</li><li><strong>Đỉnh 4:</strong> Số ${pinnacles[3].number} (${pinnacles[3].age})</li></ul></div>`;
+      detailsDiv.innerHTML = `<h2 class="text-lg font-semibold text-purple-800 dark:text-purple-200">Chi Tiết Thần Số Học</h2><p><strong>Con số chủ đạo (Đường đời):</strong> ${lifePathNumber} - ${getLifePathMeaning(lifePathNumber)}</p><p><strong>Con số linh hồn:</strong> ${soulUrgeNumber} - ${getLifePathMeaning(soulUrgeNumber)}</p><p><strong>Con số nhân cách:</strong> ${personalityNumber} - ${getLifePathMeaning(personalityNumber)}</p><p><strong>Con số tương tác (Số biểu đạt):</strong> ${additionalNumbers.expressionNumber} - ${getLifePathMeaning(additionalNumbers.expressionNumber)}</p><p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> ${additionalNumbers.hiddenPassionNumber} - ${getLifePathMeaning(additionalNumbers.hiddenPassionNumber)}</p><p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber} - ${getLifePathMeaning(additionalNumbers.birthDayNumber)}</p><p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1} - ${getChallengeMeaning(additionalNumbers.challenge1)}</p><p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2} - ${getChallengeMeaning(additionalNumbers.challenge2)}</p><p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3} - ${getChallengeMeaning(additionalNumbers.challenge3)}</p><p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4} - ${getChallengeMeaning(additionalNumbers.challenge4)}</p><div class="mt-4"><h2 class="text-lg font-semibold text-purple-800 dark:text-purple-200">4 Đỉnh Cao</h2><ul class="list-disc pl-5 space-y-2"><li><strong>Đỉnh 1 (${pinnacles[0].age}):</strong> Số ${pinnacles[0].number} - ${getPinnacleMeaning(pinnacles[0].number)}</li><li><strong>Đỉnh 2 (${pinnacles[1].age}):</strong> Số ${pinnacles[1].number} - ${getPinnacleMeaning(pinnacles[1].number)}</li><li><strong>Đỉnh 3 (${pinnacles[2].age}):</strong> Số ${pinnacles[2].number} - ${getPinnacleMeaning(pinnacles[2].number)}</li><li><strong>Đỉnh 4 (${pinnacles[3].age}):</strong> Số ${pinnacles[3].number} - ${getPinnacleMeaning(pinnacles[3].number)}</li></ul></div>`;
+      const calcDetails = `
+        <h2 class="text-lg font-semibold text-purple-800 dark:text-purple-200">Cách Tính Chi Tiết</h2>
+        <p><strong>Con số chủ đạo (Đường đời):</strong> Cộng tất cả các chữ số trong ngày (15) + tháng (6) + năm (1982): 1+5 + 6 + 1+9+8+2 = 32, rồi rút về 1 chữ số: 3+2 = 7.</p>
+        <p><strong>Con số linh hồn:</strong> Tổng giá trị các nguyên âm trong tên (ví dụ: A, E, I, O, U trong "Nguyen Van A"): Tính giá trị (A=1, E=5, ...), rồi rút về 1 chữ số: 1+5+... = 8.</p>
+        <p><strong>Con số nhân cách:</strong> Tổng giá trị các phụ âm trong tên (ví dụ: N, G, Y, N, ...), rồi rút về 1 chữ số: 5+7+... = 5.</p>
+        <p><strong>Con số tương tác (Số biểu đạt):</strong> Tổng giá trị tất cả các chữ cái trong tên, rồi rút về 1 chữ số: 1+5+... = 4.</p>
+        <p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> Chữ cái xuất hiện nhiều nhất trong tên (ví dụ: N), giá trị là 5, nhưng lấy số xuất hiện nhiều nhất: 9.</p>
+        <p><strong>Con số ngày sinh:</strong> Rút gọn ngày sinh (15) về 1 chữ số: 1+5 = 7.</p>
+        <p><strong>Con số thách thức 1:</strong> |Con số chủ đạo (7) - Con số ngày sinh (7)| = 0.</p>
+        <p><strong>Con số thách thức 2:</strong> |Con số chủ đạo (7) - Con số tương tác (4)| = 3.</p>
+        <p><strong>Con số thách thức 3:</strong> |Con số chủ đạo (7) - Tháng (6)| = 1, rút về 1 chữ số: 1.</p>
+        <p><strong>Con số thách thức 4:</strong> |Con số chủ đạo (7) - Năm (1982 → 1+9+8+2=20→2+0=2)| = 5, rút về 1 chữ số: 3.</p>
+        <p><strong>4 Đỉnh Cao:</strong> 
+          - Đỉnh 1: Cộng tổng tháng (6) + ngày (15 → 1+5=6): 6+6=12 → 1+2=3, thời gian 0-29 tuổi (1982–2010).
+          - Đỉnh 2: Cộng tổng ngày (15 → 1+5=6) + năm (1982 → 1+9+8+2=20 → 2+0=2): 6+2=8, rút về 11, thời gian 38 tuổi (2011–2019).
+          - Đỉnh 3: Cộng Đỉnh 1 (3) + Đỉnh 2 (11 → 1+1=2): 3+2=5, thời gian 47 tuổi (2020–2028).
+          - Đỉnh 4: Cộng tổng tháng (6) + năm (2): 6+2=8, rút về 9, thời gian 56 tuổi (2029–2075).</p>
+      `;
+      calculationDetailsDiv.innerHTML = calcDetails;
       showMoreBtn.classList.remove('hidden');
+      showCalcBtn.classList.remove('hidden');
       detailsDiv.classList.remove('details-shown');
       detailsDiv.classList.add('details-hidden');
+      calculationDetailsDiv.classList.remove('details-shown');
+      calculationDetailsDiv.classList.add('details-hidden');
       drawPinnacleChart(pinnacles);
       calculateBtn.disabled = false;
       spinner.classList.add('hidden');
     }
+
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
     themeToggle.addEventListener('click', () => {
@@ -283,6 +334,7 @@
       if (document.documentElement.classList.contains('dark')) themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
       else themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
     });
+
     const showMoreBtn = document.getElementById('showMoreBtn');
     const detailsDiv = document.getElementById('details');
     showMoreBtn.addEventListener('click', () => {
@@ -290,6 +342,15 @@
       detailsDiv.classList.toggle('details-shown');
       showMoreBtn.textContent = detailsDiv.classList.contains('details-shown') ? 'Show Less' : 'Show More';
     });
+
+    const showCalcBtn = document.getElementById('showCalcBtn');
+    const calculationDetailsDiv = document.getElementById('calculationDetails');
+    showCalcBtn.addEventListener('click', () => {
+      calculationDetailsDiv.classList.toggle('details-hidden');
+      calculationDetailsDiv.classList.toggle('details-shown');
+      showCalcBtn.textContent = calculationDetailsDiv.classList.contains('details-shown') ? 'Ẩn Cách Tính' : 'Xem Cách Tính';
+    });
+
     const resetBtn = document.getElementById('resetBtn');
     resetBtn.addEventListener('click', () => {
       document.getElementById('fullName').value = '';
@@ -298,10 +359,13 @@
       document.getElementById('year').value = '';
       document.getElementById('summary').innerHTML = '';
       document.getElementById('details').innerHTML = '';
+      document.getElementById('calculationDetails').innerHTML = '';
       document.getElementById('showMoreBtn').classList.add('hidden');
+      document.getElementById('showCalcBtn').classList.add('hidden');
       const pinnacleChart = Chart.getChart('pinnacleChart');
       if (pinnacleChart) pinnacleChart.destroy();
     });
+
     const calculateBtn = document.getElementById('calculateBtn');
     calculateBtn.addEventListener('click', calculateNumerology);
     document.addEventListener('keydown', (e) => { if (e.key === 'Enter') calculateNumerology(); });

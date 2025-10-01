@@ -25,14 +25,63 @@
       justify-content: center;
       align-items: center;
       margin-bottom: 2rem;
+      padding-top: 1.5rem; /* Maintains vertical spacing */
+    }
+    .header-title {
+      position: relative;
+      z-index: 10; /* Ensures title stays above buttons */
+    }
+    #themeToggle, #menuToggle {
+      position: absolute;
+      top: -15px; /* Lifted to avoid overlap */
+      transition: background-color 0.3s ease;
     }
     #themeToggle {
-      position: absolute;
-      right: 0;
+      right: 50px; /* Adjusted for spacing */
+    }
+    #menuToggle {
+      right: 10px; /* Adjusted for clear separation */
+    }
+    #themeToggle:hover, #menuToggle:hover {
+      background-color: #9333ea;
+    }
+    /* Ensure icon stays upright during rotation */
+    #menuToggle .icon-wrapper, #themeToggle .icon-wrapper {
+      display: inline-block;
       transition: transform 0.3s ease;
     }
-    #themeToggle:hover {
-      transform: rotate(180deg);
+    #menuToggle:hover .icon-wrapper, #themeToggle:hover .icon-wrapper {
+      transform: rotate(360deg);
+    }
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 10px;
+      background: #ffffff;
+      dark:bg-gray-800;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      min-width: 150px;
+      display: none;
+    }
+    .dropdown-menu.active {
+      display: block;
+    }
+    .dropdown-menu button {
+      display: block;
+      width: 100%;
+      padding: 0.5rem 1rem;
+      text-align: left;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      color: #111827;
+      dark:color: #edf2f7;
+    }
+    .dropdown-menu button:hover {
+      background: #f3e8ff;
+      dark:background: #4a5568;
     }
     .input-field, .select-field {
       transition: all 0.3s ease;
@@ -53,7 +102,7 @@
     .dark .input-field::placeholder, .dark .select-field::placeholder {
       color: #d1d5db;
     }
-    .btn-calculate, #clearBtn {
+    .btn-calculate, #clearBtn, #dailyClearBtn {
       transition: transform 0.3s ease, background-color 0.3s ease;
       border-radius: 0.75rem;
       padding: 1.25rem 2rem;
@@ -71,11 +120,11 @@
       background-color: #9333ea;
       transform: scale(1.05);
     }
-    #clearBtn {
+    #clearBtn, #dailyClearBtn {
       background-color: #6b7280;
       color: #ffffff;
     }
-    #clearBtn:hover {
+    #clearBtn:hover, #dailyClearBtn:hover {
       background-color: #4b5563;
       transform: scale(1.05);
     }
@@ -104,11 +153,11 @@
     .light .text-gray-800 {
       color: #111827;
     }
-    #result {
+    #result, #dailyResult {
       font-size: 1rem;
       line-height: 1.6;
     }
-    #details p, #meanings p, #calculationDetails p {
+    #details p, #meanings p, #calculationDetails p, #dailyForecast p {
       line-height: 1.6;
       font-size: 1rem;
     }
@@ -184,7 +233,7 @@
       .result-card {
         padding: 1rem;
       }
-      #result {
+      #result, #dailyResult {
         font-size: 0.9rem;
       }
       .button-line {
@@ -195,13 +244,13 @@
         font-size: 1rem;
         padding: 0.75rem;
       }
-      .btn-calculate, #clearBtn {
+      .btn-calculate, #clearBtn, #dailyClearBtn {
         font-size: 1rem;
         padding: 1rem 1.5rem;
         min-width: 120px;
       }
       h1 {
-        font-size: 1.5rem;
+        font-size: 1.5rem; /* Adjusted for smaller screens */
       }
       h2 {
         font-size: 1.125rem;
@@ -209,17 +258,26 @@
     }
     @media (min-width: 640px) {
       h1 {
-        font-size: 2rem;
+        font-size: 2rem; /* Adjusted for readability */
       }
       h2 {
         font-size: 1.5rem;
       }
-      #result {
+      #result, #dailyResult {
         font-size: 1rem;
       }
       .button-line {
         gap: 1rem;
       }
+    }
+    .icon {
+      margin-right: 0.5rem;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
     }
   </style>
 </head>
@@ -229,51 +287,95 @@
   </div>
   <div class="bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-90 p-8 rounded-2xl shadow-2xl w-full max-w-2xl mx-4">
     <div class="header-container mb-8">
-      <h1 class="text-2xl sm:text-4xl font-bold text-center text-purple-800 dark:text-purple-300 animate-pulse">Thần Số Học - Khám Phá Bản Thân</h1>
-      <button id="themeToggle" class="toggle-btn bg-purple-600 dark:bg-purple-900 text-white p-2 rounded-full focus:outline-none">
-        <svg id="themeIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-        </svg>
-      </button>
-    </div>
-    <div class="space-y-6">
-      <div>
-        <label class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Họ và tên đầy đủ</label>
-        <input type="text" id="fullName" placeholder="Nhập họ và tên" class="input-field block w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Vui lòng nhập họ và tên đầy đủ của bạn">
+      <div class="header-title">
+        <h1 class="text-2xl sm:text-4xl font-bold text-center text-purple-800 dark:text-purple-300 animate-pulse">Khám Phá Bản Thân Cùng Thần Số Học</h1>
       </div>
-      <div>
-        <label class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Ngày sinh</label>
-        <div class="flex space-x-3 flex-wrap gap-4">
-          <select id="day" class="select-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Chọn ngày sinh của bạn">
-            <option value="" disabled selected>Ngày</option>
-          </select>
-          <select id="month" class="select-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Chọn tháng sinh của bạn">
-            <option value="" disabled selected>Tháng</option>
-          </select>
-          <input type="number" id="year" placeholder="Năm" min="1900" max="2025" maxlength="4" class="input-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Nhập năm sinh (4 chữ số, từ 1900 đến 2025)">
+      <button id="themeToggle" class="toggle-btn bg-purple-600 dark:bg-purple-900 text-white p-2 rounded-full focus:outline-none" data-tooltip="Chuyển đổi giao diện sáng/tối">
+        <span class="icon-wrapper">
+          <svg id="themeIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+        </span>
+      </button>
+      <button id="menuToggle" class="toggle-btn bg-purple-600 dark:bg-purple-900 text-white p-2 rounded-full focus:outline-none" data-tooltip="Mở menu tab">
+        <span class="icon-wrapper">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+          </svg>
+        </span>
+      </button>
+      <div id="menuDropdown" class="dropdown-menu">
+        <button id="mainTabBtn" class="tab-btn" data-tab="main">Tổng Quan</button>
+        <button id="dailyTabBtn" class="tab-btn" data-tab="daily">Dự Báo Hàng Ngày</button>
+      </div>
+    </div>
+    <div id="mainTab" class="tab-content active">
+      <div class="space-y-6">
+        <div>
+          <label class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Họ và tên đầy đủ</label>
+          <input type="text" id="fullName" placeholder="Nhập họ và tên" class="input-field block w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Vui lòng nhập họ và tên đầy đủ của bạn">
+        </div>
+        <div>
+          <label class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Ngày sinh</label>
+          <div class="flex space-x-3 flex-wrap gap-4">
+            <select id="day" class="select-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Chọn ngày sinh của bạn">
+              <option value="" disabled selected>Ngày</option>
+            </select>
+            <select id="month" class="select-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Chọn tháng sinh của bạn">
+              <option value="" disabled selected>Tháng</option>
+            </select>
+            <input type="number" id="year" placeholder="Năm" min="1900" max="2025" maxlength="4" class="input-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Nhập năm sinh (4 chữ số, từ 1900 đến 2025)">
+          </div>
+        </div>
+        <div class="button-line">
+          <button id="calculateBtn" class="btn-calculate bg-purple-600 text-white p-3 rounded-lg font-semibold flex items-center justify-center" data-tooltip="Nhấn để tính số học của bạn">
+            Tính Toán
+          </button>
+          <button id="clearBtn" class="bg-gray-400 text-white p-3 rounded-lg font-semibold hover:bg-gray-500 transition-colors" data-tooltip="Nhấn để xóa tất cả thông tin đã nhập">
+            Xóa
+          </button>
         </div>
       </div>
-      <div class="button-line">
-        <button id="calculateBtn" class="btn-calculate bg-purple-600 text-white p-3 rounded-lg font-semibold flex items-center justify-center" data-tooltip="Nhấn để tính số học của bạn">
-          Tính Toán
-        </button>
-        <button id="clearBtn" class="bg-gray-400 text-white p-3 rounded-lg font-semibold hover:bg-gray-500 transition-colors" data-tooltip="Nhấn để xóa tất cả thông tin đã nhập">
-          Xóa
-        </button>
+      <div id="result" class="mt-6 text-gray-800 dark:text-gray-100 space-y-4">
+        <div id="summary" class="result-card p-4 rounded-lg shadow-md"></div>
+        <button id="showMoreBtn" class="w-full bg-purple-600 text-white p-2 rounded-lg font-semibold mt-2 hidden" data-tooltip="Nhấn để xem chi tiết kết quả">Xem Thêm</button>
+        <button id="showCalcBtn" class="w-full bg-purple-600 text-white p-2 rounded-lg font-semibold mt-2 hidden" data-tooltip="Nhấn để xem cách tính">Xem Cách Tính</button>
+        <button id="showMeaningsBtn" class="w-full bg-purple-600 text-white p-2 rounded-lg font-semibold mt-2 hidden" data-tooltip="Nhấn để xem ý nghĩa các con số">Xem Ý Nghĩa Các Con Số</button>
+        <div id="details" class="details-hidden result-card p-4 rounded-lg shadow-md mt-4"></div>
+        <div id="calculationDetails" class="details-hidden result-card p-4 rounded-lg shadow-md mt-4"></div>
+        <div id="meanings" class="details-hidden result-card p-4 rounded-lg shadow-md mt-4"></div>
       </div>
     </div>
-    <div id="result" class="mt-6 text-gray-800 dark:text-gray-100 space-y-4">
-      <div id="summary" class="result-card p-4 rounded-lg shadow-md"></div>
-      <button id="showMoreBtn" class="w-full bg-purple-600 text-white p-2 rounded-lg font-semibold mt-2 hidden" data-tooltip="Nhấn để xem chi tiết kết quả">Xem Thêm</button>
-      <button id="showCalcBtn" class="w-full bg-purple-600 text-white p-2 rounded-lg font-semibold mt-2 hidden" data-tooltip="Nhấn để xem cách tính">Xem Cách Tính</button>
-      <button id="showMeaningsBtn" class="w-full bg-purple-600 text-white p-2 rounded-lg font-semibold mt-2 hidden" data-tooltip="Nhấn để xem ý nghĩa các con số">Xem Ý Nghĩa Các Con Số</button>
-      <div id="details" class="details-hidden result-card p-4 rounded-lg shadow-md mt-4"></div>
-      <div id="calculationDetails" class="details-hidden result-card p-4 rounded-lg shadow-md mt-4"></div>
-      <div id="meanings" class="details-hidden result-card p-4 rounded-lg shadow-md mt-4"></div>
+    <div id="dailyTab" class="tab-content">
+      <div class="space-y-6">
+        <div>
+          <label class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Ngày sinh</label>
+          <div class="flex space-x-3 flex-wrap gap-4">
+            <select id="dailyDay" class="select-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Chọn ngày sinh của bạn">
+              <option value="" disabled selected>Ngày</option>
+            </select>
+            <select id="dailyMonth" class="select-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Chọn tháng sinh của bạn">
+              <option value="" disabled selected>Tháng</option>
+            </select>
+            <input type="number" id="dailyYear" placeholder="Năm" min="1900" max="2025" maxlength="4" class="input-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Nhập năm sinh (4 chữ số, từ 1900 đến 2025)">
+          </div>
+        </div>
+        <div class="button-line">
+          <button id="dailyCalculateBtn" class="btn-calculate bg-purple-600 text-white p-3 rounded-lg font-semibold flex items-center justify-center" data-tooltip="Nhấn để tính dự báo hàng ngày">
+            Tính Dự Báo
+          </button>
+          <button id="dailyClearBtn" class="bg-gray-400 text-white p-3 rounded-lg font-semibold hover:bg-gray-500 transition-colors" data-tooltip="Nhấn để xóa thông tin đã nhập">
+            Xóa
+          </button>
+        </div>
+      </div>
+      <div id="dailyResult" class="mt-6 text-gray-800 dark:text-gray-100 space-y-4">
+        <div id="dailyForecast" class="result-card p-4 rounded-lg shadow-md"></div>
+      </div>
     </div>
   </div>
   <script>
-    const CURRENT_YEAR = 2025;
+    const CURRENT_YEAR = new Date().getFullYear();
 
     // Function to remove diacritical marks from Vietnamese text
     function normalizeName(text) {
@@ -287,27 +389,33 @@
 
     // Populate day and month dropdowns
     function populateDropdowns() {
-      const daySelect = document.getElementById('day');
-      const monthSelect = document.getElementById('month');
-      for (let i = 1; i <= 31; i++) {
-        const option = document.createElement('option');
-        option.value = i;
-        option.textContent = i;
-        daySelect.appendChild(option);
-      }
-      for (let i = 1; i <= 12; i++) {
-        const option = document.createElement('option');
-        option.value = i;
-        option.textContent = i;
-        monthSelect.appendChild(option);
-      }
+      const daySelects = [document.getElementById('day'), document.getElementById('dailyDay')];
+      const monthSelects = [document.getElementById('month'), document.getElementById('dailyMonth')];
+      daySelects.forEach(daySelect => {
+        for (let i = 1; i <= 31; i++) {
+          const option = document.createElement('option');
+          option.value = i;
+          option.textContent = i;
+          daySelect.appendChild(option);
+        }
+      });
+      monthSelects.forEach(monthSelect => {
+        for (let i = 1; i <= 12; i++) {
+          const option = document.createElement('option');
+          option.value = i;
+          option.textContent = i;
+          monthSelect.appendChild(option);
+        }
+      });
     }
 
     // Restrict year input to 4 digits
-    document.getElementById('year').addEventListener('input', function(e) {
-      if (e.target.value.length > 4) {
-        e.target.value = e.target.value.slice(0, 4);
-      }
+    [document.getElementById('year'), document.getElementById('dailyYear')].forEach(yearInput => {
+      yearInput.addEventListener('input', function(e) {
+        if (e.target.value.length > 4) {
+          e.target.value = e.target.value.slice(0, 4);
+        }
+      });
     });
 
     // Normalize input as user types
@@ -316,42 +424,109 @@
       e.target.value = normalizedValue;
     });
 
-    function reduceToSingleDigit(number) {
-      if (number === 11 || number === 22) return number;
+    function reduceToSingleDigit(number, allowMaster = false) {
+      if (allowMaster && (number === 11 || number === 22 || number === 33)) return number;
       while (number > 9) number = String(number).split('').reduce((sum, digit) => sum + Number(digit), 0);
       return number;
     }
 
     function getLetterValue(letter) {
-      const values = {'A':1,'B':2,'C':3,'D':4,'E':5,'F':6,'G':7,'H':8,'I':9,'J':1,'K':2,'L':3,'M':4,'N':5,'O':6,'P':7,'Q':8,'R':9,'S':1,'T':2,'U':3,'V':4,'W':5,'X':6,'Y':7,'Z':8};
-      return values[letter.toUpperCase()] || 0;
+      const values = {'a':1,'b':2,'c':3,'d':4,'e':5,'f':6,'g':7,'h':8,'i':9,'j':1,'k':2,'l':3,'m':4,'n':5,'o':6,'p':7,'q':8,'r':9,'s':1,'t':2,'u':3,'v':4,'w':5,'x':6,'y':7,'z':8};
+      return values[letter.toLowerCase()] || 0;
     }
 
     function isVowel(letter, prevLetter, nextLetter) {
-      letter = letter.toUpperCase();
-      if (['A','E','I','O','U'].includes(letter)) return true;
-      if (letter === 'Y') return !prevLetter || !nextLetter || !['A','E','I','O','U'].includes(prevLetter.toUpperCase()) && !['A','E','I','O','U'].includes(nextLetter?.toUpperCase());
+      letter = letter.toLowerCase();
+      if (['a','e','i','o','u'].includes(letter)) return true;
+      if (letter === 'y') return !prevLetter || !nextLetter || !['a','e','i','o','u'].includes(prevLetter.toLowerCase()) && !['a','e','i','o','u'].includes(nextLetter?.toLowerCase());
       return false;
     }
 
-    function getLifePathMeaning(number) {
+    function getNumberMeaning(number) {
       const meanings = {
-        2: "Hợp tác, nhạy cảm, hòa hợp. <strong>Cơ hội:</strong> Xây dựng mối quan hệ vững chắc, hòa giải xung đột trong gia đình hoặc công việc. <strong>Thách thức:</strong> Dễ phụ thuộc vào người khác, né tránh xung đột dẫn đến tích tụ cảm xúc tiêu cực. <strong>Lời khuyên:</strong> Học cách đưa ra quyết định độc lập và bày tỏ ý kiến cá nhân.",
-        5: "Tự do, phiêu lưu, linh hoạt. <strong>Cơ hội:</strong> Khám phá thế giới, du lịch, trải nghiệm mới mẻ trong công việc và cuộc sống. <strong>Thách thức:</strong> Bất ổn, thiếu cam kết dẫn đến mối quan hệ không bền vững. <strong>Lời khuyên:</strong> Đặt mục tiêu rõ ràng và cân bằng giữa tự do và trách nhiệm.",
-        6: "Trách nhiệm, gia đình, yêu thương. <strong>Cơ hội:</strong> Hỗ trợ cộng đồng, xây dựng gia đình hạnh phúc, thành công trong lĩnh vực chăm sóc. <strong>Thách thức:</strong> Kiệt sức do gánh quá nhiều trách nhiệm, khó nói 'không'. <strong>Lời khuyên:</strong> Học cách ưu tiên bản thân và phân bổ thời gian hợp lý.",
-        8: "Quyền lực, thành công, tài chính. <strong>Cơ hội:</strong> Thăng tiến sự nghiệp, đạt thành công tài chính lớn qua kinh doanh. <strong>Thách thức:</strong> Tham lam, mất cân bằng giữa công việc và cuộc sống. <strong>Lời khuyên:</strong> Dành thời gian thư giãn với gia đình và thực hành lòng biết ơn.",
-        9: "Nhân đạo, hoàn thành, cống hiến. <strong>Cơ hội:</strong> Làm từ thiện, giúp đỡ người khác, hoàn thành sứ mệnh nhân sinh. <strong>Thách thức:</strong> Cảm xúc quá tải, khó buông bỏ quá khứ. <strong>Lời khuyên:</strong> Thực hành thiền hoặc viết nhật ký để giải tỏa cảm xúc."
+        1: "Độc lập, lãnh đạo, sáng tạo. <strong>Cơ hội:</strong> Dẫn dắt dự án mới, khởi nghiệp. <strong>Thách thức:</strong> Cô lập, thiếu kiên nhẫn. <strong>Lời khuyên:</strong> Học hợp tác và lắng nghe người khác.",
+        2: "Hợp tác, nhạy cảm, hòa hợp. <strong>Cơ hội:</strong> Xây dựng mối quan hệ, hòa giải. <strong>Thách thức:</strong> Phụ thuộc, né tránh xung đột. <strong>Lời khuyên:</strong> Đưa ra quyết định độc lập.",
+        3: "Sáng tạo, vui vẻ, giao tiếp. <strong>Cơ hội:</strong> Nghệ thuật, viết lách, giải trí. <strong>Thách thức:</strong> Phân tán, thiếu sâu sắc. <strong>Lời khuyên:</strong> Tập trung vào mục tiêu dài hạn.",
+        4: "Ổn định, thực tế, chăm chỉ. <strong>Cơ hội:</strong> Xây dựng nền tảng, quản lý. <strong>Thách thức:</strong> Cứng nhắc, kháng cự thay đổi. <strong>Lời khuyên:</strong> Linh hoạt hơn với ý tưởng mới.",
+        5: "Tự do, phiêu lưu, linh hoạt. <strong>Cơ hội:</strong> Du lịch, trải nghiệm mới. <strong>Thách thức:</strong> Bất ổn, thiếu cam kết. <strong>Lời khuyên:</strong> Cân bằng tự do và trách nhiệm.",
+        6: "Trách nhiệm, gia đình, yêu thương. <strong>Cơ hội:</strong> Hỗ trợ cộng đồng, chăm sóc. <strong>Thách thức:</strong> Kiệt sức, khó từ chối. <strong>Lời khuyên:</strong> Ưu tiên bản thân.",
+        7: "Phân tích, tâm linh, nội tâm. <strong>Cơ hội:</strong> Nghiên cứu, thiền định. <strong>Thách thức:</strong> Cô lập, hoài nghi. <strong>Lời khuyên:</strong> Mở lòng với người khác.",
+        8: "Quyền lực, thành công, tài chính. <strong>Cơ hội:</strong> Kinh doanh, lãnh đạo. <strong>Thách thức:</strong> Tham lam, mất cân bằng. <strong>Lời khuyên:</strong> Thực hành biết ơn.",
+        9: "Nhân đạo, hoàn thành, cống hiến. <strong>Cơ hội:</strong> Từ thiện, giúp đỡ. <strong>Thách thức:</strong> Cảm xúc quá tải. <strong>Lời khuyên:</strong> Thực hành thiền.",
+        11: "Trực giác, truyền cảm hứng, tâm linh. <strong>Cơ hội:</strong> Lãnh đạo tinh thần, sáng tạo. <strong>Thách thức:</strong> Nhạy cảm quá mức, lo lắng. <strong>Lời khuyên:</strong> Cân bằng năng lượng.",
+        22: "Xây dựng, lý tưởng thực tế, master builder. <strong>Cơ hội:</strong> Dự án lớn, thay đổi thế giới. <strong>Thách thức:</strong> Áp lực, kiệt sức. <strong>Lời khuyên:</strong> Tập trung vào mục tiêu dài hạn.",
+        33: "Thầy dạy, từ bi, hy sinh. <strong>Cơ hội:</strong> Hướng dẫn, chữa lành. <strong>Thách thức:</strong> Hy sinh quá mức. <strong>Lời khuyên:</strong> Chăm sóc bản thân."
       };
       return meanings[number] || "Không xác định";
     }
 
     function getChallengeMeaning(number) {
       const meanings = {
-        0: "Thách thức số 0: Không có thách thức cụ thể, nhưng cần tập trung vào bài học của con số chủ đạo. Tìm sự cân bằng và phát triển toàn diện bản thân.",
-        3: "Thách thức số 3: Tập trung và phát triển kỷ luật. Giảm phân tâm để hoàn thành mục tiêu dài hạn.",
-        4: "Thách thức số 4: Ổn định nhưng thích nghi với thay đổi. Tránh cứng nhắc để đón nhận cơ hội mới."
+        0: "Không có thách thức cụ thể, tự do lựa chọn. <strong>Lời khuyên:</strong> Chọn đường đi khôn ngoan, tập trung vào con số chủ đạo.",
+        1: "Học độc lập, tránh phụ thuộc. <strong>Lời khuyên:</strong> Phát triển tự tin và tự quyết.",
+        2: "Xây dựng tự tin, tránh nhạy cảm quá mức. <strong>Lời khuyên:</strong> Học cách đối mặt với phê bình.",
+        3: "Tập trung biểu đạt, tránh phân tán. <strong>Lời khuyên:</strong> Phát triển kỷ luật sáng tạo.",
+        4: "Học tổ chức, tránh cứng nhắc. <strong>Lời khuyên:</strong> Linh hoạt với thay đổi.",
+        5: "Thích nghi thay đổi, tránh vô trách nhiệm. <strong>Lời khuyên:</strong> Tìm cân bằng trong tự do.",
+        6: "Chấp nhận trách nhiệm, tránh cầu toàn. <strong>Lời khuyên:</strong> Học tha thứ và buông xả.",
+        7: "Mở lòng với người khác, tránh hoài nghi. <strong>Lời khuyên:</strong> Xây dựng niềm tin.",
+        8: "Cân bằng vật chất và tinh thần, tránh tham lam. <strong>Lời khuyên:</strong> Tập trung vào giá trị thực."
       };
       return meanings[number] || "Không xác định";
+    }
+
+    function getDailySuggestions(number) {
+      const suggestions = {
+        1: {
+          do: "Hôm nay là ngày để tỏa sáng và dẫn đầu! Hãy bắt đầu một dự án mới, đưa ra ý tưởng táo bạo hoặc thử sức với một thử thách cá nhân. Tự tin thể hiện bản thân và nắm bắt cơ hội.",
+          avoid: "Tránh né tránh trách nhiệm hoặc phụ thuộc vào người khác để đưa ra quyết định. Đừng để sự thiếu kiên nhẫn làm hỏng cơ hội."
+        },
+        2: {
+          do: "Tập trung vào các mối quan hệ và sự hợp tác. Đây là ngày lý tưởng để trò chuyện, hòa giải hoặc hỗ trợ bạn bè, gia đình. Hãy lắng nghe và kết nối cảm xúc.",
+          avoid: "Tránh né tránh xung đột hoặc giữ im lặng khi cần bày tỏ ý kiến. Đừng để sự nhạy cảm quá mức làm bạn mất cân bằng."
+        },
+        3: {
+          do: "Năng lượng sáng tạo đang dâng cao! Viết lách, vẽ tranh, hoặc tham gia hoạt động nghệ thuật. Giao tiếp vui vẻ và lan tỏa năng lượng tích cực đến mọi người.",
+          avoid: "Tránh phân tán năng lượng vào quá nhiều việc hoặc thiếu tập trung. Đừng để những lời nói bộc phát gây hiểu lầm."
+        },
+        4: {
+          do: "Hôm nay phù hợp để tổ chức, lập kế hoạch hoặc hoàn thành công việc. Xây dựng nền tảng vững chắc cho mục tiêu dài hạn và giữ kỷ luật trong công việc.",
+          avoid: "Tránh cứng nhắc hoặc từ chối thay đổi. Đừng làm việc quá sức mà quên chăm sóc bản thân."
+        },
+        5: {
+          do: "Khám phá và thay đổi! Hãy thử một hoạt động mới, đi đâu đó hoặc gặp gỡ người mới. Linh hoạt và cởi mở với những cơ hội bất ngờ.",
+          avoid: "Tránh hành động bốc đồng hoặc bỏ qua trách nhiệm. Đừng để sự thiếu cam kết ảnh hưởng đến các mối quan hệ."
+        },
+        6: {
+          do: "Dành thời gian cho gia đình, bạn bè hoặc cộng đồng. Hôm nay là ngày để chăm sóc, yêu thương và tạo ra sự hài hòa trong các mối quan hệ.",
+          avoid: "Tránh ôm đồm quá nhiều trách nhiệm hoặc quên chăm sóc bản thân. Đừng để sự cầu toàn làm bạn căng thẳng."
+        },
+        7: {
+          do: "Tìm kiếm sự tĩnh lặng và suy ngẫm. Thiền, đọc sách hoặc nghiên cứu một chủ đề bạn yêu thích. Kết nối với nội tâm sẽ mang lại sự rõ ràng.",
+          avoid: "Tránh cô lập bản thân quá lâu hoặc nghi ngờ mọi thứ. Đừng từ chối sự hỗ trợ từ người khác."
+        },
+        8: {
+          do: "Tập trung vào tài chính và mục tiêu sự nghiệp. Hôm nay là ngày tốt để lập kế hoạch kinh doanh, đàm phán hoặc đầu tư. Hãy giữ sự tự tin.",
+          avoid: "Tránh tham lam hoặc chỉ tập trung vào vật chất. Đừng bỏ qua các mối quan hệ cá nhân vì công việc."
+        },
+        9: {
+          do: "Lan tỏa lòng nhân ái và giúp đỡ người khác. Tham gia hoạt động từ thiện hoặc hỗ trợ ai đó đang cần. Hôm nay là ngày để sống vì mục đích cao cả.",
+          avoid: "Tránh giữ lấy những cảm xúc tiêu cực hoặc quá khứ. Đừng để sự nhạy cảm làm bạn kiệt sức."
+        },
+        11: {
+          do: "Lắng nghe trực giác của bạn. Đây là ngày để thiền định, tìm kiếm ý nghĩa tâm linh hoặc truyền cảm hứng cho người khác. Hãy tin vào linh cảm của mình.",
+          avoid: "Tránh để sự nhạy cảm quá mức dẫn đến lo lắng. Đừng bỏ qua các chi tiết thực tế trong công việc."
+        },
+        22: {
+          do: "Tập trung vào các dự án lớn và xây dựng tương lai. Lập kế hoạch chi tiết và làm việc hướng tới mục tiêu lâu dài. Hôm nay là ngày để biến ước mơ thành hiện thực.",
+          avoid: "Tránh để áp lực làm bạn kiệt sức. Đừng bỏ qua các chi tiết nhỏ hoặc làm việc mà không có kế hoạch."
+        },
+        33: {
+          do: "Hãy hướng dẫn và truyền cảm hứng cho người khác. Dành thời gian để chia sẻ kiến thức hoặc hỗ trợ ai đó. Hôm nay là ngày để thể hiện lòng từ bi.",
+          avoid: "Tránh hy sinh quá mức mà quên chăm sóc bản thân. Đừng để cảm xúc chi phối các quyết định quan trọng."
+        }
+      };
+      return suggestions[number] || { do: "Hôm nay là một ngày bình thường, hãy làm những gì bạn cảm thấy phù hợp.", avoid: "Tránh hành động vội vàng hoặc thiếu cân nhắc." };
     }
 
     function calculateAdditionalNumbers(fullName, day, month, year, lifePathNumber) {
@@ -359,25 +534,36 @@
       const letters = fullName.split('');
       for (let i = 0; i < letters.length; i++) {
         const letter = letters[i];
-        if (/[a-zA-Z]/.test(letter)) {
+        if (/[a-z]/.test(letter)) {
           const value = getLetterValue(letter);
           expressionSum += value;
           hiddenPassion[value] = (hiddenPassion[value] || 0) + 1;
         }
       }
-      const expressionNumber = reduceToSingleDigit(expressionSum);
+      const expressionNumber = reduceToSingleDigit(expressionSum, true);
       const hiddenPassionNumber = Object.keys(hiddenPassion).reduce((a, b) => hiddenPassion[a] > hiddenPassion[b] ? a : b, 0);
       const birthDayNumber = reduceToSingleDigit(day);
-      challenge1 = reduceToSingleDigit(Math.abs(lifePathNumber - birthDayNumber));
-      challenge2 = reduceToSingleDigit(Math.abs(lifePathNumber - expressionNumber));
-      challenge3 = reduceToSingleDigit(Math.abs(lifePathNumber - reduceToSingleDigit(month)));
-      challenge4 = reduceToSingleDigit(Math.abs(lifePathNumber - reduceToSingleDigit(year)));
+      challenge1 = reduceToSingleDigit(Math.abs(day - month));
+      challenge2 = reduceToSingleDigit(Math.abs(day - reduceToSingleDigit(year)));
+      challenge3 = reduceToSingleDigit(Math.abs(challenge1 - challenge2));
+      challenge4 = reduceToSingleDigit(Math.abs(month - reduceToSingleDigit(year)));
       return {expressionNumber, hiddenPassionNumber, birthDayNumber, challenge1, challenge2, challenge3, challenge4};
+    }
+
+    function calculateDailyNumber(day, month, year) {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth() + 1;
+      const currentDay = now.getDate();
+      const personalYear = reduceToSingleDigit(day + month + currentYear, true);
+      const personalMonth = reduceToSingleDigit(personalYear + currentMonth);
+      const personalDay = reduceToSingleDigit(personalMonth + currentDay);
+      return { personalYear, personalMonth, personalDay };
     }
 
     function isValidDate(day, month, year) {
       const date = new Date(year, month - 1, day);
-      return date.getDate() === day && date.getMonth() === month - 1 && date.getFullYear() === year;
+      return date.getDate() === day && date.getMonth() === month - 1 && date.getFullYear() === year && year >= 1900 && year <= CURRENT_YEAR;
     }
 
     function saveInputs(fullName, day, month, year) {
@@ -391,6 +577,9 @@
         document.getElementById('day').value = inputs.day || '';
         document.getElementById('month').value = inputs.month || '';
         document.getElementById('year').value = inputs.year || '';
+        document.getElementById('dailyDay').value = inputs.day || '';
+        document.getElementById('dailyMonth').value = inputs.month || '';
+        document.getElementById('dailyYear').value = inputs.year || '';
       }
     }
 
@@ -419,7 +608,6 @@
       const day = parseInt(document.getElementById('day').value);
       const month = parseInt(document.getElementById('month').value);
       const year = parseInt(document.getElementById('year').value);
-      const resultDiv = document.getElementById('result');
       const summaryDiv = document.getElementById('summary');
       const detailsDiv = document.getElementById('details');
       const calculationDetailsDiv = document.getElementById('calculationDetails');
@@ -429,7 +617,7 @@
       const showCalcBtn = document.getElementById('showCalcBtn');
       const showMeaningsBtn = document.getElementById('showMeaningsBtn');
 
-      if (!fullName || !/^[a-zA-Z\s]*$/.test(fullName)) {
+      if (!fullName || !/^[a-z\s]*$/.test(fullName)) {
         summaryDiv.innerHTML = '<p class="text-red-500 font-medium">Họ tên chỉ được chứa chữ cái và khoảng trắng!</p>';
         hideLoading();
         return;
@@ -444,12 +632,12 @@
       showLoading();
       setTimeout(() => {
         const dateSum = String(day).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(month).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(year).split('').reduce((sum, digit) => sum + Number(digit), 0);
-        const lifePathNumber = reduceToSingleDigit(dateSum);
+        const lifePathNumber = reduceToSingleDigit(dateSum, true);
         let soulUrgeSum = 0, personalitySum = 0;
         const letters = fullName.split('');
         for (let i = 0; i < letters.length; i++) {
           const letter = letters[i];
-          if (/[a-zA-Z]/.test(letter)) {
+          if (/[a-z]/.test(letter)) {
             const prevLetter = i > 0 ? letters[i - 1] : null;
             const nextLetter = i < letters.length - 1 ? letters[i + 1] : null;
             const value = getLetterValue(letter);
@@ -457,38 +645,44 @@
             else personalitySum += value;
           }
         }
-        const soulUrgeNumber = reduceToSingleDigit(soulUrgeSum);
-        const personalityNumber = reduceToSingleDigit(personalitySum);
+        const soulUrgeNumber = reduceToSingleDigit(soulUrgeSum, true);
+        const personalityNumber = reduceToSingleDigit(personalitySum, true);
         const additionalNumbers = calculateAdditionalNumbers(fullName, day, month, year, lifePathNumber);
+
         summaryDiv.innerHTML = `<h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Kết Quả Tổng Quan</h2><p><strong>Họ và tên:</strong> ${fullName}</p><p><strong>Ngày sinh:</strong> ${day}/${month}/${year}</p><p><strong>Con số chủ đạo (Số đường đời):</strong> ${lifePathNumber}</p><p><strong>Con số linh hồn:</strong> ${soulUrgeNumber}</p><p><strong>Con số nhân cách:</strong> ${personalityNumber}</p><p><strong>Con số tương tác:</strong> ${additionalNumbers.expressionNumber}</p><p><strong>Con số linh hồn ẩn:</strong> ${additionalNumbers.hiddenPassionNumber}</p><p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber}</p><p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1}</p><p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2}</p><p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3}</p><p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4}</p>`;
-        detailsDiv.innerHTML = `<h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Chi Tiết Thần Số Học</h2><p><strong>Con số chủ đạo (Số đường đời):</strong> ${lifePathNumber} - ${getLifePathMeaning(lifePathNumber)}</p><p><strong>Con số linh hồn:</strong> ${soulUrgeNumber} - ${getLifePathMeaning(soulUrgeNumber)}</p><p><strong>Con số nhân cách:</strong> ${personalityNumber} - ${getLifePathMeaning(personalityNumber)}</p><p><strong>Con số tương tác (Số biểu đạt):</strong> ${additionalNumbers.expressionNumber} - ${getLifePathMeaning(additionalNumbers.expressionNumber)}</p><p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> ${additionalNumbers.hiddenPassionNumber} - ${getLifePathMeaning(additionalNumbers.hiddenPassionNumber)}</p><p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber} - ${getLifePathMeaning(additionalNumbers.birthDayNumber)}</p><p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1} - ${getChallengeMeaning(additionalNumbers.challenge1)}</p><p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2} - ${getChallengeMeaning(additionalNumbers.challenge2)}</p><p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3} - ${getChallengeMeaning(additionalNumbers.challenge3)}</p><p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4} - ${getChallengeMeaning(additionalNumbers.challenge4)}</p>`;
+
+        detailsDiv.innerHTML = `<h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Chi Tiết Thần Số Học</h2><p><strong>Con số chủ đạo (Số đường đời):</strong> ${lifePathNumber} - ${getNumberMeaning(lifePathNumber)}</p><p><strong>Con số linh hồn:</strong> ${soulUrgeNumber} - ${getNumberMeaning(soulUrgeNumber)}</p><p><strong>Con số nhân cách:</strong> ${personalityNumber} - ${getNumberMeaning(personalityNumber)}</p><p><strong>Con số tương tác (Số biểu đạt):</strong> ${additionalNumbers.expressionNumber} - ${getNumberMeaning(additionalNumbers.expressionNumber)}</p><p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> ${additionalNumbers.hiddenPassionNumber} - ${getNumberMeaning(additionalNumbers.hiddenPassionNumber)}</p><p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber} - ${getNumberMeaning(additionalNumbers.birthDayNumber)}</p><p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1} - ${getChallengeMeaning(additionalNumbers.challenge1)}</p><p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2} - ${getChallengeMeaning(additionalNumbers.challenge2)}</p><p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3} - ${getChallengeMeaning(additionalNumbers.challenge3)}</p><p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4} - ${getChallengeMeaning(additionalNumbers.challenge4)}</p>`;
+
         const calcDetails = `
           <h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Cách Tính Chi Tiết</h2>
-          <p><strong>Con số chủ đạo (Số đường đời):</strong> Cộng tất cả các chữ số trong ngày sinh, tháng sinh và năm sinh, sau đó rút gọn về một chữ số (trừ 11, 22).</p>
-          <p><strong>Con số linh hồn:</strong> Tổng giá trị các nguyên âm (A=1, E=5, I=9, O=6, U=3, đôi khi Y=7) trong họ tên đầy đủ, rút gọn về một chữ số.</p>
-          <p><strong>Con số nhân cách:</strong> Tổng giá trị các phụ âm trong họ tên đầy đủ, rút gọn về một chữ số.</p>
-          <p><strong>Con số tương tác (Số biểu đạt):</strong> Tổng giá trị tất cả chữ cái trong họ tên, rút gọn về một chữ số.</p>
-          <p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> Con số chữ cái xuất hiện nhiều nhất trong họ tên (dựa trên giá trị số học).</p>
-          <p><strong>Con số ngày sinh:</strong> Rút gọn ngày sinh về một chữ số.</p>
-          <p><strong>Con số thách thức:</strong> Tính dựa trên sự chênh lệch giữa con số chủ đạo và các con số khác (ngày sinh, biểu đạt, tháng, năm), rút gọn.</p>
+          <p><strong>Con số chủ đạo (Số đường đời):</strong> Cộng tất cả các chữ số trong ngày sinh, tháng sinh và năm sinh, sau đó rút gọn về một chữ số (giữ nguyên 11, 22, 33 nếu áp dụng).</p>
+          <p><strong>Con số linh hồn:</strong> Tổng giá trị các nguyên âm trong họ tên đầy đủ, rút gọn.</p>
+          <p><strong>Con số nhân cách:</strong> Tổng giá trị các phụ âm trong họ tên đầy đủ, rút gọn.</p>
+          <p><strong>Con số tương tác (Số biểu đạt):</strong> Tổng giá trị tất cả chữ cái trong họ tên, rút gọn.</p>
+          <p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> Con số chữ cái xuất hiện nhiều nhất.</p>
+          <p><strong>Con số ngày sinh:</strong> Rút gọn ngày sinh.</p>
+          <p><strong>Con số thách thức:</strong> Chênh lệch giữa các thành phần ngày sinh, rút gọn.</p>
         `;
         calculationDetailsDiv.innerHTML = calcDetails;
+
         let meaningsHTML = '<h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Ý Nghĩa Các Con Số Trong Kết Quả</h2>';
-        meaningsHTML += '<p class="mb-2">Trong thần số học, mỗi con số mang ý nghĩa riêng, phản ánh các khía cạnh khác nhau của cuộc sống và tính cách của bạn. Dưới đây là giải thích chi tiết về ý nghĩa của từng loại con số trong kết quả của bạn.</p>';
-        meaningsHTML += '<h3 class="font-semibold mt-4">Ý Nghĩa Các Con Số</h3><ul class="list-disc pl-5 space-y-2">';
-        meaningsHTML += `<li><strong>Con số chủ đạo (Số đường đời - Số 5):</strong> Đây là con số quan trọng nhất trong thần số học, được tính bằng cách cộng tất cả các chữ số trong ngày sinh của bạn và rút gọn về một chữ số (trừ 11 hoặc 22). Nó đại diện cho con đường cuộc đời, sứ mệnh và bài học chính mà bạn sẽ trải qua trong suốt cuộc sống. Với số 5, bạn có xu hướng yêu thích tự do, phiêu lưu và linh hoạt. <strong>Ý nghĩa:</strong> ${getLifePathMeaning(5)}</li>`;
-        meaningsHTML += `<li><strong>Con số linh hồn (Số 6):</strong> Con số này được tính từ tổng giá trị các nguyên âm trong họ tên đầy đủ, phản ánh mong muốn nội tâm, động lực sâu xa và điều bạn khao khát trong tâm hồn. Với số 6, bạn có xu hướng hướng tới trách nhiệm, gia đình và sự yêu thương. <strong>Ý nghĩa:</strong> ${getLifePathMeaning(6)}</li>`;
-        meaningsHTML += `<li><strong>Con số nhân cách (Số 2):</strong> Được tính từ tổng giá trị các phụ âm trong họ tên, con số này thể hiện cách bạn thể hiện bản thân ra bên ngoài, ấn tượng bạn tạo ra với người khác. Với số 2, bạn thường được nhìn nhận là người hòa hợp, nhạy cảm và giỏi hợp tác. <strong>Ý nghĩa:</strong> ${getLifePathMeaning(2)}</li>`;
-        meaningsHTML += `<li><strong>Con số tương tác (Số biểu đạt - Số 8):</strong> Là tổng giá trị tất cả các chữ cái trong họ tên, con số này cho biết cách bạn tương tác với thế giới, thể hiện tài năng và mục đích sống. Với số 8, bạn có khả năng đạt thành công lớn trong lĩnh vực tài chính và quyền lực. <strong>Ý nghĩa:</strong> ${getLifePathMeaning(8)}</li>`;
-        meaningsHTML += `<li><strong>Con số linh hồn ẩn (Số đam mê ẩn - Số 9):</strong> Là con số xuất hiện nhiều nhất trong các chữ cái của họ tên, thể hiện đam mê tiềm ẩn hoặc năng lượng mạnh mẽ nhất trong bạn. Với số 9, bạn có xu hướng nhân đạo, cống hiến và hướng tới việc giúp đỡ người khác. <strong>Ý nghĩa:</strong> ${getLifePathMeaning(9)}</li>`;
-        meaningsHTML += `<li><strong>Con số ngày sinh (Số 5):</strong> Được rút gọn từ ngày sinh, con số này phản ánh năng lượng đặc trưng của bạn vào ngày sinh ra, ảnh hưởng đến cách bạn hành động trong cuộc sống. Với số 5, bạn mang năng lượng tự do, thích khám phá và thay đổi. <strong>Ý nghĩa:</strong> ${getLifePathMeaning(5)}</li>`;
+        meaningsHTML += '<p class="mb-2">Dưới đây là ý nghĩa chi tiết của các con số đã tính cho bạn.</p>';
+        meaningsHTML += '<ul class="list-disc pl-5 space-y-2">';
+        meaningsHTML += `<li><strong>Con số chủ đạo ${lifePathNumber}:</strong> ${getNumberMeaning(lifePathNumber)}</li>`;
+        meaningsHTML += `<li><strong>Con số linh hồn ${soulUrgeNumber}:</strong> ${getNumberMeaning(soulUrgeNumber)}</li>`;
+        meaningsHTML += `<li><strong>Con số nhân cách ${personalityNumber}:</strong> ${getNumberMeaning(personalityNumber)}</li>`;
+        meaningsHTML += `<li><strong>Con số tương tác ${additionalNumbers.expressionNumber}:</strong> ${getNumberMeaning(additionalNumbers.expressionNumber)}</li>`;
+        meaningsHTML += `<li><strong>Con số linh hồn ẩn ${additionalNumbers.hiddenPassionNumber}:</strong> ${getNumberMeaning(additionalNumbers.hiddenPassionNumber)}</li>`;
+        meaningsHTML += `<li><strong>Con số ngày sinh ${additionalNumbers.birthDayNumber}:</strong> ${getNumberMeaning(additionalNumbers.birthDayNumber)}</li>`;
         meaningsHTML += '</ul>';
-        meaningsHTML += '<h3 class="font-semibold mt-4">Ý Nghĩa Các Con Số Thách Thức</h3><p class="mb-2">Con số thách thức thể hiện những bài học hoặc khó khăn bạn cần vượt qua trong cuộc đời, được tính dựa trên sự chênh lệch giữa con số chủ đạo và các con số khác.</p><ul class="list-disc pl-5 space-y-2">';
-        meaningsHTML += `<li><strong>Con số thách thức 1 (Số 0):</strong> Không có thách thức cụ thể, nhưng bạn cần tập trung vào bài học của con số chủ đạo (số 5). <strong>Ý nghĩa:</strong> ${getChallengeMeaning(0)}</li>`;
-        meaningsHTML += `<li><strong>Con số thách thức 2 và 4 (Số 3):</strong> Thách thức này yêu cầu bạn tập trung và phát triển kỷ luật để vượt qua sự phân tâm. <strong>Ý nghĩa:</strong> ${getChallengeMeaning(3)}</li>`;
-        meaningsHTML += `<li><strong>Con số thách thức 3 (Số 4):</strong> Thách thức này liên quan đến việc cân bằng giữa sự ổn định và khả năng thích nghi với thay đổi. <strong>Ý nghĩa:</strong> ${getChallengeMeaning(4)}</li>`;
+        meaningsHTML += '<h3 class="font-semibold mt-4">Ý Nghĩa Các Con Số Thách Thức</h3><ul class="list-disc pl-5 space-y-2">';
+        meaningsHTML += `<li><strong>Thách thức 1 (${additionalNumbers.challenge1}):</strong> ${getChallengeMeaning(additionalNumbers.challenge1)}</li>`;
+        meaningsHTML += `<li><strong>Thách thức 2 (${additionalNumbers.challenge2}):</strong> ${getChallengeMeaning(additionalNumbers.challenge2)}</li>`;
+        meaningsHTML += `<li><strong>Thách thức 3 (${additionalNumbers.challenge3}):</strong> ${getChallengeMeaning(additionalNumbers.challenge3)}</li>`;
+        meaningsHTML += `<li><strong>Thách thức 4 (${additionalNumbers.challenge4}):</strong> ${getChallengeMeaning(additionalNumbers.challenge4)}</li>`;
         meaningsHTML += '</ul>';
         meaningsDiv.innerHTML = meaningsHTML;
+
         showMoreBtn.classList.remove('hidden');
         showCalcBtn.classList.remove('hidden');
         showMeaningsBtn.classList.remove('hidden');
@@ -504,9 +698,48 @@
       }, 500);
     }
 
+    function calculateDailyForecast() {
+      const day = parseInt(document.getElementById('dailyDay').value);
+      const month = parseInt(document.getElementById('dailyMonth').value);
+      const year = parseInt(document.getElementById('dailyYear').value);
+      const dailyForecastDiv = document.getElementById('dailyForecast');
+      const dailyCalculateBtn = document.getElementById('dailyCalculateBtn');
+
+      if (!isValidDate(day, month, year)) {
+        dailyForecastDiv.innerHTML = '<p class="text-red-500 font-medium">Ngày sinh không hợp lệ!</p>';
+        hideLoading();
+        return;
+      }
+
+      dailyCalculateBtn.disabled = true;
+      showLoading();
+      setTimeout(() => {
+        const forecast = calculateDailyNumber(day, month, year);
+        const today = new Date().toLocaleDateString('vi-VN');
+        const suggestions = getDailySuggestions(forecast.personalDay);
+        dailyForecastDiv.innerHTML = `
+          <h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Dự Báo Hàng Ngày - ${today}</h2>
+          <p><strong>Năm cá nhân:</strong> ${forecast.personalYear} - ${getNumberMeaning(forecast.personalYear)}</p>
+          <p><strong>Tháng cá nhân:</strong> ${forecast.personalMonth} - ${getNumberMeaning(forecast.personalMonth)}</p>
+          <p><strong>Ngày cá nhân:</strong> ${forecast.personalDay} - ${getNumberMeaning(forecast.personalDay)}</p>
+          <h3 class="font-semibold mt-4">Gợi ý cho hôm nay:</h3>
+          <p>${suggestions.do}</p>
+          <h3 class="font-semibold mt-4">Những việc nên tránh:</h3>
+          <p>${suggestions.avoid}</p>
+        `;
+        saveInputs('', day, month, year);
+        dailyCalculateBtn.disabled = false;
+        hideLoading();
+      }, 500);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       populateDropdowns();
       loadInputs();
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.getElementById('themeIcon').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+      }
     });
 
     const themeToggle = document.getElementById('themeToggle');
@@ -515,9 +748,34 @@
       document.documentElement.classList.toggle('dark');
       if (document.documentElement.classList.contains('dark')) {
         themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+        localStorage.setItem('theme', 'dark');
       } else {
         themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+        localStorage.setItem('theme', 'light');
       }
+    });
+
+    const menuToggle = document.getElementById('menuToggle');
+    const menuDropdown = document.getElementById('menuDropdown');
+    menuToggle.addEventListener('click', () => {
+      menuDropdown.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!menuToggle.contains(e.target) && !menuDropdown.contains(e.target)) {
+        menuDropdown.classList.remove('active');
+      }
+    });
+
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const tabId = button.getAttribute('data-tab');
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.getElementById(`${tabId}Tab`).classList.add('active');
+        menuDropdown.classList.remove('active');
+      });
     });
 
     const showMoreBtn = document.getElementById('showMoreBtn');
@@ -559,11 +817,26 @@
       document.getElementById('showMeaningsBtn').classList.add('hidden');
     });
 
+    const dailyClearBtn = document.getElementById('dailyClearBtn');
+    dailyClearBtn.addEventListener('click', () => {
+      document.getElementById('dailyDay').value = '';
+      document.getElementById('dailyMonth').value = '';
+      document.getElementById('dailyYear').value = '';
+      document.getElementById('dailyForecast').innerHTML = '';
+    });
+
     const calculateBtn = document.getElementById('calculateBtn');
     const debouncedCalculate = debounce(calculateNumerology, 500);
     calculateBtn.addEventListener('click', debouncedCalculate);
-    document.addEventListener('keydown', (e) => {
+    document.getElementById('mainTab').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') debouncedCalculate();
+    });
+
+    const dailyCalculateBtn = document.getElementById('dailyCalculateBtn');
+    const debouncedDailyCalculate = debounce(calculateDailyForecast, 500);
+    dailyCalculateBtn.addEventListener('click', debouncedDailyCalculate);
+    document.getElementById('dailyTab').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') debouncedDailyCalculate();
     });
   </script>
 </body>

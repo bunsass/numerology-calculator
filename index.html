@@ -16,7 +16,9 @@
       background: linear-gradient(135deg, #d8b4fe, #e9d5ff);
     }
     .dark {
-      background: linear-gradient(135deg, #1e3a8a, #4c1d95);
+      background-image: url('https://raw.githubusercontent.com/bunsass/than-so-hoc-test/main/asset/3b75f77f-e72b-42e9-ada7-bd37c7dcff0c.jpg');
+      background-size: cover;
+      background-position: center;
       color: #ffffff;
     }
     .header-container {
@@ -25,27 +27,26 @@
       justify-content: center;
       align-items: center;
       margin-bottom: 2rem;
-      padding-top: 1.5rem; /* Maintains vertical spacing */
+      padding-top: 1.5rem;
     }
     .header-title {
       position: relative;
-      z-index: 10; /* Ensures title stays above buttons */
+      z-index: 10;
     }
     #themeToggle, #menuToggle {
       position: absolute;
-      top: -15px; /* Lifted to avoid overlap */
+      top: -15px;
       transition: background-color 0.3s ease;
     }
     #themeToggle {
-      right: 50px; /* Adjusted for spacing */
+      right: 50px;
     }
     #menuToggle {
-      right: 10px; /* Adjusted for clear separation */
+      right: 10px;
     }
     #themeToggle:hover, #menuToggle:hover {
       background-color: #9333ea;
     }
-    /* Ensure icon stays upright during rotation */
     #menuToggle .icon-wrapper, #themeToggle .icon-wrapper {
       display: inline-block;
       transition: transform 0.3s ease;
@@ -250,7 +251,7 @@
         min-width: 120px;
       }
       h1 {
-        font-size: 1.5rem; /* Adjusted for smaller screens */
+        font-size: 1.5rem;
       }
       h2 {
         font-size: 1.125rem;
@@ -258,7 +259,7 @@
     }
     @media (min-width: 640px) {
       h1 {
-        font-size: 2rem; /* Adjusted for readability */
+        font-size: 2rem;
       }
       h2 {
         font-size: 1.5rem;
@@ -377,7 +378,6 @@
   <script>
     const CURRENT_YEAR = new Date().getFullYear();
 
-    // Function to remove diacritical marks from Vietnamese text
     function normalizeName(text) {
       return text
         .normalize('NFD')
@@ -387,7 +387,6 @@
         .toLowerCase();
     }
 
-    // Populate day and month dropdowns
     function populateDropdowns() {
       const daySelects = [document.getElementById('day'), document.getElementById('dailyDay')];
       const monthSelects = [document.getElementById('month'), document.getElementById('dailyMonth')];
@@ -409,7 +408,6 @@
       });
     }
 
-    // Restrict year input to 4 digits
     [document.getElementById('year'), document.getElementById('dailyYear')].forEach(yearInput => {
       yearInput.addEventListener('input', function(e) {
         if (e.target.value.length > 4) {
@@ -418,7 +416,6 @@
       });
     });
 
-    // Normalize input as user types
     document.getElementById('fullName').addEventListener('input', function(e) {
       const normalizedValue = normalizeName(e.target.value);
       e.target.value = normalizedValue;
@@ -658,7 +655,7 @@
           <p><strong>Con số chủ đạo (Số đường đời):</strong> Cộng tất cả các chữ số trong ngày sinh, tháng sinh và năm sinh, sau đó rút gọn về một chữ số (giữ nguyên 11, 22, 33 nếu áp dụng).</p>
           <p><strong>Con số linh hồn:</strong> Tổng giá trị các nguyên âm trong họ tên đầy đủ, rút gọn.</p>
           <p><strong>Con số nhân cách:</strong> Tổng giá trị các phụ âm trong họ tên đầy đủ, rút gọn.</p>
-          <p><strong>Con số tương tác (Số biểu đạt):</strong> Tổng giá trị tất cả chữ cái trong họ tên, rút gọn.</p>
+          <p><strong>Con tháng tương tác (Số biểu đạt):</strong> Tổng giá trị tất cả chữ cái trong họ tên, rút gọn.</p>
           <p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> Con số chữ cái xuất hiện nhiều nhất.</p>
           <p><strong>Con số ngày sinh:</strong> Rút gọn ngày sinh.</p>
           <p><strong>Con số thách thức:</strong> Chênh lệch giữa các thành phần ngày sinh, rút gọn.</p>
@@ -671,7 +668,7 @@
         meaningsHTML += `<li><strong>Con số chủ đạo ${lifePathNumber}:</strong> ${getNumberMeaning(lifePathNumber)}</li>`;
         meaningsHTML += `<li><strong>Con số linh hồn ${soulUrgeNumber}:</strong> ${getNumberMeaning(soulUrgeNumber)}</li>`;
         meaningsHTML += `<li><strong>Con số nhân cách ${personalityNumber}:</strong> ${getNumberMeaning(personalityNumber)}</li>`;
-        meaningsHTML += `<li><strong>Con số tương tác ${additionalNumbers.expressionNumber}:</strong> ${getNumberMeaning(additionalNumbers.expressionNumber)}</li>`;
+        meaningsHTML += `<li><strong>Con số tương tác ${additionalNumbers.expressionNumber}:</strong> ${getNumberMeaning(additionalNumbers.ExpressionNumber)}</li>`;
         meaningsHTML += `<li><strong>Con số linh hồn ẩn ${additionalNumbers.hiddenPassionNumber}:</strong> ${getNumberMeaning(additionalNumbers.hiddenPassionNumber)}</li>`;
         meaningsHTML += `<li><strong>Con số ngày sinh ${additionalNumbers.birthDayNumber}:</strong> ${getNumberMeaning(additionalNumbers.birthDayNumber)}</li>`;
         meaningsHTML += '</ul>';
@@ -761,7 +758,6 @@
       menuDropdown.classList.toggle('active');
     });
 
-    // Close dropdown when clicking outside
     document.addEventListener('click', (e) => {
       if (!menuToggle.contains(e.target) && !menuDropdown.contains(e.target)) {
         menuDropdown.classList.remove('active');

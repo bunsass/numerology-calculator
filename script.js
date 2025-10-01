@@ -112,7 +112,7 @@ function getPinnacleAdvice(number) {
     8: "Tận dụng năng lượng để đạt thành công về tài chính và sự nghiệp, nhưng giữ cân bằng.",
     9: "Hướng tới các mục tiêu nhân đạo, giúp đỡ người khác và sống vì lý tưởng cao cả.",
     11: "Lắng nghe trực giác và truyền cảm hứng cho người khác qua sự sáng tạo.",
-    22: "Tập trung vào các dự án lớn, biến ý tưởng thành hiện thực với kế hoạch chi tiết.",
+    22: "Tập trung vào các dự án lớn và xây dựng tương lai. Lập kế hoạch chi tiết và làm việc hướng tới mục tiêu lâu dài.",
     33: "Chia sẻ kiến thức và lòng từ bi, nhưng đừng quên chăm sóc bản thân."
   };
   return advice[number] || "Tận dụng giai đoạn này để phát triển bản thân theo hướng tích cực.";
@@ -378,9 +378,16 @@ function calculateNumerology() {
   calculateBtn.disabled = true;
   showLoading();
   setTimeout(() => {
-    const dateSum = String(day).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(month).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(year).split('').reduce((sum, digit) => sum + Number(digit), 0);
+    // Calculate Life Path Number
+    const dateSum = String(day).split('').reduce((sum, digit) => sum + Number(digit), 0) + 
+                    String(month).split('').reduce((sum, digit) => sum + Number(digit), 0) + 
+                    String(year).split('').reduce((sum, digit) => sum + Number(digit), 0);
     const lifePathNumber = reduceToSingleDigit(dateSum, true);
+    
+    // Calculate Soul Urge and Personality Numbers
     let soulUrgeSum = 0, personalitySum = 0;
+    const soulUrgeSteps = [];
+    const personalitySteps = [];
     const letters = fullName.split('');
     for (let i = 0; i < letters.length; i++) {
       const letter = letters[i];
@@ -388,15 +395,45 @@ function calculateNumerology() {
         const prevLetter = i > 0 ? letters[i - 1] : null;
         const nextLetter = i < letters.length - 1 ? letters[i + 1] : null;
         const value = getLetterValue(letter);
-        if (isVowel(letter, prevLetter, nextLetter)) soulUrgeSum += value;
-        else personalitySum += value;
+        if (isVowel(letter, prevLetter, nextLetter)) {
+          soulUrgeSum += value;
+          soulUrgeSteps.push(`${letter.toUpperCase()} = ${value}`);
+        } else {
+          personalitySum += value;
+          personalitySteps.push(`${letter.toUpperCase()} = ${value}`);
+        }
       }
     }
     const soulUrgeNumber = reduceToSingleDigit(soulUrgeSum, true);
     const personalityNumber = reduceToSingleDigit(personalitySum, true);
+    
+    // Calculate additional numbers
     const additionalNumbers = calculateAdditionalNumbers(fullName, day, month, year, lifePathNumber);
     const pinnacleNumbers = calculatePinnacleNumbers(day, month, year, lifePathNumber);
-
+    
+    // Calculate steps for additional numbers
+    const expressionSteps = [];
+    let expressionSum = 0;
+    for (let i = 0; i < letters.length; i++) {
+      const letter = letters[i];
+      if (/[a-z]/.test(letter)) {
+        const value = getLetterValue(letter);
+        expressionSum += value;
+        expressionSteps.push(`${letter.toUpperCase()} = ${value}`);
+      }
+    }
+    const hiddenPassion = {};
+    for (let i = 0; i < letters.length; i++) {
+      const letter = letters[i];
+      if (/[a-z]/.test(letter)) {
+        const value = getLetterValue(letter);
+        hiddenPassion[value] = (hiddenPassion[value] || 0) + 1;
+      }
+    }
+    const hiddenPassionSteps = Object.entries(hiddenPassion).map(([num, count]) => `Số ${num}: ${count} lần`);
+    const yearSum = String(year).split('').reduce((sum, digit) => sum + Number(digit), 0);
+    
+    // Update summary
     summaryDiv.innerHTML = `
       <h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Kết Quả Tổng Quan</h2>
       <p><strong>Họ và tên:</strong> ${fullName}</p>
@@ -407,16 +444,17 @@ function calculateNumerology() {
       <p><strong>Con số tương tác:</strong> ${additionalNumbers.expressionNumber}</p>
       <p><strong>Con số linh hồn ẩn:</strong> ${additionalNumbers.hiddenPassionNumber}</p>
       <p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber}</p>
-      <p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1}</p>
-      <p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2}</p>
-      <p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3}</p>
-      <p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4}</p>
+      <p><strong>Con số thách thức đỉnh cao 1:</strong> ${additionalNumbers.challenge1}</p>
+      <p><strong>Con số thách thức đỉnh cao 2:</strong> ${additionalNumbers.challenge2}</p>
+      <p><strong>Con số thách thức đỉnh cao 3:</strong> ${additionalNumbers.challenge3}</p>
+      <p><strong>Con số thách thức đỉnh cao 4:</strong> ${additionalNumbers.challenge4}</p>
       <p><strong>Con số đỉnh cao 1 (Tuổi ${pinnacleNumbers.firstPinnacleAge}):</strong> ${pinnacleNumbers.firstPinnacle}</p>
       <p><strong>Con số đỉnh cao 2 (Tuổi ${pinnacleNumbers.secondPinnacleAge}):</strong> ${pinnacleNumbers.secondPinnacle}</p>
       <p><strong>Con số đỉnh cao 3 (Tuổi ${pinnacleNumbers.thirdPinnacleAge}):</strong> ${pinnacleNumbers.thirdPinnacle}</p>
       <p><strong>Con số đỉnh cao 4 (Tuổi ${pinnacleNumbers.fourthPinnacleAge}):</strong> ${pinnacleNumbers.fourthPinnacle}</p>
     `;
 
+    // Update details
     detailsDiv.innerHTML = `
       <h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Chi Tiết Thần Số Học</h2>
       <p><strong>Con số chủ đạo (Số đường đời):</strong> ${lifePathNumber} - ${getNumberMeaning(lifePathNumber)}</p>
@@ -425,29 +463,33 @@ function calculateNumerology() {
       <p><strong>Con số tương tác (Số biểu đạt):</strong> ${additionalNumbers.expressionNumber} - ${getNumberMeaning(additionalNumbers.expressionNumber)}</p>
       <p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> ${additionalNumbers.hiddenPassionNumber} - ${getNumberMeaning(additionalNumbers.hiddenPassionNumber)}</p>
       <p><strong>Con số ngày sinh:</strong> ${additionalNumbers.birthDayNumber} - ${getNumberMeaning(additionalNumbers.birthDayNumber)}</p>
-      <p><strong>Con số thách thức 1:</strong> ${additionalNumbers.challenge1} - ${getChallengeMeaning(additionalNumbers.challenge1)}</p>
-      <p><strong>Con số thách thức 2:</strong> ${additionalNumbers.challenge2} - ${getChallengeMeaning(additionalNumbers.challenge2)}</p>
-      <p><strong>Con số thách thức 3:</strong> ${additionalNumbers.challenge3} - ${getChallengeMeaning(additionalNumbers.challenge3)}</p>
-      <p><strong>Con số thách thức 4:</strong> ${additionalNumbers.challenge4} - ${getChallengeMeaning(additionalNumbers.challenge4)}</p>
+      <p><strong>Con số thách thức đỉnh cao 1:</strong> ${additionalNumbers.challenge1} - ${getChallengeMeaning(additionalNumbers.challenge1)}</p>
+      <p><strong>Con số thách thức đỉnh cao 2:</strong> ${additionalNumbers.challenge2} - ${getChallengeMeaning(additionalNumbers.challenge2)}</p>
+      <p><strong>Con số thách thức đỉnh cao 3:</strong> ${additionalNumbers.challenge3} - ${getChallengeMeaning(additionalNumbers.challenge3)}</p>
+      <p><strong>Con số thách thức đỉnh cao 4:</strong> ${additionalNumbers.challenge4} - ${getChallengeMeaning(additionalNumbers.challenge4)}</p>
       <p><strong>Con số đỉnh cao 1 (Tuổi ${pinnacleNumbers.firstPinnacleAge}):</strong> ${pinnacleNumbers.firstPinnacle} - ${getNumberMeaning(pinnacleNumbers.firstPinnacle)} <strong>Lời khuyên:</strong> ${getPinnacleAdvice(pinnacleNumbers.firstPinnacle)}</p>
       <p><strong>Con số đỉnh cao 2 (Tuổi ${pinnacleNumbers.secondPinnacleAge}):</strong> ${pinnacleNumbers.secondPinnacle} - ${getNumberMeaning(pinnacleNumbers.secondPinnacle)} <strong>Lời khuyên:</strong> ${getPinnacleAdvice(pinnacleNumbers.secondPinnacle)}</p>
       <p><strong>Con số đỉnh cao 3 (Tuổi ${pinnacleNumbers.thirdPinnacleAge}):</strong> ${pinnacleNumbers.thirdPinnacle} - ${getNumberMeaning(pinnacleNumbers.thirdPinnacle)} <strong>Lời khuyên:</strong> ${getPinnacleAdvice(pinnacleNumbers.thirdPinnacle)}</p>
       <p><strong>Con số đỉnh cao 4 (Tuổi ${pinnacleNumbers.fourthPinnacleAge}):</strong> ${pinnacleNumbers.fourthPinnacle} - ${getNumberMeaning(pinnacleNumbers.fourthPinnacle)} <strong>Lời khuyên:</strong> ${getPinnacleAdvice(pinnacleNumbers.fourthPinnacle)}</p>
     `;
 
+    // Update calculation details with detailed steps
     const calcDetails = `
       <h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Cách Tính Chi Tiết</h2>
-      <p><strong>Con số chủ đạo (Số đường đời):</strong> Cộng tất cả các chữ số trong ngày sinh, tháng sinh và năm sinh, sau đó rút gọn về một chữ số (giữ nguyên 11, 22, 33 nếu áp dụng).</p>
-      <p><strong>Con số linh hồn:</strong> Tổng giá trị các nguyên âm trong họ tên đầy đủ, rút gọn.</p>
-      <p><strong>Con số nhân cách:</strong> Tổng giá trị các phụ âm trong họ tên đầy đủ, rút gọn.</p>
-      <p><strong>Con số tương tác (Số biểu đạt):</strong> Tổng giá trị tất cả chữ cái trong họ tên, rút gọn.</p>
-      <p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> Con số chữ cái xuất hiện nhiều nhất.</p>
-      <p><strong>Con số ngày sinh:</strong> Rút gọn ngày sinh.</p>
-      <p><strong>Con số thách thức:</strong> Chênh lệch giữa các thành phần ngày sinh, rút gọn.</p>
-      <p><strong>Con số đỉnh cao 1:</strong> Cộng ngày sinh và tháng sinh, rút gọn (giữ nguyên 11, 22, 33 nếu áp dụng). Bắt đầu từ tuổi ${pinnacleNumbers.firstPinnacleAge}.</p>
-      <p><strong>Con số đỉnh cao 2:</strong> Cộng ngày sinh và tổng các chữ số của năm sinh, rút gọn. Bắt đầu từ tuổi ${pinnacleNumbers.secondPinnacleAge}.</p>
-      <p><strong>Con số đỉnh cao 3:</strong> Cộng con số đỉnh cao 1 và 2, rút gọn. Bắt đầu từ tuổi ${pinnacleNumbers.thirdPinnacleAge}.</p>
-      <p><strong>Con số đỉnh cao 4:</strong> Cộng tháng sinh và tổng các chữ số của năm sinh, rút gọn. Bắt đầu từ tuổi ${pinnacleNumbers.fourthPinnacleAge}.</p>
+      <p><strong>Con số chủ đạo (Số đường đời):</strong> Cộng tất cả các chữ số trong ngày sinh (${day} → ${String(day).split('').join('+')}), tháng sinh (${month} → ${String(month).split('').join('+')}), và năm sinh (${year} → ${String(year).split('').join('+')}) = ${dateSum}. Rút gọn ${dateSum} về một chữ số (giữ nguyên 11, 22, 33 nếu có) = ${lifePathNumber}.</p>
+      <p><strong>Con số linh hồn:</strong> Tổng giá trị các nguyên âm trong họ tên "${fullName}" (${soulUrgeSteps.join(', ')}) = ${soulUrgeSum}. Rút gọn ${soulUrgeSum} về một chữ số (giữ nguyên 11, 22, 33 nếu có) = ${soulUrgeNumber}.</p>
+      <p><strong>Con số nhân cách:</strong> Tổng giá trị các phụ âm trong họ tên "${fullName}" (${personalitySteps.join(', ')}) = ${personalitySum}. Rút gọn ${personalitySum} về một chữ số (giữ nguyên 11, 22, 33 nếu có) = ${personalityNumber}.</p>
+      <p><strong>Con số tương tác (Số biểu đạt):</strong> Tổng giá trị tất cả chữ cái trong họ tên "${fullName}" (${expressionSteps.join(', ')}) = ${expressionSum}. Rút gọn ${expressionSum} về một chữ số (giữ nguyên 11, 22, 33 nếu có) = ${additionalNumbers.expressionNumber}.</p>
+      <p><strong>Con số linh hồn ẩn (Số đam mê ẩn):</strong> Đếm số lần xuất hiện của các giá trị chữ cái (${hiddenPassionSteps.join(', ')}). Giá trị xuất hiện nhiều nhất = ${additionalNumbers.hiddenPassionNumber}.</p>
+      <p><strong>Con số ngày sinh:</strong> Rút gọn ngày sinh ${day} về một chữ số = ${additionalNumbers.birthDayNumber}.</p>
+      <p><strong>Con số thách thức đỉnh cao 1:</strong> Chênh lệch giữa ngày sinh (${day}) và tháng sinh (${month}) = |${day} - ${month}| = ${Math.abs(day - month)}. Rút gọn về một chữ số = ${additionalNumbers.challenge1}.</p>
+      <p><strong>Con số thách thức đỉnh cao 2:</strong> Chênh lệch giữa ngày sinh (${day}) và tổng các chữ số của năm sinh (${year} → ${yearSum}) = |${day} - ${yearSum}| = ${Math.abs(day - yearSum)}. Rút gọn về một chữ số = ${additionalNumbers.challenge2}.</p>
+      <p><strong>Con số thách thức đỉnh cao 3:</strong> Chênh lệch giữa con số thách thức 1 (${additionalNumbers.challenge1}) và con số thách thức 2 (${additionalNumbers.challenge2}) = |${additionalNumbers.challenge1} - ${additionalNumbers.challenge2}| = ${Math.abs(additionalNumbers.challenge1 - additionalNumbers.challenge2)}. Rút gọn về một chữ số = ${additionalNumbers.challenge3}.</p>
+      <p><strong>Con số thách thức đỉnh cao 4:</strong> Chênh lệch giữa tháng sinh (${month}) và tổng các chữ số của năm sinh (${year} → ${yearSum}) = |${month} - ${yearSum}| = ${Math.abs(month - yearSum)}. Rút gọn về một chữ số = ${additionalNumbers.challenge4}.</p>
+      <p><strong>Con số đỉnh cao 1:</strong> Cộng ngày sinh (${day}) và tháng sinh (${month}) = ${day + month}. Rút gọn (giữ nguyên 11, 22, 33 nếu có) = ${pinnacleNumbers.firstPinnacle}. Bắt đầu từ tuổi ${pinnacleNumbers.firstPinnacleAge}.</p>
+      <p><strong>Con số đỉnh cao 2:</strong> Cộng ngày sinh (${day}) và tổng các chữ số của năm sinh (${yearSum}) = ${day + yearSum}. Rút gọn = ${pinnacleNumbers.secondPinnacle}. Bắt đầu từ tuổi ${pinnacleNumbers.secondPinnacleAge}.</p>
+      <p><strong>Con số đỉnh cao 3:</strong> Cộng con số đỉnh cao 1 (${pinnacleNumbers.firstPinnacle}) và con số đỉnh cao 2 (${pinnacleNumbers.secondPinnacle}) = ${pinnacleNumbers.firstPinnacle + pinnacleNumbers.secondPinnacle}. Rút gọn = ${pinnacleNumbers.thirdPinnacle}. Bắt đầu từ tuổi ${pinnacleNumbers.thirdPinnacleAge}.</p>
+      <p><strong>Con số đỉnh cao 4:</strong> Cộng tháng sinh (${month}) và tổng các chữ số của năm sinh (${yearSum}) = ${month + yearSum}. Rút gọn = ${pinnacleNumbers.fourthPinnacle}. Bắt đầu từ tuổi ${pinnacleNumbers.fourthPinnacleAge}.</p>
     `;
     calculationDetailsDiv.innerHTML = calcDetails;
 
@@ -462,11 +504,11 @@ function calculateNumerology() {
     meaningsHTML += `<li><strong>Con số ngày sinh:</strong> Liên quan đến đặc điểm và năng lượng của ngày bạn sinh ra.</li>`;
     meaningsHTML += `<li><strong>Con số đỉnh cao:</strong> Đại diện cho các giai đoạn quan trọng trong cuộc đời, ảnh hưởng đến cơ hội và thử thách ở các độ tuổi khác nhau.</li>`;
     meaningsHTML += '</ul>';
-    meaningsHTML += '<h3 class="font-semibold mt-4">Ý Nghĩa Các Con Số Thách Thức</h3><ul class="list-disc pl-5 space-y-2">';
-    meaningsHTML += `<li><strong>Con số thách thức 1:</strong> Những thử thách liên quan đến sự khác biệt giữa ngày và tháng sinh.</li>`;
-    meaningsHTML += `<li><strong>Con số thách thức 2:</strong> Những thử thách liên quan đến sự khác biệt giữa ngày sinh và năm sinh rút gọn.</li>`;
-    meaningsHTML += `<li><strong>Con số thách thức 3:</strong> Những thử thách từ sự khác biệt giữa hai con số thách thức đầu tiên.</li>`;
-    meaningsHTML += `<li><strong>Con số thách thức 4:</strong> Những thử thách liên quan đến sự khác biệt giữa tháng sinh và năm sinh rút gọn.</li>`;
+    meaningsHTML += '<h3 class="font-semibold mt-4">Ý Nghĩa Các Con Số Thách Thức Đỉnh Cao</h3><ul class="list-disc pl-5 space-y-2">';
+    meaningsHTML += `<li><strong>Con số thách thức đỉnh cao 1:</strong> Những thử thách liên quan đến sự khác biệt giữa ngày và tháng sinh.</li>`;
+    meaningsHTML += `<li><strong>Con số thách thức đỉnh cao 2:</strong> Những thử thách liên quan đến sự khác biệt giữa ngày sinh và năm sinh rút gọn.</li>`;
+    meaningsHTML += `<li><strong>Con số thách thức đỉnh cao 3:</strong> Những thử thách từ sự khác biệt giữa hai con số thách thức đầu tiên.</li>`;
+    meaningsHTML += `<li><strong>Con số thách thức đỉnh cao 4:</strong> Những thử thách liên quan đến sự khác biệt giữa tháng sinh và năm sinh rút gọn.</li>`;
     meaningsHTML += '</ul>';
     meaningsDiv.innerHTML = meaningsHTML;
 
@@ -506,6 +548,13 @@ function calculateDailyForecast() {
     const forecast = calculateDailyNumber(day, month, year);
     const today = new Date().toLocaleDateString('vi-VN');
     const suggestions = getDailySuggestions(forecast.personalDay);
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1;
+    const currentDay = new Date().getDate();
+    const personalYearSum = day + month + currentYear;
+    const personalMonthSum = forecast.personalYear + currentMonth;
+    const personalDaySum = forecast.personalMonth + currentDay;
+
     dailyForecastDiv.innerHTML = `
       <h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Dự Báo Hàng Ngày - ${today}</h2>
       <p><strong>Năm cá nhân:</strong> ${forecast.personalYear} - ${getNumberMeaning(forecast.personalYear)}</p>
@@ -519,9 +568,9 @@ function calculateDailyForecast() {
 
     const dailyCalcDetails = `
       <h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Cách Tính Dự Báo Hàng Ngày</h2>
-      <p><strong>Năm cá nhân:</strong> Cộng ngày sinh + tháng sinh + năm hiện tại, rút gọn (giữ nguyên 11, 22, 33 nếu áp dụng).</p>
-      <p><strong>Tháng cá nhân:</strong> Năm cá nhân + tháng hiện tại, rút gọn.</p>
-      <p><strong>Ngày cá nhân:</strong> Tháng cá nhân + ngày hiện tại, rút gọn.</p>
+      <p><strong>Năm cá nhân:</strong> Cộng ngày sinh (${day}) + tháng sinh (${month}) + năm hiện tại (${currentYear}) = ${personalYearSum}. Rút gọn (giữ nguyên 11, 22, 33 nếu có) = ${forecast.personalYear}.</p>
+      <p><strong>Tháng cá nhân:</strong> Năm cá nhân (${forecast.personalYear}) + tháng hiện tại (${currentMonth}) = ${personalMonthSum}. Rút gọn = ${forecast.personalMonth}.</p>
+      <p><strong>Ngày cá nhân:</strong> Tháng cá nhân (${forecast.personalMonth}) + ngày hiện tại (${currentDay}) = ${personalDaySum}. Rút gọn = ${forecast.personalDay}.</p>
     `;
     dailyCalculationDetailsDiv.innerHTML = dailyCalcDetails;
     dailyCalculationDetailsDiv.classList.remove('details-shown');
@@ -563,6 +612,30 @@ function calculateCompatibilityForecast() {
   showLoading();
   setTimeout(() => {
     const compat = calculateCompatibility(name1, day1, month1, year1, name2, day2, month2, year2);
+    const dateSum1 = String(day1).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(month1).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(year1).split('').reduce((sum, digit) => sum + Number(digit), 0);
+    const dateSum2 = String(day2).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(month2).split('').reduce((sum, digit) => sum + Number(digit), 0) + String(year2).split('').reduce((sum, digit) => sum + Number(digit), 0);
+    const expressionSteps1 = [];
+    const expressionSteps2 = [];
+    let expressionSum1 = 0, expressionSum2 = 0;
+    const letters1 = name1.split('');
+    const letters2 = name2.split('');
+    for (let i = 0; i < letters1.length; i++) {
+      const letter = letters1[i];
+      if (/[a-z]/.test(letter)) {
+        const value = getLetterValue(letter);
+        expressionSum1 += value;
+        expressionSteps1.push(`${letter.toUpperCase()} = ${value}`);
+      }
+    }
+    for (let i = 0; i < letters2.length; i++) {
+      const letter = letters2[i];
+      if (/[a-z]/.test(letter)) {
+        const value = getLetterValue(letter);
+        expressionSum2 += value;
+        expressionSteps2.push(`${letter.toUpperCase()} = ${value}`);
+      }
+    }
+
     compatForecastDiv.innerHTML = `
       <h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Kết Quả Độ Tương Hợp</h2>
       <p><strong>Họ và tên người thứ nhất:</strong> ${name1}</p>
@@ -579,9 +652,11 @@ function calculateCompatibilityForecast() {
 
     const compatCalcDetails = `
       <h2 class="text-lg sm:text-xl font-semibold text-purple-800 dark:text-purple-200">Cách Tính Độ Tương Hợp</h2>
-      <p><strong>Con số chủ đạo:</strong> Cộng tất cả chữ số trong ngày sinh, rút gọn (giữ nguyên 11, 22, 33 nếu áp dụng).</p>
-      <p><strong>Con số tương tác:</strong> Tổng giá trị tất cả chữ cái trong họ tên, rút gọn.</p>
-      <p><strong>Mức độ tương hợp:</strong> Trung bình phần trăm tương thích giữa con số chủ đạo và con số tương tác của hai người, dựa trên ma trận tương hợp định sẵn.</p>
+      <p><strong>Con số chủ đạo người thứ nhất:</strong> Cộng tất cả chữ số trong ngày sinh (${day1} → ${String(day1).split('').join('+')}), tháng sinh (${month1} → ${String(month1).split('').join('+')}), năm sinh (${year1} → ${String(year1).split('').join('+')}) = ${dateSum1}. Rút gọn (giữ nguyên 11, 22, 33 nếu có) = ${compat.lifePathNumber1}.</p>
+      <p><strong>Con số tương tác người thứ nhất:</strong> Tổng giá trị tất cả chữ cái trong họ tên "${name1}" (${expressionSteps1.join(', ')}) = ${expressionSum1}. Rút gọn (giữ nguyên 11, 22, 33 nếu có) = ${compat.expressionNumber1}.</p>
+      <p><strong>Con số chủ đạo người thứ hai:</strong> Cộng tất cả chữ số trong ngày sinh (${day2} → ${String(day2).split('').join('+')}), tháng sinh (${month2} → ${String(month2).split('').join('+')}), năm sinh (${year2} → ${String(year2).split('').join('+')}) = ${dateSum2}. Rút gọn (giữ nguyên 11, 22, 33 nếu có) = ${compat.lifePathNumber2}.</p>
+      <p><strong>Con số tương tác người thứ hai:</strong> Tổng giá trị tất cả chữ cái trong họ tên "${name2}" (${expressionSteps2.join(', ')}) = ${expressionSum2}. Rút gọn (giữ nguyên 11, 22, 33 nếu có) = ${compat.expressionNumber2}.</p>
+      <p><strong>Mức độ tương hợp:</strong> Trung bình phần trăm tương thích giữa con số chủ đạo (${compat.lifePathNumber1}, ${compat.lifePathNumber2} → ${compat.lifePathCompat}%) và con số tương tác (${compat.expressionNumber1}, ${compat.expressionNumber2} → ${compat.expressionCompat}%) = (${compat.lifePathCompat} + ${compat.expressionCompat})/2 = ${compat.overallCompat}%.</p>
     `;
     compatCalculationDetailsDiv.innerHTML = compatCalcDetails;
     compatCalculationDetailsDiv.classList.remove('details-shown');

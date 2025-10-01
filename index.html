@@ -246,7 +246,13 @@
         monthSelect.appendChild(option);
       }
     }
-    document.addEventListener('DOMContentLoaded', populateDropdowns);
+
+    // Restrict year input to 4 digits
+    document.getElementById('year').addEventListener('input', function(e) {
+      if (e.target.value.length > 4) {
+        e.target.value = e.target.value.slice(0, 4);
+      }
+    });
 
     // Normalize input as user types
     document.getElementById('fullName').addEventListener('input', function(e) {
@@ -442,7 +448,10 @@
       }, 500);
     }
 
-    document.addEventListener('DOMContentLoaded', loadInputs);
+    document.addEventListener('DOMContentLoaded', () => {
+      populateDropdowns();
+      loadInputs();
+    });
 
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');

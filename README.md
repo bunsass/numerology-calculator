@@ -1,1 +1,1 @@
-https://bunsass.github.io/than-so-hoc-test/
+https://bunsass.github.io/numerology-calculator/

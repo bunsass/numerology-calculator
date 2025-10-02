@@ -3,155 +3,689 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ứng dụng thần số học miễn phí - Khám phá con số chủ đạo, tương hợp và dự báo hàng ngày">
   <title>Ứng dụng Thần Số Học</title>
-  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-  <link href="style.css" rel="stylesheet">
+  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      transition: background 0.5s ease, color 0.3s ease;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    .light {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      animation: gradientShift 15s ease infinite;
+    }
+
+    .dark {
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      animation: gradientShift 20s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .container-main {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .dark .container-main {
+      background: rgba(30, 30, 50, 0.95);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    }
+
+    .header-gradient {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .header-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-top: 1.5rem;
+    }
+
+    .header-title {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .toggle-btn {
+      position: absolute;
+      top: -10px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 0.65rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle-btn:hover {
+      transform: scale(1.1) rotate(90deg);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    #themeToggle { right: 60px; }
+    #menuToggle { right: 10px; }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 10px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      min-width: 180px;
+      display: none;
+      overflow: hidden;
+      border: 1px solid rgba(102, 126, 234, 0.2);
+    }
+
+    .dark .dropdown-menu {
+      background: #2d2d4a;
+      border-color: rgba(102, 126, 234, 0.3);
+    }
+
+    .dropdown-menu.active {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tab-btn {
+      display: block;
+      width: 100%;
+      padding: 0.875rem 1.25rem;
+      text-align: left;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+
+    .dark .tab-btn {
+      color: #f5f5f5;
+    }
+
+    .tab-btn:hover {
+      background: linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
+      padding-left: 1.5rem;
+    }
+
+    .input-field, .select-field {
+      transition: all 0.3s ease;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 0.875rem;
+      font-size: 1rem;
+      background: white;
+      color: #333;
+    }
+
+    .dark .input-field, .dark .select-field {
+      background: #3a3a5a;
+      color: #ffffff;
+      border-color: #4a4a6a;
+    }
+
+    .dark label {
+      color: #f0f0f0;
+    }
+
+    .input-field:focus, .select-field:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .btn-calculate, .btn-clear {
+      border-radius: 12px;
+      padding: 0.875rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-calculate {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-calculate:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .btn-calculate:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-clear {
+      background: #6b7280;
+      color: white;
+      box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+    }
+
+    .btn-clear:hover {
+      background: #4b5563;
+      transform: translateY(-2px);
+    }
+
+    .result-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 250, 251, 0.9) 100%);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-top: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(102, 126, 234, 0.1);
+    }
+
+    .dark .result-card {
+      background: linear-gradient(135deg, rgba(45, 45, 74, 0.9) 0%, rgba(58, 58, 90, 0.9) 100%);
+      border-color: rgba(102, 126, 234, 0.2);
+      color: #f0f0f0 !important;
+    }
+
+    .result-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .result-card h2 {
+      color: #667eea;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .dark .result-card h2 {
+      color: #8b9ef7 !important;
+    }
+
+    .result-card h3 {
+      color: #667eea;
+    }
+
+    .dark .result-card h3 {
+      color: #8b9ef7 !important;
+    }
+
+    .result-card p {
+      margin-bottom: 0.75rem;
+      line-height: 1.7;
+      color: #333;
+    }
+
+    .dark .result-card p {
+      color: #f0f0f0 !important;
+    }
+    
+    .dark .result-card,
+    .dark .result-card *:not(strong) {
+      color: #f0f0f0 !important;
+    }
+    
+    .dark #summary,
+    .dark #summary *:not(strong),
+    .dark #details,
+    .dark #details *:not(strong),
+    .dark #calculationDetails,
+    .dark #calculationDetails *:not(strong),
+    .dark #meanings,
+    .dark #meanings *:not(strong),
+    .dark #dailyForecast,
+    .dark #dailyForecast *:not(strong),
+    .dark #compatForecast,
+    .dark #compatForecast *:not(strong),
+    .dark #dailyCalculationDetails,
+    .dark #dailyCalculationDetails *:not(strong),
+    .dark #compatCalculationDetails,
+    .dark #compatCalculationDetails *:not(strong) {
+      color: #f0f0f0 !important;
+    }
+
+    .result-card strong {
+      color: #764ba2;
+      font-weight: 600;
+    }
+
+    .dark .result-card strong {
+      color: #a78bfa !important;
+    }
+
+    .details-hidden {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: all 0.5s ease;
+      margin-top: 0 !important;
+    }
+
+    .details-shown {
+      max-height: 3000px;
+      opacity: 1;
+      transition: all 0.5s ease;
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .loading-overlay.active {
+      display: flex;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .button-line {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .toggle-details-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 0.75rem;
+      border-radius: 12px;
+      font-weight: 600;
+      margin-top: 1rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .toggle-details-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    @media (max-width: 640px) {
+      .container-main {
+        margin: 1rem;
+        padding: 1.5rem !important;
+      }
+
+      .header-gradient {
+        font-size: 1.5rem !important;
+      }
+
+      .button-line {
+        flex-direction: column;
+      }
+
+      .btn-calculate, .btn-clear {
+        width: 100%;
+      }
+
+      #themeToggle { right: 55px; }
+    }
+
+    .number-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 600;
+      margin: 0 0.25rem;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      animation: float 15s infinite ease-in-out;
+    }
+
+    .dark .particle {
+      background: rgba(102, 126, 234, 0.4);
+    }
+
+    @keyframes float {
+      0%, 100% { 
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { 
+        transform: translateY(-100vh) translateX(50px);
+        opacity: 0;
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); }
+      50% { box-shadow: 0 4px 25px rgba(102, 126, 234, 0.6); }
+    }
+
+    .btn-calculate {
+      animation: pulse 2s infinite;
+    }
+
+    .success-message {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      animation: slideIn 0.5s ease;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    }
+
+    @keyframes slideIn {
+      from { 
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .compat-meter {
+      width: 100%;
+      height: 30px;
+      background: #e5e7eb;
+      border-radius: 15px;
+      overflow: hidden;
+      margin: 1rem 0;
+      position: relative;
+    }
+
+    .compat-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 100%);
+      border-radius: 15px;
+      transition: width 1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 1rem;
+      color: white;
+      font-weight: bold;
+    }
+
+    [data-tooltip] {
+      position: relative;
+    }
+
+    [data-tooltip]:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 120%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      white-space: nowrap;
+      z-index: 100;
+      animation: fadeIn 0.3s ease;
+    }
+
+    [data-tooltip]:hover::before {
+      content: '';
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: rgba(0, 0, 0, 0.9);
+      z-index: 100;
+    }
+
+    @media print {
+      body {
+        background: white !important;
+      }
+      .toggle-btn, .dropdown-menu, .button-line, .toggle-details-btn {
+        display: none !important;
+      }
+      .container-main {
+        box-shadow: none !important;
+      }
+    }
+  </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
+<body class="flex items-center justify-center min-h-screen p-4">
+  <div class="particles" id="particles"></div>
+  
   <div id="loadingOverlay" class="loading-overlay">
     <div class="spinner"></div>
   </div>
-  <div class="bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-90 p-8 rounded-2xl shadow-2xl w-full max-w-2xl mx-4">
-    <div class="header-container mb-8">
+  
+  <div class="container-main p-8 w-full max-w-2xl">
+    <div class="header-container">
       <div class="header-title">
-        <h1 class="text-2xl sm:text-4xl font-bold text-center text-purple-800 dark:text-purple-300 animate-pulse">Khám Phá Bản Thân Cùng Thần Số Học</h1>
+        <h1 class="text-3xl sm:text-4xl font-bold header-gradient">✨ Khám Phá Bản Thân Cùng Thần Số Học</h1>
       </div>
-      <button id="themeToggle" class="toggle-btn bg-purple-600 dark:bg-purple-900 text-white p-2 rounded-full focus:outline-none" data-tooltip="Chuyển đổi giao diện sáng/tối">
-        <span class="icon-wrapper">
-          <svg id="themeIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-          </svg>
-        </span>
+      <button id="themeToggle" class="toggle-btn">
+        <svg id="themeIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
       </button>
-      <button id="menuToggle" class="toggle-btn bg-purple-600 dark:bg-purple-900 text-white p-2 rounded-full focus:outline-none" data-tooltip="Mở menu tab">
-        <span class="icon-wrapper">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
-          </svg>
-        </span>
+      <button id="menuToggle" class="toggle-btn">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
       </button>
       <div id="menuDropdown" class="dropdown-menu">
-        <button id="mainTabBtn" class="tab-btn" data-tab="main">Tổng Quan</button>
-        <button id="dailyTabBtn" class="tab-btn" data-tab="daily">Dự Báo Hàng Ngày</button>
-        <button id="compatTabBtn" class="tab-btn" data-tab="compat">Độ Tương Hợp</button>
+        <button class="tab-btn" data-tab="main">📊 Tổng Quan</button>
+        <button class="tab-btn" data-tab="daily">📅 Dự Báo Hàng Ngày</button>
+        <button class="tab-btn" data-tab="compat">💕 Độ Tương Hợp</button>
       </div>
     </div>
+
     <div id="mainTab" class="tab-content active">
       <div class="space-y-6">
         <div>
-          <label class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Họ và tên đầy đủ</label>
-          <input type="text" id="fullName" placeholder="Nhập họ và tên" class="input-field block w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Vui lòng nhập họ và tên đầy đủ của bạn">
+          <label class="block text-lg font-medium mb-2">Họ và tên đầy đủ</label>
+          <input type="text" id="fullName" placeholder="Nhập họ và tên" class="input-field block w-full">
         </div>
         <div>
-          <label class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Ngày sinh</label>
-          <div class="flex space-x-3 flex-wrap gap-4">
-            <select id="day" class="select-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Chọn ngày sinh của bạn">
+          <label class="block text-lg font-medium mb-2">Ngày sinh</label>
+          <div class="grid grid-cols-3 gap-3">
+            <select id="day" class="select-field">
               <option value="" disabled selected>Ngày</option>
             </select>
-            <select id="month" class="select-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Chọn tháng sinh của bạn">
+            <select id="month" class="select-field">
               <option value="" disabled selected>Tháng</option>
             </select>
-            <input type="number" id="year" placeholder="Năm" min="1900" max="2025" maxlength="4" class="input-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Nhập năm sinh (4 chữ số, từ 1900 đến 2025)">
+            <input type="number" id="year" placeholder="Năm" min="1900" max="2025" class="input-field">
           </div>
         </div>
         <div class="button-line">
-          <button id="calculateBtn" class="btn-calculate bg-purple-600 text-white p-3 rounded-lg font-semibold flex items-center justify-center" data-tooltip="Nhấn để tính số học của bạn">
-            Tính Toán
-          </button>
-          <button id="clearBtn" class="bg-gray-400 text-white p-3 rounded-lg font-semibold hover:bg-gray-500 transition-colors" data-tooltip="Nhấn để xóa tất cả thông tin đã nhập">
-            Xóa
-          </button>
+          <button id="calculateBtn" class="btn-calculate" data-tooltip="Nhấn để tính toán số học của bạn">Tính Toán ✨</button>
+          <button id="clearBtn" class="btn-clear" data-tooltip="Xóa tất cả dữ liệu đã nhập">Xóa 🗑️</button>
         </div>
       </div>
-      <div id="result" class="mt-6 text-gray-800 dark:text-gray-100 space-y-4">
-        <div id="summary" class="result-card p-4 rounded-lg shadow-md"></div>
-        <button id="showMoreBtn" class="w-full bg-purple-600 text-white p-2 rounded-lg font-semibold mt-2 hidden" data-tooltip="Nhấn để xem chi tiết kết quả">Xem Thêm</button>
-        <button id="showCalcBtn" class="w-full bg-purple-600 text-white p-2 rounded-lg font-semibold mt-2 hidden" data-tooltip="Nhấn để xem cách tính">Xem Cách Tính</button>
-        <button id="showMeaningsBtn" class="w-full bg-purple-600 text-white p-2 rounded-lg font-semibold mt-2 hidden" data-tooltip="Nhấn để xem ý nghĩa các con số">Xem Ý Nghĩa Các Con Số</button>
-        <div id="details" class="details-hidden result-card p-4 rounded-lg shadow-md mt-4"></div>
-        <div id="calculationDetails" class="details-hidden result-card p-4 rounded-lg shadow-md mt-4"></div>
-        <div id="meanings" class="details-hidden result-card p-4 rounded-lg shadow-md mt-4"></div>
+      <div id="result" class="mt-6">
+        <div id="summary"></div>
+        <button id="showMoreBtn" class="toggle-details-btn hidden">Xem Chi Tiết</button>
+        <div id="details" class="details-hidden"></div>
+        <button id="showCalcBtn" class="toggle-details-btn hidden">Xem Cách Tính</button>
+        <div id="calculationDetails" class="details-hidden"></div>
+        <button id="showMeaningsBtn" class="toggle-details-btn hidden">Xem Ý Nghĩa Các Con Số</button>
+        <div id="meanings" class="details-hidden"></div>
       </div>
     </div>
+
     <div id="dailyTab" class="tab-content">
       <div class="space-y-6">
         <div>
-          <label class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Ngày sinh</label>
-          <div class="flex space-x-3 flex-wrap gap-4">
-            <select id="dailyDay" class="select-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Chọn ngày sinh của bạn">
+          <label class="block text-lg font-medium mb-2">Ngày sinh</label>
+          <div class="grid grid-cols-3 gap-3">
+            <select id="dailyDay" class="select-field">
               <option value="" disabled selected>Ngày</option>
             </select>
-            <select id="dailyMonth" class="select-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Chọn tháng sinh của bạn">
+            <select id="dailyMonth" class="select-field">
               <option value="" disabled selected>Tháng</option>
             </select>
-            <input type="number" id="dailyYear" placeholder="Năm" min="1900" max="2025" maxlength="4" class="input-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Nhập năm sinh (4 chữ số, từ 1900 đến 2025)">
+            <input type="number" id="dailyYear" placeholder="Năm" min="1900" max="2025" class="input-field">
           </div>
         </div>
         <div class="button-line">
-          <button id="dailyCalculateBtn" class="btn-calculate bg-purple-600 text-white p-3 rounded-lg font-semibold flex items-center justify-center" data-tooltip="Nhấn để tính dự báo hàng ngày">
-            Tính Dự Báo
-          </button>
-          <button id="dailyClearBtn" class="bg-gray-400 text-white p-3 rounded-lg font-semibold hover:bg-gray-500 transition-colors" data-tooltip="Nhấn để xóa thông tin đã nhập">
-            Xóa
-          </button>
+          <button id="dailyCalculateBtn" class="btn-calculate">Tính Dự Báo</button>
+          <button id="dailyClearBtn" class="btn-clear">Xóa</button>
         </div>
       </div>
-      <div id="dailyResult" class="mt-6 text-gray-800 dark:text-gray-100 space-y-4">
-        <div id="dailyForecast" class="result-card p-4 rounded-lg shadow-md"></div>
-        <button id="dailyShowCalcBtn" class="w-full bg-purple-600 text-white p-2 rounded-lg font-semibold mt-2 hidden" data-tooltip="Nhấn để xem cách tính">Xem Cách Tính</button>
-        <div id="dailyCalculationDetails" class="details-hidden result-card p-4 rounded-lg shadow-md mt-4"></div>
+      <div id="dailyResult" class="mt-6">
+        <div id="dailyForecast"></div>
+        <button id="dailyShowCalcBtn" class="toggle-details-btn hidden">Xem Cách Tính</button>
+        <div id="dailyCalculationDetails" class="details-hidden"></div>
       </div>
     </div>
+
     <div id="compatTab" class="tab-content">
       <div class="space-y-6">
         <div>
-          <label class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Họ và tên người thứ nhất</label>
-          <input type="text" id="compatName1" placeholder="Nhập họ và tên người thứ nhất" class="input-field block w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Vui lòng nhập họ và tên đầy đủ của người thứ nhất">
+          <label class="block text-lg font-medium mb-2">Họ và tên người thứ nhất</label>
+          <input type="text" id="compatName1" placeholder="Nhập họ và tên" class="input-field block w-full">
         </div>
         <div>
-          <label class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Ngày sinh người thứ nhất</label>
-          <div class="flex space-x-3 flex-wrap gap-4">
-            <select id="compatDay1" class="select-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Chọn ngày sinh của người thứ nhất">
+          <label class="block text-lg font-medium mb-2">Ngày sinh người thứ nhất</label>
+          <div class="grid grid-cols-3 gap-3">
+            <select id="compatDay1" class="select-field">
               <option value="" disabled selected>Ngày</option>
             </select>
-            <select id="compatMonth1" class="select-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Chọn tháng sinh của người thứ nhất">
+            <select id="compatMonth1" class="select-field">
               <option value="" disabled selected>Tháng</option>
             </select>
-            <input type="number" id="compatYear1" placeholder="Năm" min="1900" max="2025" maxlength="4" class="input-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Nhập năm sinh (4 chữ số, từ 1900 đến 2025)">
+            <input type="number" id="compatYear1" placeholder="Năm" min="1900" max="2025" class="input-field">
           </div>
         </div>
         <div>
-          <label class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Họ và tên người thứ hai</label>
-          <input type="text" id="compatName2" placeholder="Nhập họ và tên người thứ hai" class="input-field block w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Vui lòng nhập họ và tên đầy đủ của người thứ hai">
+          <label class="block text-lg font-medium mb-2">Họ và tên người thứ hai</label>
+          <input type="text" id="compatName2" placeholder="Nhập họ và tên" class="input-field block w-full">
         </div>
         <div>
-          <label class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Ngày sinh người thứ hai</label>
-          <div class="flex space-x-3 flex-wrap gap-4">
-            <select id="compatDay2" class="select-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Chọn ngày sinh của người thứ hai">
+          <label class="block text-lg font-medium mb-2">Ngày sinh người thứ hai</label>
+          <div class="grid grid-cols-3 gap-3">
+            <select id="compatDay2" class="select-field">
               <option value="" disabled selected>Ngày</option>
             </select>
-            <select id="compatMonth2" class="select-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Chọn tháng sinh của người thứ hai">
+            <select id="compatMonth2" class="select-field">
               <option value="" disabled selected>Tháng</option>
             </select>
-            <input type="number" id="compatYear2" placeholder="Năm" min="1900" max="2025" maxlength="4" class="input-field block w-1/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none dark:bg-gray-700 dark:text-white" data-tooltip="Nhập năm sinh (4 chữ số, từ 1900 đến 2025)">
+            <input type="number" id="compatYear2" placeholder="Năm" min="1900" max="2025" class="input-field">
           </div>
         </div>
         <div class="button-line">
-          <button id="compatCalculateBtn" class="btn-calculate bg-purple-600 text-white p-3 rounded-lg font-semibold flex items-center justify-center" data-tooltip="Nhấn để tính độ tương hợp">
-            Tính Tương Hợp
-          </button>
-          <button id="compatClearBtn" class="bg-gray-400 text-white p-3 rounded-lg font-semibold hover:bg-gray-500 transition-colors" data-tooltip="Nhấn để xóa thông tin đã nhập">
-            Xóa
-          </button>
+          <button id="compatCalculateBtn" class="btn-calculate">Tính Tương Hợp</button>
+          <button id="compatClearBtn" class="btn-clear">Xóa</button>
         </div>
       </div>
-      <div id="compatResult" class="mt-6 text-gray-800 dark:text-gray-100 space-y-4">
-        <div id="compatForecast" class="result-card p-4 rounded-lg shadow-md"></div>
-        <button id="compatShowCalcBtn" class="w-full bg-purple-600 text-white p-2 rounded-lg font-semibold mt-2 hidden" data-tooltip="Nhấn để xem cách tính">Xem Cách Tính</button>
-        <div id="compatCalculationDetails" class="details-hidden result-card p-4 rounded-lg shadow-md mt-4"></div>
+      <div id="compatResult" class="mt-6">
+        <div id="compatForecast"></div>
+        <button id="compatShowCalcBtn" class="toggle-details-btn hidden">Xem Cách Tính</button>
+        <div id="compatCalculationDetails" class="details-hidden"></div>
       </div>
     </div>
   </div>
+
   <script src="script.js"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'987b5e4cadfc84b7',t:'MTc1OTMxNTUwNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'987bc8cfa98d85ed',t:'MTc1OTMxOTg2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>

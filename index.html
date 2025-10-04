@@ -6,14 +6,11 @@
   <meta name="description" content="Ứng dụng thần số học miễn phí - Khám phá con số chủ đạo, tương hợp và dự báo hàng ngày">
   <title>Ứng dụng Thần Số Học</title>
   <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Poppins', sans-serif;
@@ -24,11 +21,13 @@
 
     .light {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-size: 200% 200%;
       animation: gradientShift 15s ease infinite;
     }
 
     .dark {
       background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      background-size: 200% 200%;
       animation: gradientShift 20s ease infinite;
     }
 
@@ -70,12 +69,6 @@
       align-items: center;
       margin-bottom: 2rem;
       padding-top: 1.5rem;
-    }
-
-    .header-title {
-      position: relative;
-      z-index: 10;
-      text-align: center;
     }
 
     .toggle-btn {
@@ -142,9 +135,7 @@
       font-weight: 500;
     }
 
-    .dark .tab-btn {
-      color: #f5f5f5;
-    }
+    .dark .tab-btn { color: #f5f5f5; }
 
     .tab-btn:hover {
       background: linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
@@ -167,9 +158,7 @@
       border-color: #4a4a6a;
     }
 
-    .dark label {
-      color: #f0f0f0;
-    }
+    .dark label { color: #f0f0f0; }
 
     .input-field:focus, .select-field:focus {
       outline: none;
@@ -186,14 +175,18 @@
       cursor: pointer;
       transition: all 0.3s ease;
       border: none;
-      position: relative;
-      overflow: hidden;
     }
 
     .btn-calculate {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); }
+      50% { box-shadow: 0 4px 25px rgba(102, 126, 234, 0.6); }
     }
 
     .btn-calculate:hover:not(:disabled) {
@@ -230,7 +223,6 @@
     .dark .result-card {
       background: linear-gradient(135deg, rgba(45, 45, 74, 0.9) 0%, rgba(58, 58, 90, 0.9) 100%);
       border-color: rgba(102, 126, 234, 0.2);
-      color: #f0f0f0 !important;
     }
 
     .result-card:hover {
@@ -238,23 +230,8 @@
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
     }
 
-    .result-card h2 {
-      color: #667eea;
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
-    }
-
-    .dark .result-card h2 {
-      color: #8b9ef7 !important;
-    }
-
-    .result-card h3 {
-      color: #667eea;
-    }
-
-    .dark .result-card h3 {
-      color: #8b9ef7 !important;
-    }
+    .result-card h2, .result-card h3 { color: #667eea; margin-bottom: 1rem; }
+    .dark .result-card h2, .dark .result-card h3 { color: #8b9ef7 !important; }
 
     .result-card p {
       margin-bottom: 0.75rem;
@@ -262,42 +239,10 @@
       color: #333;
     }
 
-    .dark .result-card p {
-      color: #f0f0f0 !important;
-    }
-    
-    .dark .result-card,
-    .dark .result-card *:not(strong) {
-      color: #f0f0f0 !important;
-    }
-    
-    .dark #summary,
-    .dark #summary *:not(strong),
-    .dark #details,
-    .dark #details *:not(strong),
-    .dark #calculationDetails,
-    .dark #calculationDetails *:not(strong),
-    .dark #meanings,
-    .dark #meanings *:not(strong),
-    .dark #dailyForecast,
-    .dark #dailyForecast *:not(strong),
-    .dark #compatForecast,
-    .dark #compatForecast *:not(strong),
-    .dark #dailyCalculationDetails,
-    .dark #dailyCalculationDetails *:not(strong),
-    .dark #compatCalculationDetails,
-    .dark #compatCalculationDetails *:not(strong) {
-      color: #f0f0f0 !important;
-    }
+    .dark .result-card, .dark .result-card p { color: #f0f0f0 !important; }
 
-    .result-card strong {
-      color: #764ba2;
-      font-weight: 600;
-    }
-
-    .dark .result-card strong {
-      color: #a78bfa !important;
-    }
+    .result-card strong { color: #764ba2; font-weight: 600; }
+    .dark .result-card strong { color: #a78bfa !important; }
 
     .details-hidden {
       max-height: 0;
@@ -315,10 +260,7 @@
 
     .loading-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       background: rgba(0, 0, 0, 0.7);
       backdrop-filter: blur(5px);
       display: none;
@@ -327,9 +269,7 @@
       z-index: 9999;
     }
 
-    .loading-overlay.active {
-      display: flex;
-    }
+    .loading-overlay.active { display: flex; }
 
     .spinner {
       width: 60px;
@@ -357,9 +297,7 @@
       animation: fadeIn 0.4s ease;
     }
 
-    .tab-content.active {
-      display: block;
-    }
+    .tab-content.active { display: block; }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
@@ -383,131 +321,6 @@
     .toggle-details-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    @media (max-width: 640px) {
-      .container-main {
-        margin: 1rem;
-        padding: 1.5rem !important;
-      }
-
-      .header-gradient {
-        font-size: 1.5rem !important;
-      }
-
-      .button-line {
-        flex-direction: column;
-      }
-
-      .btn-calculate, .btn-clear {
-        width: 100%;
-      }
-
-      #themeToggle { right: 55px; }
-    }
-
-    .number-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-weight: 600;
-      margin: 0 0.25rem;
-      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-    }
-
-    .particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .particle {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.5);
-      border-radius: 50%;
-      animation: float 15s infinite ease-in-out;
-    }
-
-    .dark .particle {
-      background: rgba(102, 126, 234, 0.4);
-    }
-
-    @keyframes float {
-      0%, 100% { 
-        transform: translateY(0) translateX(0);
-        opacity: 0;
-      }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% { 
-        transform: translateY(-100vh) translateX(50px);
-        opacity: 0;
-      }
-    }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); }
-      50% { box-shadow: 0 4px 25px rgba(102, 126, 234, 0.6); }
-    }
-
-    .btn-calculate {
-      animation: pulse 2s infinite;
-    }
-
-    .success-message {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: white;
-      padding: 1rem;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      animation: slideIn 0.5s ease;
-      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-    }
-
-    @keyframes slideIn {
-      from { 
-        opacity: 0;
-        transform: translateX(-20px);
-      }
-      to { 
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .compat-meter {
-      width: 100%;
-      height: 30px;
-      background: #e5e7eb;
-      border-radius: 15px;
-      overflow: hidden;
-      margin: 1rem 0;
-      position: relative;
-    }
-
-    .compat-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 100%);
-      border-radius: 15px;
-      transition: width 1s ease;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 1rem;
-      color: white;
-      font-weight: bold;
-    }
-
-    [data-tooltip] {
-      position: relative;
     }
 
     [data-tooltip]:hover::after {
@@ -537,22 +350,22 @@
       z-index: 100;
     }
 
+    @media (max-width: 640px) {
+      .container-main { margin: 1rem; padding: 1.5rem !important; }
+      .header-gradient { font-size: 1.5rem !important; }
+      .button-line { flex-direction: column; }
+      .btn-calculate, .btn-clear { width: 100%; }
+      #themeToggle { right: 55px; }
+    }
+
     @media print {
-      body {
-        background: white !important;
-      }
-      .toggle-btn, .dropdown-menu, .button-line, .toggle-details-btn {
-        display: none !important;
-      }
-      .container-main {
-        box-shadow: none !important;
-      }
+      body { background: white !important; }
+      .toggle-btn, .dropdown-menu, .button-line, .toggle-details-btn { display: none !important; }
+      .container-main { box-shadow: none !important; }
     }
   </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-  <div class="particles" id="particles"></div>
-  
   <div id="loadingOverlay" class="loading-overlay">
     <div class="spinner"></div>
   </div>
@@ -588,12 +401,8 @@
         <div>
           <label class="block text-lg font-medium mb-2">Ngày sinh</label>
           <div class="grid grid-cols-3 gap-3">
-            <select id="day" class="select-field">
-              <option value="" disabled selected>Ngày</option>
-            </select>
-            <select id="month" class="select-field">
-              <option value="" disabled selected>Tháng</option>
-            </select>
+            <select id="day" class="select-field"><option value="" disabled selected>Ngày</option></select>
+            <select id="month" class="select-field"><option value="" disabled selected>Tháng</option></select>
             <input type="number" id="year" placeholder="Năm" min="1900" max="2025" class="input-field">
           </div>
         </div>
@@ -618,12 +427,8 @@
         <div>
           <label class="block text-lg font-medium mb-2">Ngày sinh</label>
           <div class="grid grid-cols-3 gap-3">
-            <select id="dailyDay" class="select-field">
-              <option value="" disabled selected>Ngày</option>
-            </select>
-            <select id="dailyMonth" class="select-field">
-              <option value="" disabled selected>Tháng</option>
-            </select>
+            <select id="dailyDay" class="select-field"><option value="" disabled selected>Ngày</option></select>
+            <select id="dailyMonth" class="select-field"><option value="" disabled selected>Tháng</option></select>
             <input type="number" id="dailyYear" placeholder="Năm" min="1900" max="2025" class="input-field">
           </div>
         </div>
@@ -648,12 +453,8 @@
         <div>
           <label class="block text-lg font-medium mb-2">Ngày sinh người thứ nhất</label>
           <div class="grid grid-cols-3 gap-3">
-            <select id="compatDay1" class="select-field">
-              <option value="" disabled selected>Ngày</option>
-            </select>
-            <select id="compatMonth1" class="select-field">
-              <option value="" disabled selected>Tháng</option>
-            </select>
+            <select id="compatDay1" class="select-field"><option value="" disabled selected>Ngày</option></select>
+            <select id="compatMonth1" class="select-field"><option value="" disabled selected>Tháng</option></select>
             <input type="number" id="compatYear1" placeholder="Năm" min="1900" max="2025" class="input-field">
           </div>
         </div>
@@ -664,12 +465,8 @@
         <div>
           <label class="block text-lg font-medium mb-2">Ngày sinh người thứ hai</label>
           <div class="grid grid-cols-3 gap-3">
-            <select id="compatDay2" class="select-field">
-              <option value="" disabled selected>Ngày</option>
-            </select>
-            <select id="compatMonth2" class="select-field">
-              <option value="" disabled selected>Tháng</option>
-            </select>
+            <select id="compatDay2" class="select-field"><option value="" disabled selected>Ngày</option></select>
+            <select id="compatMonth2" class="select-field"><option value="" disabled selected>Tháng</option></select>
             <input type="number" id="compatYear2" placeholder="Năm" min="1900" max="2025" class="input-field">
           </div>
         </div>

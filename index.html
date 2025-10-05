@@ -3,367 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Ứng dụng thần số học miễn phí - Khám phá con số chủ đạo, tương hợp và dự báo hàng ngày">
-  <title>Ứng dụng Thần Số Học</title>
+  <meta name="description" content="Free numerology app - Discover your life path number, compatibility and daily forecast">
+  <title>Numerology Calculator</title>
   <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      transition: background 0.5s ease, color 0.3s ease;
-      overflow-x: hidden;
-      min-height: 100vh;
-    }
-
-    .light {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      background-size: 200% 200%;
-      animation: gradientShift 15s ease infinite;
-    }
-
-    .dark {
-      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-      background-size: 200% 200%;
-      animation: gradientShift 20s ease infinite;
-    }
-
-    @keyframes gradientShift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-
-    .container-main {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 24px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      transition: all 0.3s ease;
-    }
-
-    .dark .container-main {
-      background: rgba(30, 30, 50, 0.95);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-    }
-
-    .header-gradient {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmer 3s ease-in-out infinite;
-    }
-
-    @keyframes shimmer {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.8; }
-    }
-
-    .header-container {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 2rem;
-      padding-top: 1.5rem;
-    }
-
-    .toggle-btn {
-      position: absolute;
-      top: -10px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 0.65rem;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .toggle-btn:hover {
-      transform: scale(1.1) rotate(90deg);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    #themeToggle { right: 60px; }
-    #menuToggle { right: 10px; }
-
-    .dropdown-menu {
-      position: absolute;
-      top: 100%;
-      right: 10px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-      z-index: 1000;
-      min-width: 180px;
-      display: none;
-      overflow: hidden;
-      border: 1px solid rgba(102, 126, 234, 0.2);
-    }
-
-    .dark .dropdown-menu {
-      background: #2d2d4a;
-      border-color: rgba(102, 126, 234, 0.3);
-    }
-
-    .dropdown-menu.active {
-      display: block;
-      animation: slideDown 0.3s ease;
-    }
-
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .tab-btn {
-      display: block;
-      width: 100%;
-      padding: 0.875rem 1.25rem;
-      text-align: left;
-      background: none;
-      border: none;
-      font-size: 1rem;
-      color: #333;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-weight: 500;
-    }
-
-    .dark .tab-btn { color: #f5f5f5; }
-
-    .tab-btn:hover {
-      background: linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
-      padding-left: 1.5rem;
-    }
-
-    .input-field, .select-field {
-      transition: all 0.3s ease;
-      border: 2px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 0.875rem;
-      font-size: 1rem;
-      background: white;
-      color: #333;
-    }
-
-    .dark .input-field, .dark .select-field {
-      background: #3a3a5a;
-      color: #ffffff;
-      border-color: #4a4a6a;
-    }
-
-    .dark label { color: #f0f0f0; }
-
-    .input-field:focus, .select-field:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .btn-calculate, .btn-clear {
-      border-radius: 12px;
-      padding: 0.875rem 2rem;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: none;
-    }
-
-    .btn-calculate {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); }
-      50% { box-shadow: 0 4px 25px rgba(102, 126, 234, 0.6); }
-    }
-
-    .btn-calculate:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-    }
-
-    .btn-calculate:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .btn-clear {
-      background: #6b7280;
-      color: white;
-      box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
-    }
-
-    .btn-clear:hover {
-      background: #4b5563;
-      transform: translateY(-2px);
-    }
-
-    .result-card {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(249, 250, 251, 0.9) 100%);
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-top: 1rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      transition: all 0.3s ease;
-      border: 1px solid rgba(102, 126, 234, 0.1);
-    }
-
-    .dark .result-card {
-      background: linear-gradient(135deg, rgba(45, 45, 74, 0.9) 0%, rgba(58, 58, 90, 0.9) 100%);
-      border-color: rgba(102, 126, 234, 0.2);
-    }
-
-    .result-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-    }
-
-    .result-card h2, .result-card h3 { color: #667eea; margin-bottom: 1rem; }
-    .dark .result-card h2, .dark .result-card h3 { color: #8b9ef7 !important; }
-
-    .result-card p {
-      margin-bottom: 0.75rem;
-      line-height: 1.7;
-      color: #333;
-    }
-
-    .dark .result-card, .dark .result-card p { color: #f0f0f0 !important; }
-
-    .result-card strong { color: #764ba2; font-weight: 600; }
-    .dark .result-card strong { color: #a78bfa !important; }
-
-    .details-hidden {
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: all 0.5s ease;
-      margin-top: 0 !important;
-    }
-
-    .details-shown {
-      max-height: 3000px;
-      opacity: 1;
-      transition: all 0.5s ease;
-    }
-
-    .loading-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(5px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-
-    .loading-overlay.active { display: flex; }
-
-    .spinner {
-      width: 60px;
-      height: 60px;
-      border: 4px solid rgba(255, 255, 255, 0.3);
-      border-top: 4px solid #667eea;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .button-line {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .tab-content {
-      display: none;
-      animation: fadeIn 0.4s ease;
-    }
-
-    .tab-content.active { display: block; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .toggle-details-btn {
-      width: 100%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 0.75rem;
-      border-radius: 12px;
-      font-weight: 600;
-      margin-top: 1rem;
-      cursor: pointer;
-      border: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    }
-
-    .toggle-details-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    [data-tooltip]:hover::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: 120%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.9);
-      color: white;
-      padding: 0.5rem 0.75rem;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      white-space: nowrap;
-      z-index: 100;
-      animation: fadeIn 0.3s ease;
-    }
-
-    [data-tooltip]:hover::before {
-      content: '';
-      position: absolute;
-      bottom: 110%;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 6px solid transparent;
-      border-top-color: rgba(0, 0, 0, 0.9);
-      z-index: 100;
-    }
-
-    @media (max-width: 640px) {
-      .container-main { margin: 1rem; padding: 1.5rem !important; }
-      .header-gradient { font-size: 1.5rem !important; }
-      .button-line { flex-direction: column; }
-      .btn-calculate, .btn-clear { width: 100%; }
-      #themeToggle { right: 55px; }
-    }
-
-    @media print {
-      body { background: white !important; }
-      .toggle-btn, .dropdown-menu, .button-line, .toggle-details-btn { display: none !important; }
-      .container-main { box-shadow: none !important; }
-    }
-  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
   <div id="loadingOverlay" class="loading-overlay">
@@ -373,9 +19,14 @@
   <div class="container-main p-8 w-full max-w-2xl">
     <div class="header-container">
       <div class="header-title">
-        <h1 class="text-3xl sm:text-4xl font-bold header-gradient">✨ Khám Phá Bản Thân Cùng Thần Số Học</h1>
+        <h1 class="text-3xl sm:text-4xl font-bold header-gradient" data-i18n="mainTitle">✨ Discover Yourself with Numerology</h1>
       </div>
-      <button id="themeToggle" class="toggle-btn">
+      <button id="langToggle" class="toggle-btn" title="Switch Language">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+        </svg>
+      </button>
+      <button id="themeToggle" class="toggle-btn" data-i18n-title="toggleTheme">
         <svg id="themeIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
         </svg>
@@ -386,38 +37,40 @@
         </svg>
       </button>
       <div id="menuDropdown" class="dropdown-menu">
-        <button class="tab-btn" data-tab="main">📊 Tổng Quan</button>
-        <button class="tab-btn" data-tab="daily">📅 Dự Báo Hàng Ngày</button>
-        <button class="tab-btn" data-tab="compat">💕 Độ Tương Hợp</button>
+        <button class="tab-btn" data-tab="main" data-i18n="tabOverview">📊 Overview</button>
+        <button class="tab-btn" data-tab="daily" data-i18n="tabDaily">📅 Daily Forecast</button>
+        <button class="tab-btn" data-tab="compat" data-i18n="tabCompat">💕 Compatibility</button>
+        <button class="tab-btn" data-tab="nameSuggest" data-i18n="tabNameSuggest">📝 Name Suggestion</button>
       </div>
     </div>
 
     <div id="mainTab" class="tab-content active">
       <div class="space-y-6">
-        <div>
-          <label class="block text-lg font-medium mb-2">Họ và tên đầy đủ</label>
-          <input type="text" id="fullName" placeholder="Nhập họ và tên" class="input-field block w-full">
+        <div class="input-container">
+          <input type="text" id="fullName" data-i18n-placeholder="placeholderName" placeholder="Enter your full name" class="input-field block w-full">
+          <label for="fullName" class="input-label" data-i18n="labelFullName">Full Name</label>
         </div>
         <div>
-          <label class="block text-lg font-medium mb-2">Ngày sinh</label>
+          <label class="block text-lg font-medium mb-2" data-i18n="labelBirthDate">Birth Date</label>
           <div class="grid grid-cols-3 gap-3">
-            <select id="day" class="select-field"><option value="" disabled selected>Ngày</option></select>
-            <select id="month" class="select-field"><option value="" disabled selected>Tháng</option></select>
-            <input type="number" id="year" placeholder="Năm" min="1900" max="2025" class="input-field">
+            <select id="day" class="select-field"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
+            <select id="month" class="select-field"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
+            <input type="number" id="year" data-i18n-placeholder="placeholderYear" placeholder="Year" min="1900" max="2025" class="input-field">
           </div>
         </div>
         <div class="button-line">
-          <button id="calculateBtn" class="btn-calculate" data-tooltip="Nhấn để tính toán số học của bạn">Tính Toán ✨</button>
-          <button id="clearBtn" class="btn-clear" data-tooltip="Xóa tất cả dữ liệu đã nhập">Xóa 🗑️</button>
+          <button id="calculateBtn" class="btn-calculate" data-i18n="btnCalculate" data-i18n-title="tooltipCalculate">Calculate ✨</button>
+          <button id="clearBtn" class="btn-clear" data-i18n="btnClear" data-i18n-title="tooltipClear">Clear 🗑️</button>
         </div>
       </div>
       <div id="result" class="mt-6">
         <div id="summary"></div>
-        <button id="showMoreBtn" class="toggle-details-btn hidden">Xem Chi Tiết</button>
+        <button id="downloadReportBtn" class="toggle-details-btn hidden" data-i18n="btnDownloadReport">Download Report 📥</button>
+        <button id="showMoreBtn" class="toggle-details-btn hidden" data-i18n="btnShowDetails">View Details</button>
         <div id="details" class="details-hidden"></div>
-        <button id="showCalcBtn" class="toggle-details-btn hidden">Xem Cách Tính</button>
+        <button id="showCalcBtn" class="toggle-details-btn hidden" data-i18n="btnShowCalc">View Calculation</button>
         <div id="calculationDetails" class="details-hidden"></div>
-        <button id="showMeaningsBtn" class="toggle-details-btn hidden">Xem Ý Nghĩa Các Con Số</button>
+        <button id="showMeaningsBtn" class="toggle-details-btn hidden" data-i18n="btnShowMeanings">View Number Meanings</button>
         <div id="meanings" class="details-hidden"></div>
       </div>
     </div>
@@ -425,61 +78,79 @@
     <div id="dailyTab" class="tab-content">
       <div class="space-y-6">
         <div>
-          <label class="block text-lg font-medium mb-2">Ngày sinh</label>
+          <label class="block text-lg font-medium mb-2" data-i18n="labelBirthDate">Birth Date</label>
           <div class="grid grid-cols-3 gap-3">
-            <select id="dailyDay" class="select-field"><option value="" disabled selected>Ngày</option></select>
-            <select id="dailyMonth" class="select-field"><option value="" disabled selected>Tháng</option></select>
-            <input type="number" id="dailyYear" placeholder="Năm" min="1900" max="2025" class="input-field">
+            <select id="dailyDay" class="select-field"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
+            <select id="dailyMonth" class="select-field"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
+            <input type="number" id="dailyYear" data-i18n-placeholder="placeholderYear" placeholder="Year" min="1900" max="2025" class="input-field">
           </div>
         </div>
         <div class="button-line">
-          <button id="dailyCalculateBtn" class="btn-calculate">Tính Dự Báo</button>
-          <button id="dailyClearBtn" class="btn-clear">Xóa</button>
+          <button id="dailyCalculateBtn" class="btn-calculate" data-i18n="btnDailyCalculate">Calculate Forecast</button>
+          <button id="dailyClearBtn" class="btn-clear" data-i18n="btnClear">Clear</button>
         </div>
       </div>
       <div id="dailyResult" class="mt-6">
         <div id="dailyForecast"></div>
-        <button id="dailyShowCalcBtn" class="toggle-details-btn hidden">Xem Cách Tính</button>
+        <button id="dailyShowCalcBtn" class="toggle-details-btn hidden" data-i18n="btnShowCalc">View Calculation</button>
         <div id="dailyCalculationDetails" class="details-hidden"></div>
       </div>
     </div>
 
     <div id="compatTab" class="tab-content">
       <div class="space-y-6">
-        <div>
-          <label class="block text-lg font-medium mb-2">Họ và tên người thứ nhất</label>
-          <input type="text" id="compatName1" placeholder="Nhập họ và tên" class="input-field block w-full">
+        <div class="input-container">
+          <input type="text" id="compatName1" data-i18n-placeholder="placeholderName" placeholder="Enter full name" class="input-field block w-full">
+          <label for="compatName1" class="input-label" data-i18n="labelPerson1">First Person's Full Name</label>
         </div>
         <div>
-          <label class="block text-lg font-medium mb-2">Ngày sinh người thứ nhất</label>
+          <label class="block text-lg font-medium mb-2" data-i18n="labelBirthDate1">First Person's Birth Date</label>
           <div class="grid grid-cols-3 gap-3">
-            <select id="compatDay1" class="select-field"><option value="" disabled selected>Ngày</option></select>
-            <select id="compatMonth1" class="select-field"><option value="" disabled selected>Tháng</option></select>
-            <input type="number" id="compatYear1" placeholder="Năm" min="1900" max="2025" class="input-field">
+            <select id="compatDay1" class="select-field"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
+            <select id="compatMonth1" class="select-field"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
+            <input type="number" id="compatYear1" data-i18n-placeholder="placeholderYear" placeholder="Year" min="1900" max="2025" class="input-field">
           </div>
         </div>
-        <div>
-          <label class="block text-lg font-medium mb-2">Họ và tên người thứ hai</label>
-          <input type="text" id="compatName2" placeholder="Nhập họ và tên" class="input-field block w-full">
+        <div class="input-container">
+          <input type="text" id="compatName2" data-i18n-placeholder="placeholderName" placeholder="Enter full name" class="input-field block w-full">
+          <label for="compatName2" class="input-label" data-i18n="labelPerson2">Second Person's Full Name</label>
         </div>
         <div>
-          <label class="block text-lg font-medium mb-2">Ngày sinh người thứ hai</label>
+          <label class="block text-lg font-medium mb-2" data-i18n="labelBirthDate2">Second Person's Birth Date</label>
           <div class="grid grid-cols-3 gap-3">
-            <select id="compatDay2" class="select-field"><option value="" disabled selected>Ngày</option></select>
-            <select id="compatMonth2" class="select-field"><option value="" disabled selected>Tháng</option></select>
-            <input type="number" id="compatYear2" placeholder="Năm" min="1900" max="2025" class="input-field">
+            <select id="compatDay2" class="select-field"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
+            <select id="compatMonth2" class="select-field"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
+            <input type="number" id="compatYear2" data-i18n-placeholder="placeholderYear" placeholder="Year" min="1900" max="2025" class="input-field">
           </div>
         </div>
         <div class="button-line">
-          <button id="compatCalculateBtn" class="btn-calculate">Tính Tương Hợp</button>
-          <button id="compatClearBtn" class="btn-clear">Xóa</button>
+          <button id="compatCalculateBtn" class="btn-calculate" data-i18n="btnCompatCalculate">Calculate Compatibility</button>
+          <button id="compatClearBtn" class="btn-clear" data-i18n="btnClear">Clear</button>
         </div>
       </div>
       <div id="compatResult" class="mt-6">
         <div id="compatForecast"></div>
-        <button id="compatShowCalcBtn" class="toggle-details-btn hidden">Xem Cách Tính</button>
+        <button id="compatShowCalcBtn" class="toggle-details-btn hidden" data-i18n="btnShowCalc">View Calculation</button>
         <div id="compatCalculationDetails" class="details-hidden"></div>
       </div>
+    </div>
+
+    <div id="nameSuggestTab" class="tab-content">
+      <div class="space-y-6">
+        <div>
+          <label class="block text-lg font-medium mb-2" data-i18n="labelBirthDate">Birth Date</label>
+          <div class="grid grid-cols-3 gap-3">
+            <select id="nameSuggestDay" class="select-field"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
+            <select id="nameSuggestMonth" class="select-field"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
+            <input type="number" id="nameSuggestYear" data-i18n-placeholder="placeholderYear" placeholder="Year" min="1900" max="2025" class="input-field">
+          </div>
+        </div>
+        <div class="button-line">
+          <button id="nameSuggestCalculateBtn" class="btn-calculate" data-i18n="btnNameSuggestCalculate">Suggest Names</button>
+          <button id="nameSuggestClearBtn" class="btn-clear" data-i18n="btnClear">Clear</button>
+        </div>
+      </div>
+      <div id="nameSuggestResult" class="mt-6"></div>
     </div>
   </div>
 

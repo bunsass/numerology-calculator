@@ -1,3 +1,7 @@
+// Ensure GSAP is included via CDN: <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+// Ensure Chart.js is included for pinnacle chart: <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+// Ensure jsPDF is included for PDF download: <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 const CURRENT_YEAR = new Date().getFullYear();
 
 // Global translation object - loaded from JSON
@@ -272,6 +276,39 @@ function clearFields(inputIds, resultId) {
   });
 }
 
+// Enhanced particle effect for loading overlay
+function addParticles(overlay, count = 25) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return; // Skip particles for accessibility
+  }
+
+  const particleTypes = ['particle-circle', 'particle-star', 'particle-glow'];
+  const colors = [
+    'rgba(102, 126, 234, 0.8)', // Blue from gradient
+    'rgba(118, 75, 162, 0.7)', // Purple from gradient
+    'rgba(255, 215, 0, 0.7)', // Gold accent
+    'rgba(255, 255, 255, 0.5)', // White glow
+  ];
+
+  for (let i = 0; i < count; i++) {
+    const particle = document.createElement('div');
+    const type = particleTypes[Math.floor(Math.random() * particleTypes.length)];
+    particle.className = type;
+    const size = Math.random() * 8 + 4; // 4–12px
+    particle.style.width = `${size}px`;
+    particle.style.height = type === 'particle-star' ? `${size}px` : `${size}px`;
+    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.top = `${Math.random() * 100}%`;
+    particle.style.animationDelay = `${Math.random() * 2}s`;
+    particle.style.animationDuration = `${Math.random() * 2 + 1.5}s`; // 1.5–3.5s
+    if (type === 'particle-orbit') {
+      particle.style.transformOrigin = `${size * 2}px center`;
+    }
+    overlay.appendChild(particle);
+  }
+}
+
 function calculateNumerology() {
   const name = document.getElementById('fullName').value.trim();
   const d = parseInt(document.getElementById('day').value);
@@ -291,7 +328,10 @@ function calculateNumerology() {
   saveData('mainInputs', {name, d, m, y});
 
   document.getElementById('calculateBtn').disabled = true;
-  document.getElementById('loadingOverlay').classList.add('active');
+  const overlay = document.getElementById('loadingOverlay');
+  overlay.classList.add('active');
+
+  addParticles(overlay);
 
   setTimeout(() => {
     const lpn = reduceToSingleDigit(sumDigits(d) + sumDigits(m) + sumDigits(y), true);
@@ -503,8 +543,9 @@ function calculateNumerology() {
 
     gsap.from(".result-card", { duration: 0.5, y: 20, opacity: 0, stagger: 0.1, ease: "power2.out" });
 
+    overlay.querySelectorAll('.particle').forEach((p) => p.remove());
+    overlay.classList.remove('active');
     document.getElementById('calculateBtn').disabled = false;
-    document.getElementById('loadingOverlay').classList.remove('active');
   }, 500);
 }
 
@@ -522,7 +563,10 @@ function calculateDailyForecast() {
   saveData('dailyInputs', {d, m, y});
 
   document.getElementById('dailyCalculateBtn').disabled = true;
-  document.getElementById('loadingOverlay').classList.add('active');
+  const overlay = document.getElementById('loadingOverlay');
+  overlay.classList.add('active');
+
+  addParticles(overlay);
 
   setTimeout(() => {
     const f = calculateDailyNumber(d,m,y);
@@ -545,8 +589,9 @@ function calculateDailyForecast() {
     document.getElementById('dailyShowCalcBtn').classList.remove('hidden');
     document.getElementById('dailyCalculationDetails').classList.add('details-hidden');
     gsap.from(".result-card", { duration: 0.5, y: 20, opacity: 0, stagger: 0.1, ease: "power2.out" });
+    overlay.querySelectorAll('.particle').forEach((p) => p.remove());
+    overlay.classList.remove('active');
     document.getElementById('dailyCalculateBtn').disabled = false;
-    document.getElementById('loadingOverlay').classList.remove('active');
   }, 500);
 }
 
@@ -573,7 +618,10 @@ function calculateCompatibilityForecast() {
   saveData('compatInputs', {n1, d1, m1, y1, n2, d2, m2, y2});
 
   document.getElementById('compatCalculateBtn').disabled = true;
-  document.getElementById('loadingOverlay').classList.add('active');
+  const overlay = document.getElementById('loadingOverlay');
+  overlay.classList.add('active');
+
+  addParticles(overlay);
 
   setTimeout(() => {
     const c = calculateCompatibility(n1,d1,m1,y1,n2,d2,m2,y2);
@@ -600,8 +648,9 @@ function calculateCompatibilityForecast() {
     document.getElementById('compatShowCalcBtn').classList.remove('hidden');
     document.getElementById('compatCalculationDetails').classList.add('details-hidden');
     gsap.from(".result-card", { duration: 0.5, y: 20, opacity: 0, stagger: 0.1, ease: "power2.out" });
+    overlay.querySelectorAll('.particle').forEach((p) => p.remove());
+    overlay.classList.remove('active');
     document.getElementById('compatCalculateBtn').disabled = false;
-    document.getElementById('loadingOverlay').classList.remove('active');
   }, 500);
 }
 
@@ -619,7 +668,10 @@ function calculateNameSuggestions() {
   saveData('nameSuggestInputs', {d, m, y});
 
   document.getElementById('nameSuggestCalculateBtn').disabled = true;
-  document.getElementById('loadingOverlay').classList.add('active');
+  const overlay = document.getElementById('loadingOverlay');
+  overlay.classList.add('active');
+
+  addParticles(overlay);
 
   setTimeout(() => {
     const lpn = reduceToSingleDigit(sumDigits(d) + sumDigits(m) + sumDigits(y), true);
@@ -638,8 +690,9 @@ function calculateNameSuggestions() {
       <p class="mt-4">${t('noteNames')}</p></div>`;
 
     gsap.from(".result-card", { duration: 0.5, y: 20, opacity: 0, ease: "power2.out" });
+    overlay.querySelectorAll('.particle').forEach((p) => p.remove());
+    overlay.classList.remove('active');
     document.getElementById('nameSuggestCalculateBtn').disabled = false;
-    document.getElementById('loadingOverlay').classList.remove('active');
   }, 500);
 }
 
@@ -683,6 +736,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('nameSuggestDay').value = nameSuggestInputs.d;
     document.getElementById('nameSuggestMonth').value = nameSuggestInputs.m;
     document.getElementById('nameSuggestYear').value = nameSuggestInputs.y;
+  }
+
+  // Overlapped effect for name input on page load
+  const nameInputContainer = document.querySelector('.input-container:first-child');
+  if (nameInputContainer && !sessionStorage.getItem('nameInputAnimated')) {
+    gsap.from(nameInputContainer, {
+      opacity: 0,
+      y: -20,
+      boxShadow: '0 0 0 rgba(102, 126, 234, 0)',
+      duration: 0.8,
+      ease: 'power2.out',
+      onComplete: () => {
+        sessionStorage.setItem('nameInputAnimated', 'true');
+      }
+    });
   }
 
   // Theme toggle

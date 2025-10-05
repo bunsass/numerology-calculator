@@ -79,8 +79,13 @@ body {
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
+.toggle-btn .toggle-icon {
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
 .toggle-btn:hover .toggle-icon {
-  transform: scale(1.1) rotate(90deg);
+  transform: scale(1.15) rotate(15deg);
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
 }
 
 .toggle-btn:active {
@@ -94,40 +99,45 @@ body {
 .toggle-btn::before {
   content: attr(data-tooltip-text);
   position: absolute;
-  bottom: calc(100% + 10px);
+  bottom: calc(100% + 15px);
   left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.9);
+  transform: translateX(-50%) translateY(5px);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 40, 0.95) 100%);
   color: white;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
   font-size: 0.875rem;
   white-space: nowrap;
   z-index: 10000;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(102, 126, 234, 0.3);
 }
 
 .toggle-btn:hover::before {
   opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .toggle-btn::after {
   content: '';
   position: absolute;
-  bottom: calc(100% + 4px);
+  bottom: calc(100% + 9px);
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(5px);
   border: 6px solid transparent;
-  border-top-color: rgba(0, 0, 0, 0.9);
+  border-top-color: rgba(0, 0, 0, 0.95);
   z-index: 10000;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .toggle-btn:hover::after {
   opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .dropdown-menu {
@@ -177,47 +187,54 @@ body {
 .dark .tab-btn { color: #f5f5f5; }
 
 .tab-btn:hover {
-  background: linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
-  padding-left: 1.5rem;
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.15) 0%, transparent 100%);
+  padding-left: 1.75rem;
+  transform: translateX(3px);
+  box-shadow: inset 3px 0 0 #667eea;
 }
 
 .tab-btn::before {
   content: attr(data-tooltip-text);
   position: absolute;
   top: 50%;
-  left: calc(100% + 10px);
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.9);
+  left: calc(100% + 15px);
+  transform: translateY(-50%) translateX(-5px);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 40, 0.95) 100%);
   color: white;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
   font-size: 0.875rem;
   white-space: nowrap;
   z-index: 10000;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(102, 126, 234, 0.3);
 }
 
 .tab-btn:hover::before {
   opacity: 1;
+  transform: translateY(-50%) translateX(0);
 }
 
 .tab-btn::after {
   content: '';
   position: absolute;
   top: 50%;
-  left: calc(100% + 4px);
-  transform: translateY(-50%);
+  left: calc(100% + 9px);
+  transform: translateY(-50%) translateX(-5px);
   border: 6px solid transparent;
-  border-left-color: rgba(0, 0, 0, 0.9);
+  border-right-color: rgba(0, 0, 0, 0.95);
   z-index: 10000;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .tab-btn:hover::after {
   opacity: 1;
+  transform: translateY(-50%) translateX(0);
 }
 
 .input-container {
@@ -491,83 +508,93 @@ body {
 .toggle-details-btn::before {
   content: attr(data-tooltip-text);
   position: absolute;
-  bottom: calc(100% + 10px);
+  bottom: calc(100% + 15px);
   left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.9);
+  transform: translateX(-50%) translateY(5px);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 40, 0.95) 100%);
   color: white;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
   font-size: 0.875rem;
   white-space: nowrap;
   z-index: 10000;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(102, 126, 234, 0.3);
 }
 
 .toggle-details-btn:hover::before {
   opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .toggle-details-btn::after {
   content: '';
   position: absolute;
-  bottom: calc(100% + 4px);
+  bottom: calc(100% + 9px);
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(5px);
   border: 6px solid transparent;
-  border-top-color: rgba(0, 0, 0, 0.9);
+  border-top-color: rgba(0, 0, 0, 0.95);
   z-index: 10000;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .toggle-details-btn:hover::after {
   opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .btn-calculate::before,
 .btn-clear::before {
   content: attr(data-tooltip-text);
   position: absolute;
-  bottom: calc(100% + 10px);
+  bottom: calc(100% + 15px);
   left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.9);
+  transform: translateX(-50%) translateY(5px);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 40, 0.95) 100%);
   color: white;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
   font-size: 0.875rem;
   white-space: nowrap;
   z-index: 10000;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(102, 126, 234, 0.3);
 }
 
 .btn-calculate:hover::before,
 .btn-clear:hover::before {
   opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .btn-calculate::after,
 .btn-clear::after {
   content: '';
   position: absolute;
-  bottom: calc(100% + 4px);
+  bottom: calc(100% + 9px);
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(5px);
   border: 6px solid transparent;
-  border-top-color: rgba(0, 0, 0, 0.9);
+  border-top-color: rgba(0, 0, 0, 0.95);
   z-index: 10000;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .btn-calculate:hover::after,
 .btn-clear:hover::after {
   opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 @media (max-width: 640px) {

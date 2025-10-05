@@ -738,19 +738,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('nameSuggestYear').value = nameSuggestInputs.y;
   }
 
-  // Overlapped effect for name input on page load
+  // Position name input container directly at final state (no animation)
   const nameInputContainer = document.querySelector('.input-container:first-child');
   if (nameInputContainer && !sessionStorage.getItem('nameInputAnimated')) {
-    gsap.from(nameInputContainer, {
-      opacity: 0,
-      y: -20,
-      boxShadow: '0 0 0 rgba(102, 126, 234, 0)',
-      duration: 0.8,
-      ease: 'power2.out',
-      onComplete: () => {
-        sessionStorage.setItem('nameInputAnimated', 'true');
-      }
-    });
+    gsap.set(nameInputContainer, { y: 0, opacity: 1, boxShadow: '0 4px 6px rgba(102, 126, 234, 0.1)' });
+    sessionStorage.setItem('nameInputAnimated', 'true');
   }
 
   // Theme toggle

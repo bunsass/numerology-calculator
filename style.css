@@ -76,8 +76,11 @@ body {
 }
 
 .toggle-btn:hover {
-  transform: scale(1.1) rotate(90deg);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.toggle-btn:hover .toggle-icon {
+  transform: scale(1.1) rotate(90deg);
 }
 
 .toggle-btn:active {
@@ -87,6 +90,45 @@ body {
 #langToggle { right: 110px; }
 #themeToggle { right: 60px; }
 #menuToggle { right: 10px; }
+
+.toggle-btn::before {
+  content: attr(data-tooltip-text);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.toggle-btn:hover::before {
+  opacity: 1;
+}
+
+.toggle-btn::after {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.toggle-btn:hover::after {
+  opacity: 1;
+}
 
 .dropdown-menu {
   position: absolute;
@@ -129,6 +171,7 @@ body {
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: 500;
+  position: relative;
 }
 
 .dark .tab-btn { color: #f5f5f5; }
@@ -136,6 +179,45 @@ body {
 .tab-btn:hover {
   background: linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
   padding-left: 1.5rem;
+}
+
+.tab-btn::before {
+  content: attr(data-tooltip-text);
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 10px);
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tab-btn:hover::before {
+  opacity: 1;
+}
+
+.tab-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 4px);
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-left-color: rgba(0, 0, 0, 0.9);
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.tab-btn:hover::after {
+  opacity: 1;
 }
 
 .input-container {
@@ -202,6 +284,7 @@ body {
   transition: all 0.3s ease;
   border: none;
   -webkit-tap-highlight-color: transparent;
+  position: relative;
 }
 
 .btn-calculate {
@@ -393,6 +476,7 @@ body {
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
   -webkit-tap-highlight-color: transparent;
+  position: relative;
 }
 
 .toggle-details-btn:hover {
@@ -404,10 +488,10 @@ body {
   transform: scale(0.95);
 }
 
-[data-tooltip]:hover::after {
-  content: attr(data-tooltip);
+.toggle-details-btn::before {
+  content: attr(data-tooltip-text);
   position: absolute;
-  bottom: 120%;
+  bottom: calc(100% + 10px);
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.9);
@@ -416,19 +500,74 @@ body {
   border-radius: 8px;
   font-size: 0.875rem;
   white-space: nowrap;
-  z-index: 100;
-  animation: fadeIn 0.3s ease;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-[data-tooltip]:hover::before {
+.toggle-details-btn:hover::before {
+  opacity: 1;
+}
+
+.toggle-details-btn::after {
   content: '';
   position: absolute;
-  bottom: 110%;
+  bottom: calc(100% + 4px);
   left: 50%;
   transform: translateX(-50%);
   border: 6px solid transparent;
   border-top-color: rgba(0, 0, 0, 0.9);
-  z-index: 100;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.toggle-details-btn:hover::after {
+  opacity: 1;
+}
+
+.btn-calculate::before,
+.btn-clear::before {
+  content: attr(data-tooltip-text);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-calculate:hover::before,
+.btn-clear:hover::before {
+  opacity: 1;
+}
+
+.btn-calculate::after,
+.btn-clear::after {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-calculate:hover::after,
+.btn-clear:hover::after {
+  opacity: 1;
 }
 
 @media (max-width: 640px) {
@@ -436,8 +575,16 @@ body {
   .header-gradient { font-size: 1.5rem !important; }
   .button-line { flex-direction: column; }
   .btn-calculate, .btn-clear { width: 100%; }
-  #langToggle { right: 105px; }
-  #themeToggle { right: 55px; }
+  .toggle-btn { 
+    padding: 0.5rem;
+  }
+  .toggle-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  #langToggle { right: 95px; }
+  #themeToggle { right: 50px; }
+  #menuToggle { right: 5px; }
 }
 
 @media print {

@@ -96,50 +96,6 @@ body {
 #themeToggle { right: 60px; }
 #menuToggle { right: 10px; }
 
-.toggle-btn::before {
-  content: attr(data-tooltip-text);
-  position: absolute;
-  bottom: calc(100% + 15px);
-  left: 50%;
-  transform: translateX(-50%) translateY(5px);
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 40, 0.95) 100%);
-  color: white;
-  padding: 0.6rem 1rem;
-  border-radius: 10px;
-  font-size: 0.875rem;
-  white-space: nowrap;
-  z-index: 10000;
-  pointer-events: none;
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(102, 126, 234, 0.3);
-}
-
-.toggle-btn:hover::before {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-.toggle-btn::after {
-  content: '';
-  position: absolute;
-  bottom: calc(100% + 9px);
-  left: 50%;
-  transform: translateX(-50%) translateY(5px);
-  border: 6px solid transparent;
-  border-top-color: rgba(0, 0, 0, 0.95);
-  z-index: 10000;
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-.toggle-btn:hover::after {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -191,50 +147,6 @@ body {
   padding-left: 1.75rem;
   transform: translateX(3px);
   box-shadow: inset 3px 0 0 #667eea;
-}
-
-.tab-btn::before {
-  content: attr(data-tooltip-text);
-  position: absolute;
-  top: 50%;
-  left: calc(100% + 15px);
-  transform: translateY(-50%) translateX(-5px);
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 40, 0.95) 100%);
-  color: white;
-  padding: 0.6rem 1rem;
-  border-radius: 10px;
-  font-size: 0.875rem;
-  white-space: nowrap;
-  z-index: 10000;
-  pointer-events: none;
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(102, 126, 234, 0.3);
-}
-
-.tab-btn:hover::before {
-  opacity: 1;
-  transform: translateY(-50%) translateX(0);
-}
-
-.tab-btn::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: calc(100% + 9px);
-  transform: translateY(-50%) translateX(-5px);
-  border: 6px solid transparent;
-  border-right-color: rgba(0, 0, 0, 0.95);
-  z-index: 10000;
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-.tab-btn:hover::after {
-  opacity: 1;
-  transform: translateY(-50%) translateX(0);
 }
 
 .input-container {
@@ -503,98 +415,6 @@ body {
 
 .toggle-details-btn:active {
   transform: scale(0.95);
-}
-
-.toggle-details-btn::before {
-  content: attr(data-tooltip-text);
-  position: absolute;
-  bottom: calc(100% + 15px);
-  left: 50%;
-  transform: translateX(-50%) translateY(5px);
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 40, 0.95) 100%);
-  color: white;
-  padding: 0.6rem 1rem;
-  border-radius: 10px;
-  font-size: 0.875rem;
-  white-space: nowrap;
-  z-index: 10000;
-  pointer-events: none;
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(102, 126, 234, 0.3);
-}
-
-.toggle-details-btn:hover::before {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-.toggle-details-btn::after {
-  content: '';
-  position: absolute;
-  bottom: calc(100% + 9px);
-  left: 50%;
-  transform: translateX(-50%) translateY(5px);
-  border: 6px solid transparent;
-  border-top-color: rgba(0, 0, 0, 0.95);
-  z-index: 10000;
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-.toggle-details-btn:hover::after {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-.btn-calculate::before,
-.btn-clear::before {
-  content: attr(data-tooltip-text);
-  position: absolute;
-  bottom: calc(100% + 15px);
-  left: 50%;
-  transform: translateX(-50%) translateY(5px);
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(20, 20, 40, 0.95) 100%);
-  color: white;
-  padding: 0.6rem 1rem;
-  border-radius: 10px;
-  font-size: 0.875rem;
-  white-space: nowrap;
-  z-index: 10000;
-  pointer-events: none;
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(102, 126, 234, 0.3);
-}
-
-.btn-calculate:hover::before,
-.btn-clear:hover::before {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-.btn-calculate::after,
-.btn-clear::after {
-  content: '';
-  position: absolute;
-  bottom: calc(100% + 9px);
-  left: 50%;
-  transform: translateX(-50%) translateY(5px);
-  border: 6px solid transparent;
-  border-top-color: rgba(0, 0, 0, 0.95);
-  z-index: 10000;
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-.btn-calculate:hover::after,
-.btn-clear:hover::after {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
 }
 
 @media (max-width: 640px) {

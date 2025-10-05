@@ -21,26 +21,26 @@
       <div class="header-title">
         <h1 class="text-3xl sm:text-4xl font-bold header-gradient" data-i18n="mainTitle">✨ Discover Yourself with Numerology</h1>
       </div>
-      <button id="langToggle" class="toggle-btn" data-tooltip-text="Switch between Vietnamese and English">
+      <button id="langToggle" class="toggle-btn" data-tooltip-text="Chuyển đổi giữa Tiếng Việt và Tiếng Anh">
         <svg class="w-6 h-6 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
         </svg>
       </button>
-      <button id="themeToggle" class="toggle-btn" data-tooltip-text="Toggle between Light and Dark mode">
+      <button id="themeToggle" class="toggle-btn" data-tooltip-text="Chuyển đổi chế độ Sáng/Tối">
         <svg id="themeIcon" class="w-6 h-6 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
         </svg>
       </button>
-      <button id="menuToggle" class="toggle-btn" data-tooltip-text="Open navigation menu">
+      <button id="menuToggle" class="toggle-btn" data-tooltip-text="Mở menu điều hướng">
         <svg class="w-6 h-6 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
       </button>
       <div id="menuDropdown" class="dropdown-menu">
-        <button class="tab-btn" data-tab="main" data-i18n="tabOverview" data-tooltip-text="Calculate your core numerology numbers">📊 Overview</button>
-        <button class="tab-btn" data-tab="daily" data-i18n="tabDaily" data-tooltip-text="Get your daily numerology forecast">📅 Daily Forecast</button>
-        <button class="tab-btn" data-tab="compat" data-i18n="tabCompat" data-tooltip-text="Check compatibility between two people">💕 Compatibility</button>
-        <button class="tab-btn" data-tab="nameSuggest" data-i18n="tabNameSuggest" data-tooltip-text="Get name suggestions based on numerology">📝 Name Suggestion</button>
+        <button class="tab-btn" data-tab="main" data-i18n="tabOverview" data-tooltip-text="Tính toán các chỉ số thần số học cốt lõi">📊 Overview</button>
+        <button class="tab-btn" data-tab="daily" data-i18n="tabDaily" data-tooltip-text="Nhận dự báo thần số học hàng ngày">📅 Daily Forecast</button>
+        <button class="tab-btn" data-tab="compat" data-i18n="tabCompat" data-tooltip-text="Kiểm tra độ tương hợp giữa hai người">💕 Compatibility</button>
+        <button class="tab-btn" data-tab="nameSuggest" data-i18n="tabNameSuggest" data-tooltip-text="Nhận gợi ý tên dựa trên thần số học">📝 Name Suggestion</button>
       </div>
     </div>
 
@@ -59,18 +59,18 @@
           </div>
         </div>
         <div class="button-line">
-          <button id="calculateBtn" class="btn-calculate" data-i18n="btnCalculate" data-tooltip-text="Calculate all your numerology numbers">Calculate ✨</button>
-          <button id="clearBtn" class="btn-clear" data-i18n="btnClear" data-tooltip-text="Clear all input fields and results">Clear 🗑️</button>
+          <button id="calculateBtn" class="btn-calculate" data-i18n="btnCalculate" data-tooltip-text="Tính toán tất cả các chỉ số thần số học">Calculate ✨</button>
+          <button id="clearBtn" class="btn-clear" data-i18n="btnClear" data-tooltip-text="Xóa tất cả dữ liệu đã nhập và kết quả">Clear 🗑️</button>
         </div>
       </div>
       <div id="result" class="mt-6">
         <div id="summary"></div>
-        <button id="downloadReportBtn" class="toggle-details-btn hidden" data-i18n="btnDownloadReport" data-tooltip-text="Download your complete numerology report as PDF">Download Report 📥</button>
-        <button id="showMoreBtn" class="toggle-details-btn hidden" data-i18n="btnShowDetails" data-tooltip-text="View detailed meanings for each number">View Details</button>
+        <button id="downloadReportBtn" class="toggle-details-btn hidden" data-i18n="btnDownloadReport" data-tooltip-text="Tải báo cáo thần số học hoàn chỉnh dạng PDF">Download Report 📥</button>
+        <button id="showMoreBtn" class="toggle-details-btn hidden" data-i18n="btnShowDetails" data-tooltip-text="Xem ý nghĩa chi tiết cho từng con số">View Details</button>
         <div id="details" class="details-hidden"></div>
-        <button id="showCalcBtn" class="toggle-details-btn hidden" data-i18n="btnShowCalc" data-tooltip-text="See step-by-step calculation process">View Calculation</button>
+        <button id="showCalcBtn" class="toggle-details-btn hidden" data-i18n="btnShowCalc" data-tooltip-text="Xem quy trình tính toán từng bước">View Calculation</button>
         <div id="calculationDetails" class="details-hidden"></div>
-        <button id="showMeaningsBtn" class="toggle-details-btn hidden" data-i18n="btnShowMeanings" data-tooltip-text="Learn what each numerology number represents">View Number Meanings</button>
+        <button id="showMeaningsBtn" class="toggle-details-btn hidden" data-i18n="btnShowMeanings" data-tooltip-text="Tìm hiểu ý nghĩa từng con số đại diện">View Number Meanings</button>
         <div id="meanings" class="details-hidden"></div>
       </div>
     </div>
@@ -86,13 +86,13 @@
           </div>
         </div>
         <div class="button-line">
-          <button id="dailyCalculateBtn" class="btn-calculate" data-i18n="btnDailyCalculate" data-tooltip-text="Calculate your personal day, month, and year numbers">Calculate Forecast</button>
-          <button id="dailyClearBtn" class="btn-clear" data-i18n="btnClear" data-tooltip-text="Clear all input fields and results">Clear</button>
+          <button id="dailyCalculateBtn" class="btn-calculate" data-i18n="btnDailyCalculate" data-tooltip-text="Tính toán ngày, tháng và năm cá nhân của bạn">Calculate Forecast</button>
+          <button id="dailyClearBtn" class="btn-clear" data-i18n="btnClear" data-tooltip-text="Xóa tất cả dữ liệu đã nhập và kết quả">Clear</button>
         </div>
       </div>
       <div id="dailyResult" class="mt-6">
         <div id="dailyForecast"></div>
-        <button id="dailyShowCalcBtn" class="toggle-details-btn hidden" data-i18n="btnShowCalc" data-tooltip-text="See how your daily numbers are calculated">View Calculation</button>
+        <button id="dailyShowCalcBtn" class="toggle-details-btn hidden" data-i18n="btnShowCalc" data-tooltip-text="Xem cách tính toán các con số hàng ngày">View Calculation</button>
         <div id="dailyCalculationDetails" class="details-hidden"></div>
       </div>
     </div>
@@ -124,13 +124,13 @@
           </div>
         </div>
         <div class="button-line">
-          <button id="compatCalculateBtn" class="btn-calculate" data-i18n="btnCompatCalculate" data-tooltip-text="Calculate compatibility score between two people">Calculate Compatibility</button>
-          <button id="compatClearBtn" class="btn-clear" data-i18n="btnClear" data-tooltip-text="Clear all input fields and results">Clear</button>
+          <button id="compatCalculateBtn" class="btn-calculate" data-i18n="btnCompatCalculate" data-tooltip-text="Tính điểm tương hợp giữa hai người">Calculate Compatibility</button>
+          <button id="compatClearBtn" class="btn-clear" data-i18n="btnClear" data-tooltip-text="Xóa tất cả dữ liệu đã nhập và kết quả">Clear</button>
         </div>
       </div>
       <div id="compatResult" class="mt-6">
         <div id="compatForecast"></div>
-        <button id="compatShowCalcBtn" class="toggle-details-btn hidden" data-i18n="btnShowCalc" data-tooltip-text="See how compatibility is calculated step-by-step">View Calculation</button>
+        <button id="compatShowCalcBtn" class="toggle-details-btn hidden" data-i18n="btnShowCalc" data-tooltip-text="Xem cách tính toán độ tương hợp từng bước">View Calculation</button>
         <div id="compatCalculationDetails" class="details-hidden"></div>
       </div>
     </div>
@@ -146,8 +146,8 @@
           </div>
         </div>
         <div class="button-line">
-          <button id="nameSuggestCalculateBtn" class="btn-calculate" data-i18n="btnNameSuggestCalculate" data-tooltip-text="Get name suggestions that match your birth numbers">Suggest Names</button>
-          <button id="nameSuggestClearBtn" class="btn-clear" data-i18n="btnClear" data-tooltip-text="Clear all input fields and results">Clear</button>
+          <button id="nameSuggestCalculateBtn" class="btn-calculate" data-i18n="btnNameSuggestCalculate" data-tooltip-text="Nhận gợi ý tên phù hợp với ngày sinh">Suggest Names</button>
+          <button id="nameSuggestClearBtn" class="btn-clear" data-i18n="btnClear" data-tooltip-text="Xóa tất cả dữ liệu đã nhập và kết quả">Clear</button>
         </div>
       </div>
       <div id="nameSuggestResult" class="mt-6"></div>

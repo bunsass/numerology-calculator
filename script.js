@@ -30,7 +30,25 @@ const translations = {
     tooltipClear: 'Xóa tất cả dữ liệu đã nhập',
     btnHideDetails: 'Ẩn Chi Tiết',
     btnHideCalc: 'Ẩn Cách Tính',
-    btnHideMeanings: 'Ẩn Ý Nghĩa'
+    btnHideMeanings: 'Ẩn Ý Nghĩa',  // ← ADD COMMA HERE
+    tooltipLangToggle: 'Chuyển đổi giữa Tiếng Việt và Tiếng Anh',
+    tooltipThemeToggle: 'Chuyển đổi chế độ Sáng/Tối',
+    tooltipMenuToggle: 'Mở menu điều hướng',
+    tooltipTabMain: 'Tính toán các chỉ số thần số học cốt lõi',
+    tooltipTabDaily: 'Nhận dự báo thần số học hàng ngày',
+    tooltipTabCompat: 'Kiểm tra độ tương hợp giữa hai người',
+    tooltipTabNameSuggest: 'Nhận gợi ý tên dựa trên thần số học',
+    tooltipCalculate: 'Tính toán tất cả các chỉ số thần số học',
+    tooltipClear: 'Xóa tất cả dữ liệu đã nhập và kết quả',
+    tooltipDownload: 'Tải báo cáo thần số học hoàn chỉnh dạng PDF',
+    tooltipShowDetails: 'Xem ý nghĩa chi tiết cho từng con số',
+    tooltipShowCalc: 'Xem quy trình tính toán từng bước',
+    tooltipShowMeanings: 'Tìm hiểu ý nghĩa từng con số đại diện',
+    tooltipDailyCalculate: 'Tính toán ngày, tháng và năm cá nhân của bạn',
+    tooltipDailyShowCalc: 'Xem cách tính toán các con số hàng ngày',
+    tooltipCompatCalculate: 'Tính điểm tương hợp giữa hai người',
+    tooltipCompatShowCalc: 'Xem cách tính toán độ tương hợp từng bước',
+    tooltipNameSuggestCalculate: 'Nhận gợi ý tên phù hợp với ngày sinh'
   },
   en: {
     mainTitle: '✨ Discover Yourself with Numerology',
@@ -61,7 +79,25 @@ const translations = {
     tooltipClear: 'Clear all entered data',
     btnHideDetails: 'Hide Details',
     btnHideCalc: 'Hide Calculation',
-    btnHideMeanings: 'Hide Meanings'
+    btnHideMeanings: 'Hide Meanings',  // ← ADD COMMA HERE
+    tooltipLangToggle: 'Switch between Vietnamese and English',
+    tooltipThemeToggle: 'Toggle between Light and Dark mode',
+    tooltipMenuToggle: 'Open navigation menu',
+    tooltipTabMain: 'Calculate your core numerology numbers',
+    tooltipTabDaily: 'Get your daily numerology forecast',
+    tooltipTabCompat: 'Check compatibility between two people',
+    tooltipTabNameSuggest: 'Get name suggestions based on numerology',
+    tooltipCalculate: 'Calculate all your numerology numbers',
+    tooltipClear: 'Clear all input fields and results',
+    tooltipDownload: 'Download your complete numerology report as PDF',
+    tooltipShowDetails: 'View detailed meanings for each number',
+    tooltipShowCalc: 'See step-by-step calculation process',
+    tooltipShowMeanings: 'Learn what each numerology number represents',
+    tooltipDailyCalculate: 'Calculate your personal day, month, and year numbers',
+    tooltipDailyShowCalc: 'See how your daily numbers are calculated',
+    tooltipCompatCalculate: 'Calculate compatibility score between two people',
+    tooltipCompatShowCalc: 'See how compatibility is calculated step-by-step',
+    tooltipNameSuggestCalculate: 'Get name suggestions that match your birth numbers'
   }
 };
 
@@ -164,6 +200,45 @@ function updateTranslations() {
     const key = el.getAttribute('data-i18n-title');
     el.title = translations[currentLang][key] || el.title;
   });
+  
+  // Update tooltips dynamically
+  document.getElementById('langToggle').setAttribute('data-tooltip-text', translations[currentLang].tooltipLangToggle);
+  document.getElementById('themeToggle').setAttribute('data-tooltip-text', translations[currentLang].tooltipThemeToggle);
+  document.getElementById('menuToggle').setAttribute('data-tooltip-text', translations[currentLang].tooltipMenuToggle);
+  
+  document.querySelector('[data-tab="main"]').setAttribute('data-tooltip-text', translations[currentLang].tooltipTabMain);
+  document.querySelector('[data-tab="daily"]').setAttribute('data-tooltip-text', translations[currentLang].tooltipTabDaily);
+  document.querySelector('[data-tab="compat"]').setAttribute('data-tooltip-text', translations[currentLang].tooltipTabCompat);
+  document.querySelector('[data-tab="nameSuggest"]').setAttribute('data-tooltip-text', translations[currentLang].tooltipTabNameSuggest);
+  
+  document.getElementById('calculateBtn').setAttribute('data-tooltip-text', translations[currentLang].tooltipCalculate);
+  document.getElementById('clearBtn').setAttribute('data-tooltip-text', translations[currentLang].tooltipClear);
+  document.getElementById('dailyCalculateBtn').setAttribute('data-tooltip-text', translations[currentLang].tooltipDailyCalculate);
+  document.getElementById('dailyClearBtn').setAttribute('data-tooltip-text', translations[currentLang].tooltipClear);
+  document.getElementById('compatCalculateBtn').setAttribute('data-tooltip-text', translations[currentLang].tooltipCompatCalculate);
+  document.getElementById('compatClearBtn').setAttribute('data-tooltip-text', translations[currentLang].tooltipClear);
+  document.getElementById('nameSuggestCalculateBtn').setAttribute('data-tooltip-text', translations[currentLang].tooltipNameSuggestCalculate);
+  document.getElementById('nameSuggestClearBtn').setAttribute('data-tooltip-text', translations[currentLang].tooltipClear);
+  
+  // Update result buttons if they exist
+  const downloadBtn = document.getElementById('downloadReportBtn');
+  if(downloadBtn) downloadBtn.setAttribute('data-tooltip-text', translations[currentLang].tooltipDownload);
+  
+  const showMoreBtn = document.getElementById('showMoreBtn');
+  if(showMoreBtn) showMoreBtn.setAttribute('data-tooltip-text', translations[currentLang].tooltipShowDetails);
+  
+  const showCalcBtn = document.getElementById('showCalcBtn');
+  if(showCalcBtn) showCalcBtn.setAttribute('data-tooltip-text', translations[currentLang].tooltipShowCalc);
+  
+  const showMeaningsBtn = document.getElementById('showMeaningsBtn');
+  if(showMeaningsBtn) showMeaningsBtn.setAttribute('data-tooltip-text', translations[currentLang].tooltipShowMeanings);
+  
+  const dailyShowCalcBtn = document.getElementById('dailyShowCalcBtn');
+  if(dailyShowCalcBtn) dailyShowCalcBtn.setAttribute('data-tooltip-text', translations[currentLang].tooltipDailyShowCalc);
+  
+  const compatShowCalcBtn = document.getElementById('compatShowCalcBtn');
+  if(compatShowCalcBtn) compatShowCalcBtn.setAttribute('data-tooltip-text', translations[currentLang].tooltipCompatShowCalc);
+  
   // Re-run calculations to update displayed results with new language
   if(document.getElementById('summary').innerHTML) calculateNumerology();
   if(document.getElementById('dailyForecast').innerHTML) calculateDailyForecast();

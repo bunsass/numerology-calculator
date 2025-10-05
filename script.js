@@ -364,8 +364,17 @@ function calculatePinnacleNumbers(d, m, y, lpn) {
   const p2 = reduceToSingleDigit(d + ys, true);
   const p3 = reduceToSingleDigit(p1 + p2, true);
   const p4 = reduceToSingleDigit(m + ys, true);
-  const a1 = 36 - lpn;
-  return {firstPinnacle:p1,secondPinnacle:p2,thirdPinnacle:p3,fourthPinnacle:p4,firstPinnacleAge:`${a1} - ${a1+8}`,secondPinnacleAge:`${a1+9} - ${a1+17}`,thirdPinnacleAge:`${a1+18} - ${a1+26}`,fourthPinnacleAge:currentLang === 'vi' ? `${a1+27} trở đi` : `${a1+27} onwards`};
+  const a1 = 36 - lpn - 9; // Modified: Subtract 9 from the first pinnacle age
+  return {
+    firstPinnacle: p1,
+    secondPinnacle: p2,
+    thirdPinnacle: p3,
+    fourthPinnacle: p4,
+    firstPinnacleAge: `${a1} - ${a1 + 9}`, // Display as start - start+9
+    secondPinnacleAge: `${a1 + 9} - ${a1 + 18}`,
+    thirdPinnacleAge: `${a1 + 18} - ${a1 + 27}`,
+    fourthPinnacleAge: currentLang === 'vi' ? `${a1 + 27} trở đi` : `${a1 + 27} onwards`
+  };
 }
 
 function calculateAdditionalNumbers(name, d, m, y) {

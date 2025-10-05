@@ -1,0 +1,202 @@
+{
+  "ui": {
+    "mainTitle": "✨ Discover Yourself with Numerology",
+    "labelFullName": "Full Name",
+    "labelBirthDate": "Birth Date",
+    "labelPerson1": "First Person's Full Name",
+    "labelBirthDate1": "First Person's Birth Date",
+    "labelPerson2": "Second Person's Full Name",
+    "labelBirthDate2": "Second Person's Birth Date",
+    "placeholderName": "Enter full name",
+    "placeholderYear": "Year",
+    "selectDay": "Day",
+    "selectMonth": "Month",
+    "btnCalculate": "Calculate ✨",
+    "btnClear": "Clear 🗑️",
+    "btnShowDetails": "View Details",
+    "btnShowCalc": "View Calculation",
+    "btnShowMeanings": "View Number Meanings",
+    "btnHideDetails": "Hide Details",
+    "btnHideCalc": "Hide Calculation",
+    "btnHideMeanings": "Hide Meanings",
+    "btnDailyCalculate": "Calculate Forecast",
+    "btnCompatCalculate": "Calculate Compatibility",
+    "btnDownloadReport": "Download Report 📥",
+    "btnNameSuggestCalculate": "Suggest Names",
+    "tabOverview": "📊 Overview",
+    "tabDaily": "📅 Daily Forecast",
+    "tabCompat": "💕 Compatibility",
+    "tabNameSuggest": "📝 Name Suggestion",
+    "tooltipLangToggle": "Switch between Vietnamese and English",
+    "tooltipThemeToggle": "Toggle between Light and Dark mode",
+    "tooltipMenuToggle": "Open navigation menu",
+    "tooltipTabMain": "Calculate your core numerology numbers",
+    "tooltipTabDaily": "Get your daily numerology forecast",
+    "tooltipTabCompat": "Check compatibility between two people",
+    "tooltipTabNameSuggest": "Get name suggestions based on numerology",
+    "tooltipCalculate": "Calculate all your numerology numbers",
+    "tooltipClear": "Clear all input fields and results",
+    "tooltipDownload": "Download your complete numerology report as PDF",
+    "tooltipShowDetails": "View detailed meanings for each number",
+    "tooltipShowCalc": "See step-by-step calculation process",
+    "tooltipShowMeanings": "Learn what each numerology number represents",
+    "tooltipDailyCalculate": "Calculate your personal day, month, and year numbers",
+    "tooltipDailyShowCalc": "See how your daily numbers are calculated",
+    "tooltipCompatCalculate": "Calculate compatibility score between two people",
+    "tooltipCompatShowCalc": "See how compatibility is calculated step-by-step",
+    "tooltipNameSuggestCalculate": "Get name suggestions that match your birth numbers",
+    "errorInvalidName": "Name can only contain letters and spaces!",
+    "errorInvalidDate": "Invalid birth date!",
+    "lifePath": "Life Path Number",
+    "soulUrge": "Soul Urge Number",
+    "personality": "Personality Number",
+    "expression": "Expression Number",
+    "hiddenPassion": "Hidden Passion Number",
+    "birthDay": "Birth Day Number",
+    "challenge1": "Challenge 1",
+    "challenge2": "Challenge 2",
+    "challenge3": "Challenge 3",
+    "challenge4": "Challenge 4",
+    "pinnacle1": "Pinnacle 1 (Age {age})",
+    "pinnacle2": "Pinnacle 2 (Age {age})",
+    "pinnacle3": "Pinnacle 3 (Age {age})",
+    "pinnacle4": "Pinnacle 4 (Age {age})",
+    "advice": "Advice",
+    "personalYear": "Personal Year",
+    "personalMonth": "Personal Month",
+    "personalDay": "Personal Day",
+    "suggestionsToday": "Suggestions for Today",
+    "thingsToAvoid": "Things to Avoid",
+    "compatibilityLevel": "Compatibility Level",
+    "suggestedNames": "Suggested Names",
+    "noteNames": "Note: These names are suggested to complement your Life Path Number."
+  },
+  "meanings": {
+    "1": "Independence, leadership, creativity. <strong>Opportunity:</strong> Leading new projects, entrepreneurship. <strong>Challenge:</strong> Isolation, impatience. <strong>Advice:</strong> Learn to collaborate and listen to others.",
+    "2": "Cooperation, sensitivity, harmony. <strong>Opportunity:</strong> Building relationships, mediation. <strong>Challenge:</strong> Dependency, conflict avoidance. <strong>Advice:</strong> Make independent decisions.",
+    "3": "Creativity, joy, communication. <strong>Opportunity:</strong> Art, writing, entertainment. <strong>Challenge:</strong> Scattered focus, lack of depth. <strong>Advice:</strong> Focus on long-term goals.",
+    "4": "Stability, practicality, hard work. <strong>Opportunity:</strong> Building foundations, management. <strong>Challenge:</strong> Rigidity, resistance to change. <strong>Advice:</strong> Be open to new ideas.",
+    "5": "Freedom, adventure, flexibility. <strong>Opportunity:</strong> Travel, new experiences. <strong>Challenge:</strong> Instability, lack of commitment. <strong>Advice:</strong> Balance freedom and responsibility.",
+    "6": "Responsibility, family, love. <strong>Opportunity:</strong> Supporting community, caregiving. <strong>Challenge:</strong> Burnout, difficulty saying no. <strong>Advice:</strong> Prioritize self-care.",
+    "7": "Analysis, spirituality, introspection. <strong>Opportunity:</strong> Research, meditation. <strong>Challenge:</strong> Isolation, skepticism. <strong>Advice:</strong> Open up to others.",
+    "8": "Power, success, finance. <strong>Opportunity:</strong> Business, leadership. <strong>Challenge:</strong> Greed, imbalance. <strong>Advice:</strong> Practice gratitude.",
+    "9": "Humanitarianism, completion, service. <strong>Opportunity:</strong> Charity, helping others. <strong>Challenge:</strong> Emotional overload. <strong>Advice:</strong> Practice meditation.",
+    "11": "Intuition, inspiration, spirituality. <strong>Opportunity:</strong> Spiritual leadership, creativity. <strong>Challenge:</strong> Oversensitivity, anxiety. <strong>Advice:</strong> Balance your energy.",
+    "22": "Master builder, practical idealism. <strong>Opportunity:</strong> Large projects, world-changing goals. <strong>Challenge:</strong> Pressure, burnout. <strong>Advice:</strong> Focus on long-term goals.",
+    "33": "Master teacher, compassion, sacrifice. <strong>Opportunity:</strong> Guiding, healing. <strong>Challenge:</strong> Over-sacrifice. <strong>Advice:</strong> Take care of yourself."
+  },
+  "meaningsPDF": {
+    "1": "Independence, leadership, creativity. Opportunity: Leading new projects, entrepreneurship. Challenge: Isolation, impatience. Advice: Learn to collaborate and listen to others.",
+    "2": "Cooperation, sensitivity, harmony. Opportunity: Building relationships, mediation. Challenge: Dependency, conflict avoidance. Advice: Make independent decisions.",
+    "3": "Creativity, joy, communication. Opportunity: Art, writing, entertainment. Challenge: Scattered focus, lack of depth. Advice: Focus on long-term goals.",
+    "4": "Stability, practicality, hard work. Opportunity: Building foundations, management. Challenge: Rigidity, resistance to change. Advice: Be open to new ideas.",
+    "5": "Freedom, adventure, flexibility. Opportunity: Travel, new experiences. Challenge: Instability, lack of commitment. Advice: Balance freedom and responsibility.",
+    "6": "Responsibility, family, love. Opportunity: Supporting community, caregiving. Challenge: Burnout, difficulty saying no. Advice: Prioritize self-care.",
+    "7": "Analysis, spirituality, introspection. Opportunity: Research, meditation. Challenge: Isolation, skepticism. Advice: Open up to others.",
+    "8": "Power, success, finance. Opportunity: Business, leadership. Challenge: Greed, imbalance. Advice: Practice gratitude.",
+    "9": "Humanitarianism, completion, service. Opportunity: Charity, helping others. Challenge: Emotional overload. Advice: Practice meditation.",
+    "11": "Intuition, inspiration, spirituality. Opportunity: Spiritual leadership, creativity. Challenge: Oversensitivity, anxiety. Advice: Balance your energy.",
+    "22": "Master builder, practical idealism. Opportunity: Large projects, world-changing goals. Challenge: Pressure, burnout. Advice: Focus on long-term goals.",
+    "33": "Master teacher, compassion, sacrifice. Opportunity: Guiding, healing. Challenge: Over-sacrifice. Advice: Take care of yourself."
+  },
+  "challengeMeanings": {
+    "0": "No specific challenge, free to choose. <strong>Advice:</strong> Choose your path wisely, focus on your Life Path number.",
+    "1": "Learn independence, avoid dependency. <strong>Advice:</strong> Build confidence and self-reliance.",
+    "2": "Build confidence, avoid oversensitivity. <strong>Advice:</strong> Learn to handle criticism.",
+    "3": "Focus on expression, avoid scattering energy. <strong>Advice:</strong> Develop creative discipline.",
+    "4": "Learn organization, avoid rigidity. <strong>Advice:</strong> Be flexible with changes.",
+    "5": "Adapt to change, avoid irresponsibility. <strong>Advice:</strong> Find balance in freedom.",
+    "6": "Accept responsibility, avoid perfectionism. <strong>Advice:</strong> Learn to forgive and let go.",
+    "7": "Open up to others, avoid skepticism. <strong>Advice:</strong> Build trust.",
+    "8": "Balance material and spiritual, avoid greed. <strong>Advice:</strong> Focus on true values."
+  },
+  "challengeMeaningsPDF": {
+    "0": "No specific challenge, free to choose. Advice: Choose your path wisely, focus on your Life Path number.",
+    "1": "Learn independence, avoid dependency. Advice: Build confidence and self-reliance.",
+    "2": "Build confidence, avoid oversensitivity. Advice: Learn to handle criticism.",
+    "3": "Focus on expression, avoid scattering energy. Advice: Develop creative discipline.",
+    "4": "Learn organization, avoid rigidity. Advice: Be flexible with changes.",
+    "5": "Adapt to change, avoid irresponsibility. Advice: Find balance in freedom.",
+    "6": "Accept responsibility, avoid perfectionism. Advice: Learn to forgive and let go.",
+    "7": "Open up to others, avoid skepticism. Advice: Build trust.",
+    "8": "Balance material and spiritual, avoid greed. Advice: Focus on true values."
+  },
+  "pinnacleAdvice": {
+    "1": "Seize this period to assert yourself and lead new projects.",
+    "2": "Focus on building relationships and collaboration, listen to your emotions.",
+    "3": "Explore your creativity, express yourself through art or communication.",
+    "4": "Build a solid foundation, focus on organization and discipline.",
+    "5": "Embrace change and explore new opportunities, but maintain balance.",
+    "6": "Care for family and community, prioritize responsibility and love.",
+    "7": "Reflect and seek solitude to develop inner wisdom and clarity.",
+    "8": "Leverage energy for financial and career success, but maintain balance.",
+    "9": "Pursue humanitarian goals, help others, and live for a higher purpose.",
+    "11": "Listen to your intuition and inspire others through creativity.",
+    "22": "Focus on large projects and building the future. Plan carefully and work toward long-term goals.",
+    "33": "Share knowledge and compassion, but don't neglect self-care."
+  },
+  "pinnacleAdvicePDF": {
+    "1": "Seize this period to assert yourself and lead new projects.",
+    "2": "Focus on building relationships and collaboration, listen to your emotions.",
+    "3": "Explore your creativity, express yourself through art or communication.",
+    "4": "Build a solid foundation, focus on organization and discipline.",
+    "5": "Embrace change and explore new opportunities, but maintain balance.",
+    "6": "Care for family and community, prioritize responsibility and love.",
+    "7": "Reflect and seek solitude to develop inner wisdom and clarity.",
+    "8": "Leverage energy for financial and career success, but maintain balance.",
+    "9": "Pursue humanitarian goals, help others, and live for a higher purpose.",
+    "11": "Listen to your intuition and inspire others through creativity.",
+    "22": "Focus on large projects and building the future. Plan carefully and work toward long-term goals.",
+    "33": "Share knowledge and compassion, but don't neglect self-care."
+  },
+  "dailySuggestions": {
+    "1": {
+      "do": "Today is the day to shine and lead! Start a new project, present a bold idea, or take on a personal challenge. Be confident in expressing yourself and seize opportunities.",
+      "avoid": "Avoid shirking responsibility or depending on others to make decisions. Don't let impatience ruin opportunities."
+    },
+    "2": {
+      "do": "Focus on relationships and cooperation. This is an ideal day for conversations, mediation, or supporting friends and family. Listen and connect emotionally.",
+      "avoid": "Avoid conflict avoidance or staying silent when you need to speak up. Don't let oversensitivity throw you off balance."
+    },
+    "3": {
+      "do": "Creative energy is rising! Write, paint, or participate in artistic activities. Communicate joyfully and spread positive energy to everyone.",
+      "avoid": "Avoid scattering your energy across too many tasks or lacking focus. Don't let impulsive words cause misunderstandings."
+    },
+    "4": {
+      "do": "Today is suitable for organizing, planning, or completing work. Build a solid foundation for long-term goals and maintain discipline in your work.",
+      "avoid": "Avoid rigidity or refusing change. Don't overwork and forget to take care of yourself."
+    },
+    "5": {
+      "do": "Explore and change! Try a new activity, go somewhere different, or meet new people. Be flexible and open to unexpected opportunities.",
+      "avoid": "Avoid impulsive actions or ignoring responsibilities. Don't let lack of commitment affect relationships."
+    },
+    "6": {
+      "do": "Spend time with family, friends, or community. Today is the day to care, love, and create harmony in relationships.",
+      "avoid": "Avoid taking on too many responsibilities or forgetting self-care. Don't let perfectionism stress you out."
+    },
+    "7": {
+      "do": "Seek stillness and reflection. Meditate, read, or research a topic you love. Connecting with your inner self will bring clarity.",
+      "avoid": "Avoid isolating yourself too long or doubting everything. Don't refuse support from others."
+    },
+    "8": {
+      "do": "Focus on finances and career goals. Today is a good day for business planning, negotiation, or investment. Stay confident.",
+      "avoid": "Avoid greed or focusing only on material things. Don't neglect personal relationships for work."
+    },
+    "9": {
+      "do": "Spread compassion and help others. Participate in charity work or support someone in need. Today is the day to live for a higher purpose.",
+      "avoid": "Avoid holding onto negative emotions or the past. Don't let sensitivity drain you."
+    },
+    "11": {
+      "do": "Listen to your intuition. This is a day for meditation, seeking spiritual meaning, or inspiring others. Trust your instincts.",
+      "avoid": "Avoid letting oversensitivity lead to anxiety. Don't ignore practical details in your work."
+    },
+    "22": {
+      "do": "Focus on large projects and building the future. Plan carefully and work toward long-term goals. Today is the day to turn dreams into reality.",
+      "avoid": "Avoid letting pressure exhaust you. Don't overlook small details or work without a plan."
+    },
+    "33": {
+      "do": "Guide and inspire others. Spend time sharing knowledge or supporting someone. Today is the day to express compassion.",
+      "avoid": "Avoid over-sacrifice and forgetting self-care. Don't let emotions control important decisions."
+    }
+  }
+}

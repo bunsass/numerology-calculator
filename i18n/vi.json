@@ -1,0 +1,202 @@
+{
+  "ui": {
+    "mainTitle": "✨ Khám Phá Bản Thân Với Thần Số Học",
+    "labelFullName": "Họ và Tên",
+    "labelBirthDate": "Ngày Sinh",
+    "labelPerson1": "Họ và Tên Người Thứ Nhất",
+    "labelBirthDate1": "Ngày Sinh Người Thứ Nhất",
+    "labelPerson2": "Họ và Tên Người Thứ Hai",
+    "labelBirthDate2": "Ngày Sinh Người Thứ Hai",
+    "placeholderName": "Nhập họ và tên",
+    "placeholderYear": "Năm",
+    "selectDay": "Ngày",
+    "selectMonth": "Tháng",
+    "btnCalculate": "Tính Toán ✨",
+    "btnClear": "Xóa 🗑️",
+    "btnShowDetails": "Xem Chi Tiết",
+    "btnShowCalc": "Xem Cách Tính",
+    "btnShowMeanings": "Xem Ý Nghĩa Các Con Số",
+    "btnHideDetails": "Ẩn Chi Tiết",
+    "btnHideCalc": "Ẩn Cách Tính",
+    "btnHideMeanings": "Ẩn Ý Nghĩa",
+    "btnDailyCalculate": "Tính Dự Báo",
+    "btnCompatCalculate": "Tính Độ Tương Hợp",
+    "btnDownloadReport": "Tải Báo Cáo 📥",
+    "btnNameSuggestCalculate": "Gợi Ý Tên",
+    "tabOverview": "📊 Tổng Quan",
+    "tabDaily": "📅 Dự Báo Hàng Ngày",
+    "tabCompat": "💕 Độ Tương Hợp",
+    "tabNameSuggest": "📝 Gợi Ý Tên",
+    "tooltipLangToggle": "Chuyển đổi giữa Tiếng Việt và Tiếng Anh",
+    "tooltipThemeToggle": "Chuyển đổi chế độ Sáng/Tối",
+    "tooltipMenuToggle": "Mở menu điều hướng",
+    "tooltipTabMain": "Tính toán các chỉ số thần số học cốt lõi",
+    "tooltipTabDaily": "Nhận dự báo thần số học hàng ngày",
+    "tooltipTabCompat": "Kiểm tra độ tương hợp giữa hai người",
+    "tooltipTabNameSuggest": "Nhận gợi ý tên dựa trên thần số học",
+    "tooltipCalculate": "Tính toán tất cả các chỉ số thần số học",
+    "tooltipClear": "Xóa tất cả dữ liệu đã nhập và kết quả",
+    "tooltipDownload": "Tải báo cáo thần số học hoàn chỉnh dạng PDF",
+    "tooltipShowDetails": "Xem ý nghĩa chi tiết cho từng con số",
+    "tooltipShowCalc": "Xem quy trình tính toán từng bước",
+    "tooltipShowMeanings": "Tìm hiểu ý nghĩa từng con số đại diện",
+    "tooltipDailyCalculate": "Tính toán ngày, tháng và năm cá nhân của bạn",
+    "tooltipDailyShowCalc": "Xem cách tính toán các con số hàng ngày",
+    "tooltipCompatCalculate": "Tính điểm tương hợp giữa hai người",
+    "tooltipCompatShowCalc": "Xem cách tính toán độ tương hợp từng bước",
+    "tooltipNameSuggestCalculate": "Nhận gợi ý tên phù hợp với ngày sinh",
+    "errorInvalidName": "Họ tên chỉ được chứa chữ cái và khoảng trắng!",
+    "errorInvalidDate": "Ngày sinh không hợp lệ!",
+    "lifePath": "Con số chủ đạo (Life Path)",
+    "soulUrge": "Con số linh hồn (Soul Urge)",
+    "personality": "Con số nhân cách (Personality)",
+    "expression": "Con số tương tác (Expression)",
+    "hiddenPassion": "Con số linh hồn ẩn (Hidden Passion)",
+    "birthDay": "Con số ngày sinh (Birth Day)",
+    "challenge1": "Con số thách thức đỉnh cao 1 (Challenge 1)",
+    "challenge2": "Con số thách thức đỉnh cao 2 (Challenge 2)",
+    "challenge3": "Con số thách thức đỉnh cao 3 (Challenge 3)",
+    "challenge4": "Con số thách thức đỉnh cao 4 (Challenge 4)",
+    "pinnacle1": "Con số đỉnh cao 1 (Pinnacle 1, Age {age})",
+    "pinnacle2": "Con số đỉnh cao 2 (Pinnacle 2, Age {age})",
+    "pinnacle3": "Con số đỉnh cao 3 (Pinnacle 3, Age {age})",
+    "pinnacle4": "Con số đỉnh cao 4 (Pinnacle 4, Age {age})",
+    "advice": "Lời khuyên",
+    "personalYear": "Năm cá nhân",
+    "personalMonth": "Tháng cá nhân",
+    "personalDay": "Ngày cá nhân",
+    "suggestionsToday": "Gợi ý cho hôm nay",
+    "thingsToAvoid": "Những việc nên tránh",
+    "compatibilityLevel": "Mức độ tương hợp",
+    "suggestedNames": "Tên gợi ý",
+    "noteNames": "Lưu ý: Những tên này được gợi ý để bổ sung năng lượng cho con số chủ đạo của bạn."
+  },
+  "meanings": {
+    "1": "Độc lập, lãnh đạo, sáng tạo. <strong>Cơ hội:</strong> Dẫn dắt dự án mới, khởi nghiệp. <strong>Thách thức:</strong> Cô lập, thiếu kiên nhẫn. <strong>Lời khuyên:</strong> Học hợp tác và lắng nghe người khác.",
+    "2": "Hợp tác, nhạy cảm, hòa hợp. <strong>Cơ hội:</strong> Xây dựng mối quan hệ, hòa giải. <strong>Thách thức:</strong> Phụ thuộc, né tránh xung đột. <strong>Lời khuyên:</strong> Đưa ra quyết định độc lập.",
+    "3": "Sáng tạo, vui vẻ, giao tiếp. <strong>Cơ hội:</strong> Nghệ thuật, viết lách, giải trí. <strong>Thách thức:</strong> Phân tán, thiếu sâu sắc. <strong>Lời khuyên:</strong> Tập trung vào mục tiêu dài hạn.",
+    "4": "Ổn định, thực tế, chăm chỉ. <strong>Cơ hội:</strong> Xây dựng nền tảng, quản lý. <strong>Thách thức:</strong> Cứng nhắc, kháng cự thay đổi. <strong>Lời khuyên:</strong> Linh hoạt hơn với ý tưởng mới.",
+    "5": "Tự do, phiêu lưu, linh hoạt. <strong>Cơ hội:</strong> Du lịch, trải nghiệm mới. <strong>Thách thức:</strong> Bất ổn, thiếu cam kết. <strong>Lời khuyên:</strong> Cân bằng tự do và trách nhiệm.",
+    "6": "Trách nhiệm, gia đình, yêu thương. <strong>Cơ hội:</strong> Hỗ trợ cộng đồng, chăm sóc. <strong>Thách thức:</strong> Kiệt sức, khó từ chối. <strong>Lời khuyên:</strong> Ưu tiên bản thân.",
+    "7": "Phân tích, tâm linh, nội tâm. <strong>Cơ hội:</strong> Nghiên cứu, thiền định. <strong>Thách thức:</strong> Cô lập, hoài nghi. <strong>Lời khuyên:</strong> Mở lòng với người khác.",
+    "8": "Quyền lực, thành công, tài chính. <strong>Cơ hội:</strong> Kinh doanh, lãnh đạo. <strong>Thách thức:</strong> Tham lam, mất cân bằng. <strong>Lời khuyên:</strong> Thực hành biết ơn.",
+    "9": "Nhân đạo, hoàn thành, cống hiến. <strong>Cơ hội:</strong> Từ thiện, giúp đỡ. <strong>Thách thức:</strong> Cảm xúc quá tải. <strong>Lời khuyên:</strong> Thực hành thiền.",
+    "11": "Trực giác, truyền cảm hứng, tâm linh. <strong>Cơ hội:</strong> Lãnh đạo tinh thần, sáng tạo. <strong>Thách thức:</strong> Nhạy cảm quá mức, lo lắng. <strong>Lời khuyên:</strong> Cân bằng năng lượng.",
+    "22": "Xây dựng, lý tưởng thực tế, master builder. <strong>Cơ hội:</strong> Dự án lớn, thay đổi thế giới. <strong>Thách thức:</strong> Áp lực, kiệt sức. <strong>Lời khuyên:</strong> Tập trung vào mục tiêu dài hạn.",
+    "33": "Thầy dạy, từ bi, hy sinh. <strong>Cơ hội:</strong> Hướng dẫn, chữa lành. <strong>Thách thức:</strong> Hy sinh quá mức. <strong>Lời khuyên:</strong> Chăm sóc bản thân."
+  },
+  "meaningsPDF": {
+    "1": "Doc lap, lanh dao, sang tao. Co hoi: Dan dat du an moi, khoi nghiep. Thach thuc: Co lap, thieu kien nhan. Loi khuyen: Hoc hop tac va lang nghe nguoi khac.",
+    "2": "Hop tac, nhay cam, hoa hop. Co hoi: Xay dung moi quan he, hoa giai. Thach thuc: Phu thuoc, ne tranh xung dot. Loi khuyen: Dua ra quyet dinh doc lap.",
+    "3": "Sang tao, vui ve, giao tiep. Co hoi: Nghe thuat, viet lach, giai tri. Thach thuc: Phan tan, thieu sau sac. Loi khuyen: Tap trung vao muc tieu dai han.",
+    "4": "On dinh, thuc te, cham chi. Co hoi: Xay dung nen tang, quan ly. Thach thuc: Cung nhac, khang cu thay doi. Loi khuyen: Linh hoat hon voi y tuong moi.",
+    "5": "Tu do, phieu luu, linh hoat. Co hoi: Du lich, trai nghiem moi. Thach thuc: Bat on, thieu cam ket. Loi khuyen: Can bang tu do va trach nhiem.",
+    "6": "Trach nhiem, gia dinh, yeu thuong. Co hoi: Ho tro cong dong, cham soc. Thach thuc: Kiet suc, kho tu choi. Loi khuyen: Uu tien ban than.",
+    "7": "Phan tich, tam linh, noi tam. Co hoi: Nghien cuu, thien dinh. Thach thuc: Co lap, hoai nghi. Loi khuyen: Mo long voi nguoi khac.",
+    "8": "Quyen luc, thanh cong, tai chinh. Co hoi: Kinh doanh, lanh dao. Thach thuc: Tham lam, mat can bang. Loi khuyen: Thuc hanh biet on.",
+    "9": "Nhan dao, hoan thanh, cong hien. Co hoi: Tu thien, giup do. Thach thuc: Cam xuc qua tai. Loi khuyen: Thuc hanh thien.",
+    "11": "Truc giac, truyen cam hung, tam linh. Co hoi: Lanh dao tinh than, sang tao. Thach thuc: Nhay cam qua muc, lo lang. Loi khuyen: Can bang nang luong.",
+    "22": "Xay dung, ly tuong thuc te, master builder. Co hoi: Du an lon, thay doi the gioi. Thach thuc: Ap luc, kiet suc. Loi khuyen: Tap trung vao muc tieu dai han.",
+    "33": "Thay day, tu bi, hy sinh. Co hoi: Huong dan, chua lanh. Thach thuc: Hy sinh qua muc. Loi khuyen: Cham soc ban than."
+  },
+  "challengeMeanings": {
+    "0": "Không có thách thức cụ thể, tự do lựa chọn. <strong>Lời khuyên:</strong> Chọn đường đi khôn ngoan, tập trung vào con số chủ đạo.",
+    "1": "Học độc lập, tránh phụ thuộc. <strong>Lời khuyên:</strong> Phát triển tự tin và tự quyết.",
+    "2": "Xây dựng tự tin, tránh nhạy cảm quá mức. <strong>Lời khuyên:</strong> Học cách đối mặt với phê bình.",
+    "3": "Tập trung biểu đạt, tránh phân tán. <strong>Lời khuyên:</strong> Phát triển kỷ luật sáng tạo.",
+    "4": "Học tổ chức, tránh cứng nhắc. <strong>Lời khuyên:</strong> Linh hoạt với thay đổi.",
+    "5": "Thích nghi thay đổi, tránh vô trách nhiệm. <strong>Lời khuyên:</strong> Tìm cân bằng trong tự do.",
+    "6": "Chấp nhận trách nhiệm, tránh cầu toàn. <strong>Lời khuyên:</strong> Học tha thứ và buông xả.",
+    "7": "Mở lòng với người khác, tránh hoài nghi. <strong>Lời khuyên:</strong> Xây dựng niềm tin.",
+    "8": "Cân bằng vật chất và tinh thần, tránh tham lam. <strong>Lời khuyên:</strong> Tập trung vào giá trị thực."
+  },
+  "challengeMeaningsPDF": {
+    "0": "Khong co thach thuc cu the, tu do lua chon. Loi khuyen: Chon duong di khon ngoan, tap trung vao con so chu dao.",
+    "1": "Hoc doc lap, tranh phu thuoc. Loi khuyen: Phat trien tu tin va tu quyet.",
+    "2": "Xay dung tu tin, tranh nhay cam qua muc. Loi khuyen: Hoc cach doi mat voi phe binh.",
+    "3": "Tap trung bieu dat, tranh phan tan. Loi khuyen: Phat trien ky luat sang tao.",
+    "4": "Hoc to chuc, tranh cung nhac. Loi khuyen: Linh hoat voi thay doi.",
+    "5": "Thich nghi thay doi, tranh vo trach nhiem. Loi khuyen: Tim can bang trong tu do.",
+    "6": "Chap nhan trach nhiem, tranh cau toan. Loi khuyen: Hoc tha thu va buong xa.",
+    "7": "Mo long voi nguoi khac, tranh hoai nghi. Loi khuyen: Xay dung niem tin.",
+    "8": "Can bang vat chat va tinh than, tranh tham lam. Loi khuyen: Tap trung vao gia tri thuc."
+  },
+  "pinnacleAdvice": {
+    "1": "Hãy tận dụng giai đoạn này để khẳng định bản thân và dẫn dắt các dự án mới.",
+    "2": "Tập trung xây dựng các mối quan hệ và hợp tác, lắng nghe cảm xúc của bản thân.",
+    "3": "Khám phá sự sáng tạo, thể hiện bản thân qua nghệ thuật hoặc giao tiếp.",
+    "4": "Xây dựng nền tảng vững chắc, tập trung vào tổ chức và kỷ luật.",
+    "5": "Chấp nhận thay đổi và khám phá cơ hội mới, nhưng giữ sự cân bằng.",
+    "6": "Chăm sóc gia đình và cộng đồng, ưu tiên trách nhiệm và yêu thương.",
+    "7": "Suy ngẫm và tìm kiếm sự tĩnh lặng để phát triển nội tâm và trí tuệ.",
+    "8": "Tận dụng năng lượng để đạt thành công về tài chính và sự nghiệp, nhưng giữ cân bằng.",
+    "9": "Hướng tới các mục tiêu nhân đạo, giúp đỡ người khác và sống vì lý tưởng cao cả.",
+    "11": "Lắng nghe trực giác và truyền cảm hứng cho người khác qua sự sáng tạo.",
+    "22": "Tập trung vào các dự án lớn và xây dựng tương lai. Lập kế hoạch chi tiết và làm việc hướng tới mục tiêu lâu dài.",
+    "33": "Chia sẻ kiến thức và lòng từ bi, nhưng đừng quên chăm sóc bản thân."
+  },
+  "pinnacleAdvicePDF": {
+    "1": "Hay tan dung giai doan nay de khang dinh ban than va dan dat cac du an moi.",
+    "2": "Tap trung xay dung cac moi quan he va hop tac, lang nghe cam xuc cua ban than.",
+    "3": "Kham pha su sang tao, the hien ban than qua nghe thuat hoac giao tiep.",
+    "4": "Xay dung nen tang vung chac, tap trung vao to chuc va ky luat.",
+    "5": "Chap nhan thay doi va kham pha co hoi moi, nhung giu su can bang.",
+    "6": "Cham soc gia dinh va cong dong, uu tien trach nhiem va yeu thuong.",
+    "7": "Suy ngam va tim kiem su tinh lang de phat trien noi tam va tri tue.",
+    "8": "Tan dung nang luong de dat thanh cong ve tai chinh va su nghiep, nhung giu can bang.",
+    "9": "Huong toi cac muc tieu nhan dao, giup do nguoi khac va song vi ly tuong cao ca.",
+    "11": "Lang nghe truc giac va truyen cam hung cho nguoi khac qua su sang tao.",
+    "22": "Tap trung vao cac du an lon va xay dung tuong lai. Lap ke hoach chi tiet va lam viec huong toi muc tieu lau dai.",
+    "33": "Chia se kien thuc va long tu bi, nhung dung quen cham soc ban than."
+  },
+  "dailySuggestions": {
+    "1": {
+      "do": "Hôm nay là ngày để tỏa sáng và dẫn đầu! Hãy bắt đầu một dự án mới, đưa ra ý tưởng táo bạo hoặc thử sức với một thử thách cá nhân. Tự tin thể hiện bản thân và nắm bắt cơ hội.",
+      "avoid": "Tránh né tránh trách nhiệm hoặc phụ thuộc vào người khác để đưa ra quyết định. Đừng để sự thiếu kiên nhẫn làm hỏng cơ hội."
+    },
+    "2": {
+      "do": "Tập trung vào các mối quan hệ và sự hợp tác. Đây là ngày lý tưởng để trò chuyện, hòa giải hoặc hỗ trợ bạn bè, gia đình. Hãy lắng nghe và kết nối cảm xúc.",
+      "avoid": "Tránh né tránh xung đột hoặc giữ im lặng khi cần bày tỏ ý kiến. Đừng để sự nhạy cảm quá mức làm bạn mất cân bằng."
+    },
+    "3": {
+      "do": "Năng lượng sáng tạo đang dâng cao! Viết lách, vẽ tranh, hoặc tham gia hoạt động nghệ thuật. Giao tiếp vui vẻ và lan tỏa năng lượng tích cực đến mọi người.",
+      "avoid": "Tránh phân tán năng lượng vào quá nhiều việc hoặc thiếu tập trung. Đừng để những lời nói bộc phát gây hiểu lầm."
+    },
+    "4": {
+      "do": "Hôm nay phù hợp để tổ chức, lập kế hoạch hoặc hoàn thành công việc. Xây dựng nền tảng vững chắc cho mục tiêu dài hạn và giữ kỷ luật trong công việc.",
+      "avoid": "Tránh cứng nhắc hoặc từ chối thay đổi. Đừng làm việc quá sức mà quên chăm sóc bản thân."
+    },
+    "5": {
+      "do": "Khám phá và thay đổi! Hãy thử một hoạt động mới, đi đâu đó hoặc gặp gỡ người mới. Linh hoạt và cởi mở với những cơ hội bất ngờ.",
+      "avoid": "Tránh hành động bốc đồng hoặc bỏ qua trách nhiệm. Đừng để sự thiếu cam kết ảnh hưởng đến các mối quan hệ."
+    },
+    "6": {
+      "do": "Dành thời gian cho gia đình, bạn bè hoặc cộng đồng. Hôm nay là ngày để chăm sóc, yêu thương và tạo ra sự hài hòa trong các mối quan hệ.",
+      "avoid": "Tránh ôm đồm quá nhiều trách nhiệm hoặc quên chăm sóc bản thân. Đừng để sự cầu toàn làm bạn căng thẳng."
+    },
+    "7": {
+      "do": "Tìm kiếm sự tĩnh lặng và suy ngẫm. Thiền, đọc sách hoặc nghiên cứu một chủ đề bạn yêu thích. Kết nối với nội tâm sẽ mang lại sự rõ ràng.",
+      "avoid": "Tránh cô lập bản thân quá lâu hoặc nghi ngờ mọi thứ. Đừng từ chối sự hỗ trợ từ người khác."
+    },
+    "8": {
+      "do": "Tập trung vào tài chính và mục tiêu sự nghiệp. Hôm nay là ngày tốt để lập kế hoạch kinh doanh, đàm phán hoặc đầu tư. Hãy giữ sự tự tin.",
+      "avoid": "Tránh tham lam hoặc chỉ tập trung vào vật chất. Đừng bỏ qua các mối quan hệ cá nhân vì công việc."
+    },
+    "9": {
+      "do": "Lan tỏa lòng nhân ái và giúp đỡ người khác. Tham gia hoạt động từ thiện hoặc hỗ trợ ai đó đang cần. Hôm nay là ngày để sống vì mục đích cao cả.",
+      "avoid": "Tránh giữ lấy những cảm xúc tiêu cực hoặc quá khứ. Đừng để sự nhạy cảm làm bạn kiệt sức."
+    },
+    "11": {
+      "do": "Lắng nghe trực giác của bạn. Đây là ngày để thiền định, tìm kiếm ý nghĩa tâm linh hoặc truyền cảm hứng cho người khác. Hãy tin vào linh cảm của mình.",
+      "avoid": "Tránh để sự nhạy cảm quá mức dẫn đến lo lắng. Đừng bỏ qua các chi tiết thực tế trong công việc."
+    },
+    "22": {
+      "do": "Tập trung vào các dự án lớn và xây dựng tương lai. Lập kế hoạch chi tiết và làm việc hướng tới mục tiêu lâu dài. Hôm nay là ngày để biến ước mơ thành hiện thực.",
+      "avoid": "Tránh để áp lực làm bạn kiệt sức. Đừng bỏ qua các chi tiết nhỏ hoặc làm việc mà không có kế hoạch."
+    },
+    "33": {
+      "do": "Hãy hướng dẫn và truyền cảm hứng cho người khác. Dành thời gian để chia sẻ kiến thức hoặc hỗ trợ ai đó. Hôm nay là ngày để thể hiện lòng từ bi.",
+      "avoid": "Tránh hy sinh quá mức mà quên chăm sóc bản thân. Đừng để cảm xúc chi phối các quyết định quan trọng."
+    }
+  }
+}

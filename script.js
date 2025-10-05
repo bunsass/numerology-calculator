@@ -738,12 +738,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('nameSuggestYear').value = nameSuggestInputs.y;
   }
 
-  // Position name input container directly at final state (no animation)
-  const nameInputContainer = document.querySelector('.input-container:first-child');
-  if (nameInputContainer && !sessionStorage.getItem('nameInputAnimated')) {
-    gsap.set(nameInputContainer, { y: 0, opacity: 1, boxShadow: '0 4px 6px rgba(102, 126, 234, 0.1)' });
-    sessionStorage.setItem('nameInputAnimated', 'true');
-  }
+  // Set input containers to final position without animation, even when empty
+  ['fullName', 'compatName1', 'compatName2'].forEach(id => {
+    const container = document.querySelector(`.input-container input#${id}`).parentElement;
+    if (container && !sessionStorage.getItem(`input${id}Positioned`)) {
+      gsap.set(container, { y: 0, opacity: 1, boxShadow: '0 4px 6px rgba(102, 126, 234, 0.1)' });
+      sessionStorage.setItem(`input${id}Positioned`, 'true');
+    }
+  });
 
   // Theme toggle
   document.getElementById('themeToggle').addEventListener('click', () => {

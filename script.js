@@ -276,39 +276,6 @@ function clearFields(inputIds, resultId) {
   });
 }
 
-// Enhanced particle effect for loading overlay
-function addParticles(overlay, count = 25) {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    return; // Skip particles for accessibility
-  }
-
-  const particleTypes = ['particle-circle', 'particle-star', 'particle-glow'];
-  const colors = [
-    'rgba(102, 126, 234, 0.8)', // Blue from gradient
-    'rgba(118, 75, 162, 0.7)', // Purple from gradient
-    'rgba(255, 215, 0, 0.7)', // Gold accent
-    'rgba(255, 255, 255, 0.5)', // White glow
-  ];
-
-  for (let i = 0; i < count; i++) {
-    const particle = document.createElement('div');
-    const type = particleTypes[Math.floor(Math.random() * particleTypes.length)];
-    particle.className = type;
-    const size = Math.random() * 8 + 4; // 4–12px
-    particle.style.width = `${size}px`;
-    particle.style.height = type === 'particle-star' ? `${size}px` : `${size}px`;
-    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-    particle.style.left = `${Math.random() * 100}%`;
-    particle.style.top = `${Math.random() * 100}%`;
-    particle.style.animationDelay = `${Math.random() * 2}s`;
-    particle.style.animationDuration = `${Math.random() * 2 + 1.5}s`; // 1.5–3.5s
-    if (type === 'particle-orbit') {
-      particle.style.transformOrigin = `${size * 2}px center`;
-    }
-    overlay.appendChild(particle);
-  }
-}
-
 function calculateNumerology() {
   const name = document.getElementById('fullName').value.trim();
   const d = parseInt(document.getElementById('day').value);
@@ -328,12 +295,9 @@ function calculateNumerology() {
   saveData('mainInputs', {name, d, m, y});
 
   document.getElementById('calculateBtn').disabled = true;
-  const overlay = document.getElementById('loadingOverlay');
-  overlay.classList.add('active');
-
-  addParticles(overlay);
 
   setTimeout(() => {
+
     const lpn = reduceToSingleDigit(sumDigits(d) + sumDigits(m) + sumDigits(y), true);
     let suSum = 0, pSum = 0;
     const suSteps = [], pSteps = [];
@@ -543,10 +507,8 @@ function calculateNumerology() {
 
     gsap.from(".result-card", { duration: 0.5, y: 20, opacity: 0, stagger: 0.1, ease: "power2.out" });
 
-    overlay.querySelectorAll('.particle').forEach((p) => p.remove());
-    overlay.classList.remove('active');
     document.getElementById('calculateBtn').disabled = false;
-  }, 500);
+  }, 300);
 }
 
 function calculateDailyForecast() {
@@ -563,10 +525,6 @@ function calculateDailyForecast() {
   saveData('dailyInputs', {d, m, y});
 
   document.getElementById('dailyCalculateBtn').disabled = true;
-  const overlay = document.getElementById('loadingOverlay');
-  overlay.classList.add('active');
-
-  addParticles(overlay);
 
   setTimeout(() => {
     const f = calculateDailyNumber(d,m,y);
@@ -589,10 +547,8 @@ function calculateDailyForecast() {
     document.getElementById('dailyShowCalcBtn').classList.remove('hidden');
     document.getElementById('dailyCalculationDetails').classList.add('details-hidden');
     gsap.from(".result-card", { duration: 0.5, y: 20, opacity: 0, stagger: 0.1, ease: "power2.out" });
-    overlay.querySelectorAll('.particle').forEach((p) => p.remove());
-    overlay.classList.remove('active');
     document.getElementById('dailyCalculateBtn').disabled = false;
-  }, 500);
+  }, 300);
 }
 
 function calculateCompatibilityForecast() {
@@ -618,10 +574,6 @@ function calculateCompatibilityForecast() {
   saveData('compatInputs', {n1, d1, m1, y1, n2, d2, m2, y2});
 
   document.getElementById('compatCalculateBtn').disabled = true;
-  const overlay = document.getElementById('loadingOverlay');
-  overlay.classList.add('active');
-
-  addParticles(overlay);
 
   setTimeout(() => {
     const c = calculateCompatibility(n1,d1,m1,y1,n2,d2,m2,y2);
@@ -645,13 +597,11 @@ function calculateCompatibilityForecast() {
       <p><strong>${currentLang === 'vi' ? 'Tương hợp con số tương tác' : 'Expression Compatibility'}:</strong> ${c.expressionCompat}%</p>
       <p><strong>${currentLang === 'vi' ? 'Tương hợp tổng thể' : 'Overall Compatibility'}:</strong> (${c.lifePathCompat}+${c.expressionCompat})/2 = ${c.overallCompat}%</p></div>`;
 
-    document.getElementById('compatShowCalcBtn').classList.remove('hidden');
+    ddocument.getElementById('compatShowCalcBtn').classList.remove('hidden');
     document.getElementById('compatCalculationDetails').classList.add('details-hidden');
     gsap.from(".result-card", { duration: 0.5, y: 20, opacity: 0, stagger: 0.1, ease: "power2.out" });
-    overlay.querySelectorAll('.particle').forEach((p) => p.remove());
-    overlay.classList.remove('active');
     document.getElementById('compatCalculateBtn').disabled = false;
-  }, 500);
+  }, 300);
 }
 
 function calculateNameSuggestions() {
@@ -668,10 +618,6 @@ function calculateNameSuggestions() {
   saveData('nameSuggestInputs', {d, m, y});
 
   document.getElementById('nameSuggestCalculateBtn').disabled = true;
-  const overlay = document.getElementById('loadingOverlay');
-  overlay.classList.add('active');
-
-  addParticles(overlay);
 
   setTimeout(() => {
     const lpn = reduceToSingleDigit(sumDigits(d) + sumDigits(m) + sumDigits(y), true);
@@ -690,10 +636,8 @@ function calculateNameSuggestions() {
       <p class="mt-4">${t('noteNames')}</p></div>`;
 
     gsap.from(".result-card", { duration: 0.5, y: 20, opacity: 0, ease: "power2.out" });
-    overlay.querySelectorAll('.particle').forEach((p) => p.remove());
-    overlay.classList.remove('active');
     document.getElementById('nameSuggestCalculateBtn').disabled = false;
-  }, 500);
+  }, 300);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

@@ -1,190 +1,157 @@
+
 <!DOCTYPE html>
-<html lang="vi" data-bs-theme="light">
+<html lang="vi" class="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Free numerology app - Discover your life path number, compatibility and daily forecast">
   <title>Numerology Calculator</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <!-- Custom CSS for gradients and overrides -->
+  <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <!-- GSAP, Chart.js, jsPDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
-<body class="d-flex align-items-center justify-content-center min-vh-100 p-4">
-  <div class="container-main p-4 p-md-5 w-100">
-    <nav class="navbar navbar-expand-lg mb-4">
-      <div class="container-fluid">
-        <h1 class="navbar-brand header-gradient fs-2 fs-md-1 fw-bold">✨ Discover Yourself with Numerology</h1>
-        <div class="d-flex gap-2 ms-auto">
-          <button id="langToggle" class="btn toggle-btn" data-tooltip-text="Switch between Vietnamese and English" aria-label="Switch language">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
-            </svg>
-          </button>
-          <button id="themeToggle" class="btn toggle-btn" data-tooltip-text="Toggle between Light and Dark mode" aria-label="Toggle theme">
-            <svg id="themeIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-            </svg>
-          </button>
-          <button class="btn toggle-btn navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuDropdown" aria-label="Open menu">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-          </button>
-        </div>
-        <div class="collapse navbar-collapse" id="menuDropdown">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><button class="nav-link tab-btn" data-tab="main" data-i18n="tabOverview">📊 Overview</button></li>
-            <li class="nav-item"><button class="nav-link tab-btn" data-tab="daily" data-i18n="tabDaily">📅 Daily Forecast</button></li>
-            <li class="nav-item"><button class="nav-link tab-btn" data-tab="compat" data-i18n="tabCompat">💕 Compatibility</button></li>
-            <li class="nav-item"><button class="nav-link tab-btn" data-tab="nameSuggest" data-i18n="tabNameSuggest">📝 Name Suggestion</button></li>
-          </ul>
-        </div>
+<body class="flex items-center justify-center min-h-screen p-4">
+  
+  <div class="container-main p-8 w-full max-w-2xl">
+    <div class="header-container">
+      <div class="header-title">
+        <h1 class="text-3xl sm:text-4xl font-bold header-gradient" data-i18n="mainTitle">✨ Discover Yourself with Numerology</h1>
       </div>
-    </nav>
+      <button id="langToggle" class="toggle-btn" data-tooltip-text="Switch between Vietnamese and English" aria-label="Switch language">
+        <svg class="w-6 h-6 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+        </svg>
+      </button>
+      <button id="themeToggle" class="toggle-btn" data-tooltip-text="Toggle between Light and Dark mode" aria-label="Toggle theme">
+        <svg id="themeIcon" class="w-6 h-6 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+      </button>
+      <button id="menuToggle" class="toggle-btn" data-tooltip-text="Open navigation menu" aria-label="Open menu">
+        <svg class="w-6 h-6 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+      <div id="menuDropdown" class="dropdown-menu">
+        <button class="tab-btn" data-tab="main" data-i18n="tabOverview" data-tooltip-text="Calculate core numerology numbers">📊 Overview</button>
+        <button class="tab-btn" data-tab="daily" data-i18n="tabDaily" data-tooltip-text="Get daily numerology forecast">📅 Daily Forecast</button>
+        <button class="tab-btn" data-tab="compat" data-i18n="tabCompat" data-tooltip-text="Check compatibility between two people">💕 Compatibility</button>
+        <button class="tab-btn" data-tab="nameSuggest" data-i18n="tabNameSuggest" data-tooltip-text="Get name suggestions based on numerology">📝 Name Suggestion</button>
+      </div>
+    </div>
+
     <div id="mainTab" class="tab-content active">
-      <form class="mb-4">
-        <div class="mb-3">
-          <label for="fullName" class="form-label" data-i18n="labelFullName">Full Name</label>
-          <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" aria-label="Full name" data-i18n-placeholder="placeholderName">
+      <div class="space-y-6">
+        <div class="input-container">
+          <input type="text" id="fullName" data-i18n-placeholder="placeholderName" placeholder="Enter your full name" class="input-field block w-full" aria-label="Full name">
+          <label for="fullName" class="input-label" data-i18n="labelFullName">Full Name</label>
         </div>
-        <div class="mb-3">
-          <label class="form-label" data-i18n="labelBirthDate">Birth Date</label>
-          <div class="row g-3">
-            <div class="col-md-4">
-              <select id="day" class="form-select" aria-label="Birth day"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
-            </div>
-            <div class="col-md-4">
-              <select id="month" class="form-select" aria-label="Birth month"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
-            </div>
-            <div class="col-md-4">
-              <input type="number" id="year" class="form-control" placeholder="Year" min="1900" max="2025" aria-label="Birth year" data-i18n-placeholder="placeholderYear">
-            </div>
+        <div>
+          <label class="block text-lg font-medium mb-2" data-i18n="labelBirthDate">Birth Date</label>
+          <div class="grid grid-cols-3 gap-3">
+            <select id="day" class="select-field" aria-label="Birth day"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
+            <select id="month" class="select-field" aria-label="Birth month"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
+            <input type="number" id="year" data-i18n-placeholder="placeholderYear" placeholder="Year" min="1900" max="2025" class="input-field" aria-label="Birth year">
           </div>
         </div>
-        <div class="d-flex gap-2 justify-content-center flex-wrap">
-          <button id="calculateBtn" class="btn btn-primary btn-calculate" data-i18n="btnCalculate" data-tooltip-text="Calculate all numerology numbers">Calculate ✨</button>
-          <button id="clearBtn" class="btn btn-secondary btn-clear" data-i18n="btnClear" data-tooltip-text="Clear all entered data and results">Clear 🗑️</button>
+        <div class="button-line">
+          <button id="calculateBtn" class="btn-calculate" data-i18n="btnCalculate" data-tooltip-text="Calculate all numerology numbers">Calculate ✨</button>
+          <button id="clearBtn" class="btn-clear" data-i18n="btnClear" data-tooltip-text="Clear all entered data and results">Clear 🗑️</button>
         </div>
-      </form>
-      <div id="result" class="mt-4">
-        <div id="summary" class="card mb-3"><div class="card-body"></div></div>
-        <button id="downloadReportBtn" class="btn btn-primary btn-calculate hidden" data-i18n="btnDownloadReport" data-tooltip-text="Download complete numerology report as PDF">Download Report 📥</button>
-        <button id="showMoreBtn" class="btn btn-primary btn-calculate hidden" data-bs-toggle="collapse" data-bs-target="#details" data-i18n="btnShowDetails" data-tooltip-text="View detailed meanings for each number">View Details</button>
-        <div id="details" class="collapse card mb-3"><div class="card-body"></div></div>
-        <button id="showCalcBtn" class="btn btn-primary btn-calculate hidden" data-bs-toggle="collapse" data-bs-target="#calculationDetails" data-i18n="btnShowCalc" data-tooltip-text="View step-by-step calculation process">View Calculation</button>
-        <div id="calculationDetails" class="collapse card mb-3"><div class="card-body"></div></div>
-        <button id="showMeaningsBtn" class="btn btn-primary btn-calculate hidden" data-bs-toggle="collapse" data-bs-target="#meanings" data-i18n="btnShowMeanings" data-tooltip-text="Learn what each number represents">View Number Meanings</button>
-        <div id="meanings" class="collapse card"><div class="card-body"></div></div>
+      </div>
+      <div id="result" class="mt-6">
+        <div id="summary"></div>
+        <button id="downloadReportBtn" class="toggle-details-btn hidden" data-i18n="btnDownloadReport" data-tooltip-text="Download complete numerology report as PDF">Download Report 📥</button>
+        <button id="showMoreBtn" class="toggle-details-btn hidden" data-i18n="btnShowDetails" data-tooltip-text="View detailed meanings for each number">View Details</button>
+        <div id="details" class="details-hidden"></div>
+        <button id="showCalcBtn" class="toggle-details-btn hidden" data-i18n="btnShowCalc" data-tooltip-text="View step-by-step calculation process">View Calculation</button>
+        <div id="calculationDetails" class="details-hidden"></div>
+        <button id="showMeaningsBtn" class="toggle-details-btn hidden" data-i18n="btnShowMeanings" data-tooltip-text="Learn what each number represents">View Number Meanings</button>
+        <div id="meanings" class="details-hidden"></div>
       </div>
     </div>
+
     <div id="dailyTab" class="tab-content">
-      <form class="mb-4">
-        <div class="mb-3">
-          <label class="form-label" data-i18n="labelBirthDate">Birth Date</label>
-          <div class="row g-3">
-            <div class="col-md-4">
-              <select id="dailyDay" class="form-select" aria-label="Birth day"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
-            </div>
-            <div class="col-md-4">
-              <select id="dailyMonth" class="form-select" aria-label="Birth month"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
-            </div>
-            <div class="col-md-4">
-              <input type="number" id="dailyYear" class="form-control" placeholder="Year" min="1900" max="2025" aria-label="Birth year" data-i18n-placeholder="placeholderYear">
-            </div>
+      <div class="space-y-6">
+        <div>
+          <label class="block text-lg font-medium mb-2" data-i18n="labelBirthDate">Birth Date</label>
+          <div class="grid grid-cols-3 gap-3">
+            <select id="dailyDay" class="select-field" aria-label="Birth day"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
+            <select id="dailyMonth" class="select-field" aria-label="Birth month"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
+            <input type="number" id="dailyYear" data-i18n-placeholder="placeholderYear" placeholder="Year" min="1900" max="2025" class="input-field" aria-label="Birth year">
           </div>
         </div>
-        <div class="d-flex gap-2 justify-content-center flex-wrap">
-          <button id="dailyCalculateBtn" class="btn btn-primary btn-calculate" data-i18n="btnDailyCalculate" data-tooltip-text="Calculate your personal day, month and year">Calculate Forecast</button>
-          <button id="dailyClearBtn" class="btn btn-secondary btn-clear" data-i18n="btnClear" data-tooltip-text="Clear all entered data and results">Clear</button>
+        <div class="button-line">
+          <button id="dailyCalculateBtn" class="btn-calculate" data-i18n="btnDailyCalculate" data-tooltip-text="Calculate your personal day, month and year">Calculate Forecast</button>
+          <button id="dailyClearBtn" class="btn-clear" data-i18n="btnClear" data-tooltip-text="Clear all entered data and results">Clear</button>
         </div>
-      </form>
-      <div id="dailyResult" class="mt-4">
-        <div id="dailyForecast" class="card mb-3"><div class="card-body"></div></div>
-        <button id="dailyShowCalcBtn" class="btn btn-primary btn-calculate hidden" data-bs-toggle="collapse" data-bs-target="#dailyCalculationDetails" data-i18n="btnShowCalc" data-tooltip-text="View how daily numbers are calculated">View Calculation</button>
-        <div id="dailyCalculationDetails" class="collapse card"><div class="card-body"></div></div>
+      </div>
+      <div id="dailyResult" class="mt-6">
+        <div id="dailyForecast"></div>
+        <button id="dailyShowCalcBtn" class="toggle-details-btn hidden" data-i18n="btnShowCalc" data-tooltip-text="View how daily numbers are calculated">View Calculation</button>
+        <div id="dailyCalculationDetails" class="details-hidden"></div>
       </div>
     </div>
+
     <div id="compatTab" class="tab-content">
-      <form class="mb-4">
-        <div class="mb-3">
-          <label for="compatName1" class="form-label" data-i18n="labelPerson1">First Person's Full Name</label>
-          <input type="text" id="compatName1" class="form-control" placeholder="Enter full name" aria-label="First person's name" data-i18n-placeholder="placeholderName">
+      <div class="space-y-6">
+        <div class="input-container">
+          <input type="text" id="compatName1" data-i18n-placeholder="placeholderName" placeholder="Enter full name" class="input-field block w-full" aria-label="First person's name">
+          <label for="compatName1" class="input-label" data-i18n="labelPerson1">First Person's Full Name</label>
         </div>
-        <div class="mb-3">
-          <label class="form-label" data-i18n="labelBirthDate1">First Person's Birth Date</label>
-          <div class="row g-3">
-            <div class="col-md-4">
-              <select id="compatDay1" class="form-select" aria-label="First person's birth day"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
-            </div>
-            <div class="col-md-4">
-              <select id="compatMonth1" class="form-select" aria-label="First person's birth month"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
-            </div>
-            <div class="col-md-4">
-              <input type="number" id="compatYear1" class="form-control" placeholder="Year" min="1900" max="2025" aria-label="First person's birth year" data-i18n-placeholder="placeholderYear">
-            </div>
+        <div>
+          <label class="block text-lg font-medium mb-2" data-i18n="labelBirthDate1">First Person's Birth Date</label>
+          <div class="grid grid-cols-3 gap-3">
+            <select id="compatDay1" class="select-field" aria-label="First person's birth day"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
+            <select id="compatMonth1" class="select-field" aria-label="First person's birth month"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
+            <input type="number" id="compatYear1" data-i18n-placeholder="placeholderYear" placeholder="Year" min="1900" max="2025" class="input-field" aria-label="First person's birth year">
           </div>
         </div>
-        <div class="mb-3">
-          <label for="compatName2" class="form-label" data-i18n="labelPerson2">Second Person's Full Name</label>
-          <input type="text" id="compatName2" class="form-control" placeholder="Enter full name" aria-label="Second person's name" data-i18n-placeholder="placeholderName">
+        <div class="input-container">
+          <input type="text" id="compatName2" data-i18n-placeholder="placeholderName" placeholder="Enter full name" class="input-field block w-full" aria-label="Second person's name">
+          <label for="compatName2" class="input-label" data-i18n="labelPerson2">Second Person's Full Name</label>
         </div>
-        <div class="mb-3">
-          <label class="form-label" data-i18n="labelBirthDate2">Second Person's Birth Date</label>
-          <div class="row g-3">
-            <div class="col-md-4">
-              <select id="compatDay2" class="form-select" aria-label="Second person's birth day"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
-            </div>
-            <div class="col-md-4">
-              <select id="compatMonth2" class="form-select" aria-label="Second person's birth month"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
-            </div>
-            <div class="col-md-4">
-              <input type="number" id="compatYear2" class="form-control" placeholder="Year" min="1900" max="2025" aria-label="Second person's birth year" data-i18n-placeholder="placeholderYear">
-            </div>
+        <div>
+          <label class="block text-lg font-medium mb-2" data-i18n="labelBirthDate2">Second Person's Birth Date</label>
+          <div class="grid grid-cols-3 gap-3">
+            <select id="compatDay2" class="select-field" aria-label="Second person's birth day"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
+            <select id="compatMonth2" class="select-field" aria-label="Second person's birth month"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
+            <input type="number" id="compatYear2" data-i18n-placeholder="placeholderYear" placeholder="Year" min="1900" max="2025" class="input-field" aria-label="Second person's birth year">
           </div>
         </div>
-        <div class="d-flex gap-2 justify-content-center flex-wrap">
-          <button id="compatCalculateBtn" class="btn btn-primary btn-calculate" data-i18n="btnCompatCalculate" data-tooltip-text="Calculate compatibility score between two people">Calculate Compatibility</button>
-          <button id="compatClearBtn" class="btn btn-secondary btn-clear" data-i18n="btnClear" data-tooltip-text="Clear all entered data and results">Clear</button>
+        <div class="button-line">
+          <button id="compatCalculateBtn" class="btn-calculate" data-i18n="btnCompatCalculate" data-tooltip-text="Calculate compatibility score between two people">Calculate Compatibility</button>
+          <button id="compatClearBtn" class="btn-clear" data-i18n="btnClear" data-tooltip-text="Clear all entered data and results">Clear</button>
         </div>
-      </form>
-      <div id="compatResult" class="mt-4">
-        <div id="compatForecast" class="card mb-3"><div class="card-body"></div></div>
-        <button id="compatShowCalcBtn" class="btn btn-primary btn-calculate hidden" data-bs-toggle="collapse" data-bs-target="#compatCalculationDetails" data-i18n="btnShowCalc" data-tooltip-text="View step-by-step compatibility calculation">View Calculation</button>
-        <div id="compatCalculationDetails" class="collapse card"><div class="card-body"></div></div>
+      </div>
+      <div id="compatResult" class="mt-6">
+        <div id="compatForecast"></div>
+        <button id="compatShowCalcBtn" class="toggle-details-btn hidden" data-i18n="btnShowCalc" data-tooltip-text="View step-by-step compatibility calculation">View Calculation</button>
+        <div id="compatCalculationDetails" class="details-hidden"></div>
       </div>
     </div>
+
     <div id="nameSuggestTab" class="tab-content">
-      <form class="mb-4">
-        <div class="mb-3">
-          <label class="form-label" data-i18n="labelBirthDate">Birth Date</label>
-          <div class="row g-3">
-            <div class="col-md-4">
-              <select id="nameSuggestDay" class="form-select" aria-label="Birth day"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
-            </div>
-            <div class="col-md-4">
-              <select id="nameSuggestMonth" class="form-select" aria-label="Birth month"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
-            </div>
-            <div class="col-md-4">
-              <input type="number" id="nameSuggestYear" class="form-control" placeholder="Year" min="1900" max="2025" aria-label="Birth year" data-i18n-placeholder="placeholderYear">
-            </div>
+      <div class="space-y-6">
+        <div>
+          <label class="block text-lg font-medium mb-2" data-i18n="labelBirthDate">Birth Date</label>
+          <div class="grid grid-cols-3 gap-3">
+            <select id="nameSuggestDay" class="select-field" aria-label="Birth day"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
+            <select id="nameSuggestMonth" class="select-field" aria-label="Birth month"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
+            <input type="number" id="nameSuggestYear" data-i18n-placeholder="placeholderYear" placeholder="Year" min="1900" max="2025" class="input-field" aria-label="Birth year">
           </div>
         </div>
-        <div class="d-flex gap-2 justify-content-center flex-wrap">
-          <button id="nameSuggestCalculateBtn" class="btn btn-primary btn-calculate" data-i18n="btnNameSuggestCalculate" data-tooltip-text="Get name suggestions that match birth date">Suggest Names</button>
-          <button id="nameSuggestClearBtn" class="btn btn-secondary btn-clear" data-i18n="btnClear" data-tooltip-text="Clear all entered data and results">Clear</button>
+        <div class="button-line">
+          <button id="nameSuggestCalculateBtn" class="btn-calculate" data-i18n="btnNameSuggestCalculate" data-tooltip-text="Get name suggestions that match birth date">Suggest Names</button>
+          <button id="nameSuggestClearBtn" class="btn-clear" data-i18n="btnClear" data-tooltip-text="Clear all entered data and results">Clear</button>
         </div>
-      </form>
-      <div id="nameSuggestResult" class="mt-4 card"><div class="card-body"></div></div>
+      </div>
+      <div id="nameSuggestResult" class="mt-6"></div>
     </div>
   </div>
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <!-- Custom JavaScript -->
+
   <script src="script.js"></script>
 </body>
 </html>

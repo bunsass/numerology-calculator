@@ -574,10 +574,6 @@ function calculateCompatibilityForecast() {
   saveData('compatInputs', {n1, d1, m1, y1, n2, d2, m2, y2});
 
   document.getElementById('compatCalculateBtn').disabled = true;
-  const overlay = document.getElementById('loadingOverlay');
-  overlay.classList.add('active');
-
-  addParticles(overlay);
 
   setTimeout(() => {
     const c = calculateCompatibility(n1,d1,m1,y1,n2,d2,m2,y2);
@@ -601,13 +597,11 @@ function calculateCompatibilityForecast() {
       <p><strong>${currentLang === 'vi' ? 'Tương hợp con số tương tác' : 'Expression Compatibility'}:</strong> ${c.expressionCompat}%</p>
       <p><strong>${currentLang === 'vi' ? 'Tương hợp tổng thể' : 'Overall Compatibility'}:</strong> (${c.lifePathCompat}+${c.expressionCompat})/2 = ${c.overallCompat}%</p></div>`;
 
-    document.getElementById('compatShowCalcBtn').classList.remove('hidden');
+    ddocument.getElementById('compatShowCalcBtn').classList.remove('hidden');
     document.getElementById('compatCalculationDetails').classList.add('details-hidden');
     gsap.from(".result-card", { duration: 0.5, y: 20, opacity: 0, stagger: 0.1, ease: "power2.out" });
-    overlay.querySelectorAll('.particle').forEach((p) => p.remove());
-    overlay.classList.remove('active');
     document.getElementById('compatCalculateBtn').disabled = false;
-  }, 500);
+  }, 300);
 }
 
 function calculateNameSuggestions() {
@@ -624,10 +618,6 @@ function calculateNameSuggestions() {
   saveData('nameSuggestInputs', {d, m, y});
 
   document.getElementById('nameSuggestCalculateBtn').disabled = true;
-  const overlay = document.getElementById('loadingOverlay');
-  overlay.classList.add('active');
-
-  addParticles(overlay);
 
   setTimeout(() => {
     const lpn = reduceToSingleDigit(sumDigits(d) + sumDigits(m) + sumDigits(y), true);
@@ -646,10 +636,8 @@ function calculateNameSuggestions() {
       <p class="mt-4">${t('noteNames')}</p></div>`;
 
     gsap.from(".result-card", { duration: 0.5, y: 20, opacity: 0, ease: "power2.out" });
-    overlay.querySelectorAll('.particle').forEach((p) => p.remove());
-    overlay.classList.remove('active');
     document.getElementById('nameSuggestCalculateBtn').disabled = false;
-  }, 500);
+  }, 300);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {

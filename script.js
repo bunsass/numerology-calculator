@@ -9,11 +9,10 @@ async function loadTranslations(lang) {
     translations = await response.json();
     currentLang = lang;
     updateTranslations();
-   
+  
     if(document.getElementById('summary').innerHTML) calculateNumerology();
     if(document.getElementById('dailyForecast').innerHTML) calculateDailyForecast();
     if(document.getElementById('compatForecast').innerHTML) calculateCompatibilityForecast();
-    if(document.getElementById('nameSuggestResult').innerHTML) calculateNameSuggestions();
   } catch (error) {
     console.error('Failed to load translations:', error);
     alert(`Failed to load language file: ${lang}.json`);
@@ -27,62 +26,44 @@ function updateTranslations() {
       el.textContent = translations.ui[key];
     }
   });
- 
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
     if (translations.ui && translations.ui[key]) {
       el.placeholder = translations.ui[key];
     }
   });
- 
   const tooltipMap = {
     'langToggle': 'tooltipLangToggle',
     'themeToggle': 'tooltipThemeToggle',
-    'menuToggle': 'tooltipMenuToggle',
     'calculateBtn': 'tooltipCalculate',
     'clearBtn': 'tooltipClear',
     'dailyCalculateBtn': 'tooltipDailyCalculate',
     'dailyClearBtn': 'tooltipClear',
     'compatCalculateBtn': 'tooltipCompatCalculate',
     'compatClearBtn': 'tooltipClear',
-    'nameSuggestCalculateBtn': 'tooltipNameSuggestCalculate',
-    'nameSuggestClearBtn': 'tooltipClear'
+    'downloadReportBtn': 'tooltipDownload',
+    'showMoreBtn': 'tooltipShowDetails',
+    'showCalcBtn': 'tooltipShowCalc',
+    'showMeaningsBtn': 'tooltipShowMeanings',
+    'showNameChartBtn': 'tooltipShowNameChart',
+    'dailyShowCalcBtn': 'tooltipDailyShowCalc',
+    'compatShowCalcBtn': 'tooltipCompatShowCalc'
   };
- 
   Object.keys(tooltipMap).forEach(id => {
     const el = document.getElementById(id);
     if (el && translations.ui && translations.ui[tooltipMap[id]]) {
       el.setAttribute('data-tooltip-text', translations.ui[tooltipMap[id]]);
     }
   });
- 
   const tabs = {
     'main': 'tooltipTabMain',
     'daily': 'tooltipTabDaily',
-    'compat': 'tooltipTabCompat',
-    'nameSuggest': 'tooltipTabNameSuggest'
+    'compat': 'tooltipTabCompat'
   };
- 
   Object.keys(tabs).forEach(tab => {
     const el = document.querySelector(`[data-tab="${tab}"]`);
     if (el && translations.ui && translations.ui[tabs[tab]]) {
       el.setAttribute('data-tooltip-text', translations.ui[tabs[tab]]);
-    }
-  });
- 
-  const resultBtns = {
-    'downloadReportBtn': 'tooltipDownload',
-    'showMoreBtn': 'tooltipShowDetails',
-    'showCalcBtn': 'tooltipShowCalc',
-    'showMeaningsBtn': 'tooltipShowMeanings',
-    'dailyShowCalcBtn': 'tooltipDailyShowCalc',
-    'compatShowCalcBtn': 'tooltipCompatShowCalc'
-  };
- 
-  Object.keys(resultBtns).forEach(id => {
-    const el = document.getElementById(id);
-    if (el && translations.ui && translations.ui[resultBtns[id]]) {
-      el.setAttribute('data-tooltip-text', translations.ui[resultBtns[id]]);
     }
   });
 }
@@ -98,17 +79,17 @@ function t(key, replacements = {}) {
 const normalizeName = text => text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase();
 
 function populateDropdowns() {
-  ['day','dailyDay','compatDay1','compatDay2','nameSuggestDay'].forEach(id => {
+  ['day','dailyDay','compatDay1','compatDay2'].forEach(id => {
     const sel = document.getElementById(id);
     for(let i=1; i<=31; i++) sel.innerHTML += `<option value="${i}">${i}</option>`;
   });
-  ['month','dailyMonth','compatMonth1','compatMonth2','nameSuggestMonth'].forEach(id => {
+  ['month','dailyMonth','compatMonth1','compatMonth2'].forEach(id => {
     const sel = document.getElementById(id);
     for(let i=1; i<=12; i++) sel.innerHTML += `<option value="${i}">${i}</option>`;
   });
 }
 
-['year','dailyYear','compatYear1','compatYear2','nameSuggestYear'].forEach(id => {
+['year','dailyYear','compatYear1','compatYear2'].forEach(id => {
   document.getElementById(id).addEventListener('input', e => e.target.value = e.target.value.slice(0,4));
 });
 
@@ -180,6 +161,7 @@ function calculateAdditionalNumbers(name, d, m, y) {
   const ys = reduceToSingleDigit(y);
   return {
     expressionNumber: reduceToSingleDigit(eSum, true),
+    expressionSteps: name.split('').map(l => /[a-z]/.test(l) ? `${l.toUpperCase()}=${getLetterValue(l)}` : null).filter(Boolean),
     hiddenPassionNumber: +hpn,
     birthDayNumber: reduceToSingleDigit(d),
     challenge1: reduceToSingleDigit(Math.abs(d - m)),
@@ -242,11 +224,11 @@ function clearFields(inputIds, resultId) {
     else if(el.tagName === 'SELECT') el.selectedIndex = 0;
   });
   document.getElementById(resultId).innerHTML = '';
-  ['showMoreBtn','showCalcBtn','showMeaningsBtn','downloadReportBtn','dailyShowCalcBtn','compatShowCalcBtn'].forEach(id => {
+  ['showMoreBtn','showCalcBtn','showMeaningsBtn','showNameChartBtn','downloadReportBtn','dailyShowCalcBtn','compatShowCalcBtn'].forEach(id => {
     const btn = document.getElementById(id);
     if(btn) btn.classList.add('hidden');
   });
-  ['details','calculationDetails','meanings','dailyCalculationDetails','compatCalculationDetails'].forEach(id => {
+  ['details','calculationDetails','meanings','nameChart','dailyCalculationDetails','compatCalculationDetails'].forEach(id => {
     const el = document.getElementById(id);
     if(el) {
       el.classList.remove('details-shown');
@@ -326,7 +308,7 @@ function calculateNumerology() {
       <p><strong>${t('lifePath')}:</strong> ${d}→${String(d).split('').join('+')} + ${m}→${String(m).split('').join('+')} + ${y}→${String(y).split('').join('+')} = ${sumDigits(d)+sumDigits(m)+sumDigits(y)} → ${lpn}</p>
       <p><strong>${t('soulUrge')}:</strong> ${suSteps.join(', ')} = ${suSum} → ${sun}</p>
       <p><strong>${t('personality')}:</strong> ${pSteps.join(', ')} = ${pSum} → ${pn}</p>
-      <p><strong>${t('expression')}:</strong> ${currentLang === 'vi' ? 'Tổng tất cả chữ cái' : 'Sum of all letters'} = ${add.expressionNumber}</p>
+      <p><strong>${t('expression')}:</strong> ${add.expressionSteps.join(', ')} = ${eSum} → ${add.expressionNumber}</p>
       <p><strong>${t('birthDay')}:</strong> ${d} → ${add.birthDayNumber}</p>
       <p><strong>${t('challenge1')}:</strong> |${d}-${m}| = ${add.challenge1}</p>
       <p><strong>${t('challenge2')}:</strong> |${d}-${sumDigits(y)}| = ${add.challenge2}</p>
@@ -347,6 +329,9 @@ function calculateNumerology() {
         <li><strong>${currentLang === 'vi' ? 'Con số đỉnh cao' : 'Pinnacle Numbers'}:</strong> ${currentLang === 'vi' ? 'Giai đoạn quan trọng trong cuộc đời.' : 'Significant life phases.'}</li>
         <li><strong>${currentLang === 'vi' ? 'Con số thách thức' : 'Challenge Numbers'}:</strong> ${currentLang === 'vi' ? 'Những thử thách cần vượt qua.' : 'Challenges to overcome.'}</li>
       </ul></div>`;
+    document.getElementById('nameChart').innerHTML = `<div class="result-card"><h2>${t('btnShowNameChart')}</h2>
+      <p><strong>${t('expression')}:</strong> ${add.expressionNumber} - ${translations.meanings[add.expressionNumber]}</p>
+      <canvas id="nameChartCanvas"></canvas></div>`;
     new Chart(document.getElementById('pinnacleChart'), {
       type: 'line',
       data: {
@@ -368,8 +353,28 @@ function calculateNumerology() {
         }
       }
     });
-    ['showMoreBtn','showCalcBtn','showMeaningsBtn','downloadReportBtn'].forEach(id => document.getElementById(id).classList.remove('hidden'));
-    ['details','calculationDetails','meanings'].forEach(id => {
+    new Chart(document.getElementById('nameChartCanvas'), {
+      type: 'bar',
+      data: {
+        labels: [name.toUpperCase()],
+        datasets: [{
+          label: currentLang === 'vi' ? 'Con số tương tác' : 'Expression Number',
+          data: [add.expressionNumber],
+          backgroundColor: 'rgba(102, 126, 234, 0.5)',
+          borderColor: '#667eea',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true, title: { display: true, text: currentLang === 'vi' ? 'Giá Trị Thần Số Học' : 'Numerology Value' } },
+          x: { title: { display: true, text: currentLang === 'vi' ? 'Tên' : 'Name' } }
+        }
+      }
+    });
+    ['showMoreBtn','showCalcBtn','showMeaningsBtn','showNameChartBtn','downloadReportBtn'].forEach(id => document.getElementById(id).classList.remove('hidden'));
+    ['details','calculationDetails','meanings','nameChart'].forEach(id => {
       const el = document.getElementById(id);
       el.classList.remove('details-shown');
       el.classList.add('details-hidden');
@@ -377,18 +382,18 @@ function calculateNumerology() {
     document.getElementById('downloadReportBtn').onclick = () => {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
-     
+    
       const stripHtml = (html) => {
         const tmp = document.createElement('div');
         tmp.innerHTML = html;
         return tmp.textContent || tmp.innerText || '';
       };
-     
+    
       let yPos = 15;
       const lineHeight = 7;
       const pageHeight = 280;
       const maxWidth = 180;
-     
+    
       const addText = (text, fontSize = 10) => {
         doc.setFontSize(fontSize);
         const lines = doc.splitTextToSize(text, maxWidth);
@@ -401,73 +406,73 @@ function calculateNumerology() {
           yPos += lineHeight;
         });
       };
-     
+    
       addText(currentLang === 'vi' ? 'BAO CAO THAN SO HOC' : 'NUMEROLOGY REPORT', 18);
       yPos += 3;
-     
+    
       addText(`${t('labelFullName')}: ${name}`, 12);
       addText(`${t('labelBirthDate')}: ${d}/${m}/${y}`, 12);
       yPos += 3;
-     
+    
       addText(`${t('lifePath')}: ${lpn}`, 11);
       addText(stripHtml(translations.meaningsPDF[lpn]));
       yPos += 2;
-     
+    
       addText(`${t('soulUrge')}: ${sun}`, 11);
       addText(stripHtml(translations.meaningsPDF[sun]));
       yPos += 2;
-     
+    
       addText(`${t('personality')}: ${pn}`, 11);
       addText(stripHtml(translations.meaningsPDF[pn]));
       yPos += 2;
-     
+    
       addText(`${t('expression')}: ${add.expressionNumber}`, 11);
       addText(stripHtml(translations.meaningsPDF[add.expressionNumber]));
       yPos += 2;
-     
+    
       addText(`${t('hiddenPassion')}: ${add.hiddenPassionNumber}`, 11);
       addText(stripHtml(translations.meaningsPDF[add.hiddenPassionNumber]));
       yPos += 2;
-     
+    
       addText(`${t('birthDay')}: ${add.birthDayNumber}`, 11);
       addText(stripHtml(translations.meaningsPDF[add.birthDayNumber]));
       yPos += 2;
-     
+    
       addText(`${t('challenge1')}: ${add.challenge1}`, 11);
       addText(stripHtml(translations.challengeMeaningsPDF[add.challenge1]));
       yPos += 2;
-     
+    
       addText(`${t('challenge2')}: ${add.challenge2}`, 11);
       addText(stripHtml(translations.challengeMeaningsPDF[add.challenge2]));
       yPos += 2;
-     
+    
       addText(`${t('challenge3')}: ${add.challenge3}`, 11);
       addText(stripHtml(translations.challengeMeaningsPDF[add.challenge3]));
       yPos += 2;
-     
+    
       addText(`${t('challenge4')}: ${add.challenge4}`, 11);
       addText(stripHtml(translations.challengeMeaningsPDF[add.challenge4]));
       yPos += 2;
-     
+    
       addText(`${t('pinnacle1', {age: pin.firstPinnacleAge})}: ${pin.firstPinnacle}`, 11);
       addText(stripHtml(translations.meaningsPDF[pin.firstPinnacle]));
       addText(stripHtml(translations.pinnacleAdvicePDF[pin.firstPinnacle]));
       yPos += 2;
-     
+    
       addText(`${t('pinnacle2', {age: pin.secondPinnacleAge})}: ${pin.secondPinnacle}`, 11);
       addText(stripHtml(translations.meaningsPDF[pin.secondPinnacle]));
       addText(stripHtml(translations.pinnacleAdvicePDF[pin.secondPinnacle]));
       yPos += 2;
-     
+    
       addText(`${t('pinnacle3', {age: pin.thirdPinnacleAge})}: ${pin.thirdPinnacle}`, 11);
       addText(stripHtml(translations.meaningsPDF[pin.thirdPinnacle]));
       addText(stripHtml(translations.pinnacleAdvicePDF[pin.thirdPinnacle]));
       yPos += 2;
-     
+    
       addText(`${t('pinnacle4', {age: pin.fourthPinnacleAge})}: ${pin.fourthPinnacle}`, 11);
       addText(stripHtml(translations.meaningsPDF[pin.fourthPinnacle]));
       addText(stripHtml(translations.pinnacleAdvicePDF[pin.fourthPinnacle]));
-     
+    
       doc.save('numerology-report.pdf');
     };
     gsap.from(".result-card", { duration: 0.5, y: 20, opacity: 0, stagger: 0.1, ease: "power2.out" });
@@ -556,203 +561,6 @@ function calculateCompatibilityForecast() {
   }, 300);
 }
 
-function calculateNameSuggestions() {
-  const d = parseInt(document.getElementById('nameSuggestDay').value);
-  const m = parseInt(document.getElementById('nameSuggestMonth').value);
-  const y = parseInt(document.getElementById('nameSuggestYear').value);
-  const resultDiv = document.getElementById('nameSuggestResult');
-  if(!isValidDate(d,m,y)) {
-    resultDiv.innerHTML = `<p class="text-red-500 font-medium">${t('errorInvalidDate')}</p>`;
-    return;
-  }
-  saveData('nameSuggestInputs', {d, m, y});
-  document.getElementById('nameSuggestCalculateBtn').disabled = true;
-  setTimeout(() => {
-    // Calculate Life Path Number
-    const lpn = reduceToSingleDigit(sumDigits(d) + sumDigits(m) + sumDigits(y), true);
-    
-    // Identify numbers present in birth date
-    const digits = `${d}${m}${y}`.split('').map(Number);
-    const presentNumbers = new Set(digits.filter(n => n >= 1 && n <= 9));
-    
-    // Find missing numbers (1-9)
-    const missingNumbers = Array.from({length: 9}, (_, i) => i + 1).filter(n => !presentNumbers.has(n));
-    
-    // Map numbers to letters
-    const numberToLetters = {
-      1: ['a', 'j', 's'],
-      2: ['b', 'k', 't'],
-      3: ['c', 'l', 'u'],
-      4: ['d', 'm', 'v'],
-      5: ['e', 'n', 'w'],
-      6: ['f', 'o', 'x'],
-      7: ['g', 'p', 'y'],
-      8: ['h', 'q', 'z'],
-      9: ['i', 'r']
-    };
-    
-    // Compatibility matrix from calculateCompatibility
-    const cm = {
-      1:{1:90,2:70,3:80,4:60,5:75,6:65,7:70,8:85,9:80,11:90,22:70,33:80},
-      2:{1:70,2:95,3:65,4:85,5:60,6:90,7:80,8:65,9:75,11:70,22:85,33:90},
-      3:{1:80,2:65,3:90,4:60,5:85,6:75,7:70,8:65,9:90,11:80,22:60,33:85},
-      4:{1:60,2:85,3:60,4:90,5:65,6:80,7:75,8:85,9:70,11:60,22:90,33:80},
-      5:{1:75,2:60,3:85,4:65,5:90,6:70,7:80,8:65,9:85,11:75,22:65,33:70},
-      6:{1:65,2:90,3:75,4:80,5:70,6:95,7:65,8:75,9:85,11:70,22:80,33:90},
-      7:{1:70,2:80,3:70,4:75,5:80,6:65,7:90,8:60,9:75,11:85,22:70,33:80},
-      8:{1:85,2:65,3:65,4:85,5:65,6:75,7:60,8:90,9:70,11:65,22:85,33:75},
-      9:{1:80,2:75,3:90,4:70,5:85,6:85,7:75,8:70,9:95,11:80,22:70,33:90},
-      11:{1:90,2:70,3:80,4:60,5:75,6:70,7:85,8:65,9:80,11:95,22:70,33:90},
-      22:{1:70,2:85,3:60,4:90,5:65,6:80,7:70,8:85,9:70,11:70,22:95,33:80},
-      33:{1:80,2:90,3:85,4:80,5:70,6:90,7:80,8:75,9:90,11:90,22:80,33:95}
-    };
-    
-    // Define name components for Vietnamese names
-    const prefixes = ['An', 'Binh', 'Cam', 'Duc', 'Ha', 'Kim', 'Lan', 'Minh', 'Ngoc', 'Tam', 'Phuc', 'Thanh', 'Tuan', 'Van', 'Yen'];
-    const suffixes = ['Anh', 'Chi', 'Duy', 'Hanh', 'Linh', 'Nam', 'Nhi', 'Phong', 'Thu', 'Vy', 'Hien', 'Nguyen', 'Tam', 'Trang', 'Vinh'];
-    const middleSyllables = ['la', 'mi', 'fo', 'hu', 'ri', 'do', 'vi', 'co', 'hi', 'xu', 'ma', 'thi', 'lu', 'di', 'ho'];
-    
-    // Vowels and consonants for syllable construction
-    const vowels = ['a', 'e', 'i', 'o', 'u'];
-    const consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'y', 'z'];
-    
-    const generateName = () => {
-      let name = '';
-      const targetNumbers = [...missingNumbers];
-      const usedNumbers = new Set();
-      
-      // Start with a prefix (90% chance) for familiarity
-      const usePrefix = Math.random() > 0.1;
-      if (usePrefix) {
-        const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-        name += prefix;
-        name.split('').forEach(l => {
-          const val = getLetterValue(l);
-          if (val && targetNumbers.includes(val)) {
-            usedNumbers.add(val);
-            targetNumbers.splice(targetNumbers.indexOf(val), 1);
-          }
-        });
-      }
-      
-      // Add middle syllables to include remaining missing numbers
-      let syllableCount = Math.max(2, Math.ceil(targetNumbers.length / 2)); // At least 2 syllables
-      let useVowel = name.length === 0 || consonants.includes(name[name.length - 1].toLowerCase());
-      
-      while (targetNumbers.length > 0 && syllableCount > 0) {
-        const num = targetNumbers[0];
-        const letters = numberToLetters[num].filter(l => (useVowel ? vowels : consonants).includes(l));
-        if (letters.length === 0) {
-          const letter = numberToLetters[num][Math.floor(Math.random() * numberToLetters[num].length)];
-          name += letter;
-        } else {
-          const letter = letters[Math.floor(Math.random() * letters.length)];
-          name += letter;
-        }
-        usedNumbers.add(num);
-        targetNumbers.splice(0, 1);
-        useVowel = !useVowel;
-        syllableCount--;
-        
-        // Add a middle syllable or letter to complete the syllable
-        if (syllableCount > 0 && name.length < 8) {
-          const middle = middleSyllables.filter(syl => {
-            const sylNumbers = syl.split('').map(getLetterValue).filter(n => n);
-            return !sylNumbers.some(n => presentNumbers.has(n) && !usedNumbers.has(n));
-          });
-          if (middle.length > 0) {
-            const syl = middle[Math.floor(Math.random() * middle.length)];
-            name += syl;
-            syl.split('').forEach(l => {
-              const val = getLetterValue(l);
-              if (val && targetNumbers.includes(val)) {
-                usedNumbers.add(val);
-                targetNumbers.splice(targetNumbers.indexOf(val), 1);
-              }
-            });
-            useVowel = consonants.includes(syl[syl.length - 1].toLowerCase());
-            syllableCount--;
-          }
-        }
-      }
-      
-      // Add suffix for natural ending (80% chance if name is short)
-      if (name.length < 7 && Math.random() > 0.2) {
-        const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
-        const suffixNumbers = suffix.split('').map(getLetterValue).filter(n => n);
-        if (!suffixNumbers.some(n => presentNumbers.has(n) && !usedNumbers.has(n))) {
-          name += suffix;
-        }
-      }
-      
-      // Ensure minimum length of 5 characters
-      while (name.length < 5 && syllableCount > 0) {
-        const letter = (useVowel ? vowels : consonants).filter(l => {
-          const val = getLetterValue(l);
-          return !val || !presentNumbers.has(n) || usedNumbers.has(val);
-        })[Math.floor(Math.random() * (useVowel ? vowels : consonants).length)];
-        if (letter) {
-          name += letter;
-          useVowel = !useVowel;
-          syllableCount--;
-        }
-      }
-      
-      // Trim to max 10 characters and ensure natural ending
-      name = name.slice(0, 10);
-      if (name.length > 4 && consonants.includes(name[name.length - 1].toLowerCase())) {
-        const finalVowel = vowels.filter(v => {
-          const val = getLetterValue(v);
-          return !val || !presentNumbers.has(val) || usedNumbers.has(val);
-        })[Math.floor(Math.random() * vowels.length)];
-        if (finalVowel) {
-          name = name.slice(0, -1) + finalVowel;
-        }
-      }
-      
-      // Capitalize first letter
-      return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-    };
-    
-    // Generate candidate names and filter by compatibility (prioritize high compatibility)
-    const suggestedNames = [];
-    const maxAttempts = 150;
-    let attempts = 0;
-    
-    while (suggestedNames.length < 5 && attempts < maxAttempts) {
-      const name = generateName();
-      const expressionNumber = reduceToSingleDigit(name.split('').reduce((s, l) => s + getLetterValue(l), 0), true);
-      const compatibility = cm[lpn][expressionNumber] || 0;
-      if (compatibility >= 75 && !suggestedNames.some(n => n.name === name) && name.length >= 5) {
-        suggestedNames.push({ name, expressionNumber });
-      }
-      attempts++;
-    }
-    
-    // Fallback names if not enough compatible names
-    while (suggestedNames.length < 5) {
-      suggestedNames.push({
-        name: currentLang === 'vi' ? `Ten${suggestedNames.length + 1}` : `Name${suggestedNames.length + 1}`,
-        expressionNumber: lpn
-      });
-    }
-    
-    // Sort names by compatibility (descending)
-    suggestedNames.sort((a, b) => (cm[lpn][b.expressionNumber] || 0) - (cm[lpn][a.expressionNumber] || 0));
-    
-    // Display results
-    resultDiv.innerHTML = `<div class="result-card"><h2>${t('tabNameSuggest')}</h2>
-      <p><strong>${t('labelBirthDate')}:</strong> ${d}/${m}/${y}</p>
-      <p><strong>${t('lifePath')}:</strong> ${lpn}</p>
-      <p><strong>${currentLang === 'vi' ? 'Các số thiếu' : 'Missing Numbers'}:</strong> ${missingNumbers.length ? missingNumbers.join(', ') : (currentLang === 'vi' ? 'Không có số thiếu' : 'No missing numbers')}</p>
-      <h3 class="font-semibold mt-4">${t('suggestedNames')}:</h3>
-      <ul class="list-disc pl-5 space-y-2">${suggestedNames.map(n => `<li>${n.name} (${t('expression')}: ${n.expressionNumber} - ${translations.meanings[n.expressionNumber]})</li>`).join('')}</ul>
-      <p class="mt-4">${t('noteNames')}</p></div>`;
-    gsap.from(".result-card", { duration: 0.5, y: 20, opacity: 0, ease: "power2.out" });
-    document.getElementById('nameSuggestCalculateBtn').disabled = false;
-  }, 300);
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
   populateDropdowns();
   const savedLang = localStorage.getItem('language') || 'vi';
@@ -781,12 +589,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('compatMonth2').value = compatInputs.m2;
     document.getElementById('compatYear2').value = compatInputs.y2;
   }
-  const nameSuggestInputs = loadData('nameSuggestInputs');
-  if(nameSuggestInputs) {
-    document.getElementById('nameSuggestDay').value = nameSuggestInputs.d;
-    document.getElementById('nameSuggestMonth').value = nameSuggestInputs.m;
-    document.getElementById('nameSuggestYear').value = nameSuggestInputs.y;
-  }
   ['fullName', 'compatName1', 'compatName2'].forEach(id => {
     const container = document.querySelector(`.input-container input#${id}`).parentElement;
     if (container && !sessionStorage.getItem(`input${id}Positioned`)) {
@@ -809,39 +611,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadTranslations(newLang);
     localStorage.setItem('language', newLang);
   });
-  document.getElementById('menuToggle').addEventListener('click', () => {
-    document.getElementById('menuDropdown').classList.toggle('active');
-  });
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.getElementById(btn.dataset.tab + 'Tab').classList.add('active');
-      document.getElementById('menuDropdown').classList.remove('active');
+      btn.classList.add('active');
+      gsap.from(`#${btn.dataset.tab}Tab`, { duration: 0.4, y: 10, opacity: 0, ease: "power2.out" });
     });
   });
-  document.getElementById('calculateBtn').addEventListener('click', debounce(calculateNumerology, 500));
-  document.getElementById('dailyCalculateBtn').addEventListener('click', debounce(calculateDailyForecast, 500));
-  document.getElementById('compatCalculateBtn').addEventListener('click', debounce(calculateCompatibilityForecast, 500));
-  document.getElementById('nameSuggestCalculateBtn').addEventListener('click', debounce(calculateNameSuggestions, 500));
-  document.getElementById('clearBtn').addEventListener('click', () => clearFields(['fullName','day','month','year'], 'summary'));
-  document.getElementById('dailyClearBtn').addEventListener('click', () => clearFields(['dailyDay','dailyMonth','dailyYear'], 'dailyForecast'));
-  document.getElementById('compatClearBtn').addEventListener('click', () => clearFields(['compatName1','compatDay1','compatMonth1','compatYear1','compatName2','compatDay2','compatMonth2','compatYear2'], 'compatForecast'));
-  document.getElementById('nameSuggestClearBtn').addEventListener('click', () => clearFields(['nameSuggestDay','nameSuggestMonth','nameSuggestYear'], 'nameSuggestResult'));
-  document.getElementById('showMoreBtn').addEventListener('click', () => toggleDetails(document.getElementById('details'), document.getElementById('showMoreBtn'), 'btnHideDetails', 'btnShowDetails'));
-  document.getElementById('showCalcBtn').addEventListener('click', () => toggleDetails(document.getElementById('calculationDetails'), document.getElementById('showCalcBtn'), 'btnHideCalc', 'btnShowCalc'));
-  document.getElementById('showMeaningsBtn').addEventListener('click', () => toggleDetails(document.getElementById('meanings'), document.getElementById('showMeaningsBtn'), 'btnHideMeanings', 'btnShowMeanings'));
-  document.getElementById('dailyShowCalcBtn').addEventListener('click', () => toggleDetails(document.getElementById('dailyCalculationDetails'), document.getElementById('dailyShowCalcBtn'), 'btnHideCalc', 'btnShowCalc'));
-  document.getElementById('compatShowCalcBtn').addEventListener('click', () => toggleDetails(document.getElementById('compatCalculationDetails'), document.getElementById('compatShowCalcBtn'), 'btnHideCalc', 'btnShowCalc'));
-  document.getElementById('mainTab').addEventListener('keydown', e => {
-    if(e.key === 'Enter') calculateNumerology();
+  document.getElementById('calculateBtn').addEventListener('click', calculateNumerology);
+  document.getElementById('clearBtn').addEventListener('click', () => clearFields(['fullName', 'day', 'month', 'year'], 'summary'));
+  document.getElementById('dailyCalculateBtn').addEventListener('click', calculateDailyForecast);
+  document.getElementById('dailyClearBtn').addEventListener('click', () => clearFields(['dailyDay', 'dailyMonth', 'dailyYear'], 'dailyForecast'));
+  document.getElementById('compatCalculateBtn').addEventListener('click', calculateCompatibilityForecast);
+  document.getElementById('compatClearBtn').addEventListener('click', () => clearFields(['compatName1', 'compatDay1', 'compatMonth1', 'compatYear1', 'compatName2', 'compatDay2', 'compatMonth2', 'compatYear2'], 'compatForecast'));
+  document.getElementById('showMoreBtn').addEventListener('click', () => toggleDetails(document.getElementById('details'), document.getElementById('showMoreBtn'), 'hideDetails', 'btnShowDetails'));
+  document.getElementById('showCalcBtn').addEventListener('click', () => toggleDetails(document.getElementById('calculationDetails'), document.getElementById('showCalcBtn'), 'hideCalc', 'btnShowCalc'));
+  document.getElementById('showMeaningsBtn').addEventListener('click', () => toggleDetails(document.getElementById('meanings'), document.getElementById('showMeaningsBtn'), 'hideMeanings', 'btnShowMeanings'));
+  document.getElementById('showNameChartBtn').addEventListener('click', () => toggleDetails(document.getElementById('nameChart'), document.getElementById('showNameChartBtn'), 'hideNameChart', 'btnShowNameChart'));
+  document.getElementById('dailyShowCalcBtn').addEventListener('click', () => toggleDetails(document.getElementById('dailyCalculationDetails'), document.getElementById('dailyShowCalcBtn'), 'hideCalc', 'btnShowCalc'));
+  document.getElementById('compatShowCalcBtn').addEventListener('click', () => toggleDetails(document.getElementById('compatCalculationDetails'), document.getElementById('compatShowCalcBtn'), 'hideCalc', 'btnShowCalc'));
+  ['fullName', 'day', 'month', 'year'].forEach(id => {
+    document.getElementById(id).addEventListener('input', debounce(() => {
+      if(document.getElementById('summary').innerHTML) calculateNumerology();
+    }, 300));
   });
-  document.getElementById('dailyTab').addEventListener('keydown', e => {
-    if(e.key === 'Enter') calculateDailyForecast();
+  ['dailyDay', 'dailyMonth', 'dailyYear'].forEach(id => {
+    document.getElementById(id).addEventListener('input', debounce(() => {
+      if(document.getElementById('dailyForecast').innerHTML) calculateDailyForecast();
+    }, 300));
   });
-  document.getElementById('compatTab').addEventListener('keydown', e => {
-    if(e.key === 'Enter') calculateCompatibilityForecast();
-  });
-  document.getElementById('nameSuggestTab').addEventListener('keydown', e => {
-    if(e.key === 'Enter') calculateNameSuggestions();
+  ['compatName1', 'compatDay1', 'compatMonth1', 'compatYear1', 'compatName2', 'compatDay2', 'compatMonth2', 'compatYear2'].forEach(id => {
+    document.getElementById(id).addEventListener('input', debounce(() => {
+      if(document.getElementById('compatForecast').innerHTML) calculateCompatibilityForecast();
+    }, 300));
   });
 });

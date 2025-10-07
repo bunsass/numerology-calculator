@@ -331,6 +331,31 @@ body {
   color: #a78bfa !important;
 }
 
+.dark .result-card ul li,
+.dark .result-card ul li *,
+.dark .result-card p,
+.dark .result-card p *,
+.dark .result-card div,
+.dark .result-card div *,
+.dark .result-card span,
+.dark .result-card span * {
+  color: #f0f0f0 !important;
+}
+
+/* Override Tailwind text color classes in dark mode */
+.dark .text-red-500 {
+  color: #ef4444 !important;
+}
+
+.dark .result-card .text-3xl,
+.dark .result-card .text-2xl,
+.dark .result-card .text-xl,
+.dark .result-card .text-lg,
+.dark .result-card .text-base,
+.dark .result-card .text-sm {
+  color: #f0f0f0 !important;
+}
+
 .details-hidden {
   max-height: 0;
   overflow: hidden;
@@ -416,4 +441,19 @@ body {
   body { background: white !important; }
   .toggle-btn, .dropdown-menu, .button-line, .toggle-details-btn { display: none !important; }
   .container-main { box-shadow: none !important; }
+}
+
+/* DARK MODE OVERRIDES - Must be at the end for maximum specificity */
+html.dark .result-card,
+html.dark .result-card *:not(h2):not(h3):not(strong) {
+  color: #f0f0f0 !important;
+}
+
+html.dark .result-card h2,
+html.dark .result-card h3 {
+  color: #8b9ef7 !important;
+}
+
+html.dark .result-card strong {
+  color: #a78bfa !important;
 }

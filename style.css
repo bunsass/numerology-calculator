@@ -317,6 +317,20 @@ body {
   color: #a78bfa;
 }
 
+/* Force all text elements in result cards to be light in dark mode */
+.dark .result-card * {
+  color: #f0f0f0 !important;
+}
+
+.dark .result-card h2, 
+.dark .result-card h3 {
+  color: #8b9ef7 !important;
+}
+
+.dark .result-card strong {
+  color: #a78bfa !important;
+}
+
 .details-hidden {
   max-height: 0;
   overflow: hidden;

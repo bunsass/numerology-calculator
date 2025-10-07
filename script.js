@@ -624,8 +624,8 @@ function calculateNameSuggestions() {
       const targetNumbers = [...missingNumbers];
       const usedNumbers = new Set();
       
-      // Start with a prefix or construct syllable
-      const usePrefix = Math.random() > 0.3 && targetNumbers.length > 0;
+      // Start with a prefix (80% chance) for familiarity
+      const usePrefix = Math.random() > 0.2;
       if (usePrefix) {
         const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
         name += prefix;
@@ -638,44 +638,74 @@ function calculateNameSuggestions() {
         });
       }
       
-      // Add syllables to include remaining missing numbers
-      let syllableCount = Math.floor(Math.random() * 2) + 1; // 1-2 syllables
+      // Build syllables to include all missing numbers
+      let syllableCount = Math.max(2, Math.ceil(targetNumbers.length / 2)); // At least 2 syllables
+      let useVowel = name.length === 0 || consonants.includes(name[name.length - 1].toLowerCase());
+      
       while (targetNumbers.length > 0 && syllableCount > 0) {
         const num = targetNumbers[0];
-        const letters = numberToLetters[num];
-        const letter = letters[Math.floor(Math.random() * letters.length)];
-        name += letter;
+        const letters = numberToLetters[num].filter(l => (useVowel ? vowels : consonants).includes(l));
+        if (letters.length === 0) {
+          // If no suitable letter for the desired type, relax the constraint
+          const letter = numberToLetters[num][Math.floor(Math.random() * numberToLetters[num].length)];
+          name += letter;
+        } else {
+          const letter = letters[Math.floor(Math.random() * letters.length)];
+          name += letter;
+        }
         usedNumbers.add(num);
         targetNumbers.splice(0, 1);
+        useVowel = !useVowel;
+        syllableCount--;
         
-        // Add a vowel if the last letter was a consonant
-        if (consonants.includes(letter) && vowels.some(v => numberToLetters[targetNumbers[0]]?.includes(v))) {
-          const vowel = numberToLetters[targetNumbers[0]]?.find(v => vowels.includes(v)) || vowels[Math.floor(Math.random() * vowels.length)];
-          name += vowel;
-          const val = getLetterValue(vowel);
-          if (val && targetNumbers.includes(val)) {
-            usedNumbers.add(val);
-            targetNumbers.splice(targetNumbers.indexOf(val), 1);
+        // Add a vowel or consonant to complete the syllable
+        if (syllableCount > 0 && name.length < 8) {
+          const nextLetters = useVowel ? vowels : consonants;
+          const available = nextLetters.filter(l => {
+            const val = getLetterValue(l);
+            return !val || !presentNumbers.has(val) || targetNumbers.includes(val);
+          });
+          if (available.length > 0) {
+            const letter = available[Math.floor(Math.random() * available.length)];
+            name += letter;
+            const val = getLetterValue(letter);
+            if (val && targetNumbers.includes(val)) {
+              usedNumbers.add(val);
+              targetNumbers.splice(targetNumbers.indexOf(val), 1);
+            }
+            useVowel = !useVowel;
+            syllableCount--;
           }
         }
-        syllableCount--;
       }
       
-      // Add suffix if name is short and no conflicting numbers
-      if (name.length < 6 && Math.random() > 0.5) {
+      // Add suffix for natural ending (70% chance if name is short)
+      if (name.length < 6 && Math.random() > 0.3) {
         const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
         const suffixNumbers = suffix.split('').map(getLetterValue).filter(n => n);
-        if (!suffixNumbers.some(n => presentNumbers.has(n))) {
+        if (!suffixNumbers.some(n => presentNumbers.has(n) && !usedNumbers.has(n))) {
           name += suffix;
         }
       }
       
-      // Ensure name length is 4-10 characters
-      while (name.length < 4 && syllableCount > 0) {
-        name += vowels[Math.floor(Math.random() * vowels.length)];
-        syllableCount--;
+      // Ensure minimum length of 5 characters
+      while (name.length < 5 && syllableCount > 0) {
+        const letter = (useVowel ? vowels : consonants)[Math.floor(Math.random() * (useVowel ? vowels : consonants).length)];
+        if (!getLetterValue(letter) || !presentNumbers.has(getLetterValue(letter)) || usedNumbers.has(getLetterValue(letter))) {
+          name += letter;
+          useVowel = !useVowel;
+          syllableCount--;
+        }
       }
-      name = name.slice(0, 10); // Cap at 10 characters
+      
+      // Trim to max 10 characters and avoid awkward endings
+      name = name.slice(0, 10);
+      if (name.length > 4 && consonants.includes(name[name.length - 1].toLowerCase()) && Math.random() > 0.5) {
+        const finalVowel = vowels[Math.floor(Math.random() * vowels.length)];
+        if (!presentNumbers.has(getLetterValue(finalVowel)) || usedNumbers.has(getLetterValue(finalVowel))) {
+          name = name.slice(0, -1) + finalVowel;
+        }
+      }
       
       // Capitalize first letter
       return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
@@ -690,7 +720,7 @@ function calculateNameSuggestions() {
       const name = generateName();
       const expressionNumber = reduceToSingleDigit(name.split('').reduce((s, l) => s + getLetterValue(l), 0), true);
       const compatibility = cm[lpn][expressionNumber] || 0;
-      if (compatibility >= 70 && !suggestedNames.some(n => n.name === name)) {
+      if (compatibility >= 70 && !suggestedNames.some(n => n.name === name) && name.length >= 5) {
         suggestedNames.push({ name, expressionNumber });
       }
       attempts++;

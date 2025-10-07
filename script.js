@@ -607,41 +607,78 @@ function calculateNameSuggestions() {
       33:{1:80,2:90,3:85,4:80,5:70,6:90,7:80,8:75,9:90,11:90,22:80,33:95}
     };
     
-    // Generate names using missing numbers
+    // Define name components for better pronounceability
+    const prefixes = currentLang === 'vi' ? 
+      ['An', 'Binh', 'Cam', 'Duc', 'Ha', 'Kim', 'Lan', 'Minh', 'Ngoc', 'Tam'] :
+      ['Al', 'Ben', 'Cla', 'Dan', 'Em', 'Fin', 'Grace', 'Han', 'Ivy', 'Jo'];
+    const suffixes = currentLang === 'vi' ? 
+      ['Anh', 'Chi', 'Duy', 'Hanh', 'Linh', 'Nam', 'Nhi', 'Phong', 'Thu', 'Vy'] :
+      ['ah', 'en', 'ia', 'ie', 'is', 'on', 'ra', 'son', 'ta', 'y'];
+    
+    // Vowels and consonants for syllable construction
     const vowels = ['a', 'e', 'i', 'o', 'u'];
-    const consonants = Object.values(numberToLetters).flat().filter(l => !vowels.includes(l));
+    const consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'y', 'z'];
     
     const generateName = () => {
       let name = '';
-      const nameLength = Math.floor(Math.random() * 4) + 5; // 5-8 letters
-      let useVowel = Math.random() > 0.5;
-      
-      // Ensure at least one letter from each missing number
-      const usedNumbers = new Set();
       const targetNumbers = [...missingNumbers];
+      const usedNumbers = new Set();
       
-      while (name.length < nameLength && targetNumbers.length > 0) {
-        const num = targetNumbers[Math.floor(Math.random() * targetNumbers.length)];
+      // Start with a prefix or construct syllable
+      const usePrefix = Math.random() > 0.3 && targetNumbers.length > 0;
+      if (usePrefix) {
+        const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+        name += prefix;
+        name.split('').forEach(l => {
+          const val = getLetterValue(l);
+          if (val && targetNumbers.includes(val)) {
+            usedNumbers.add(val);
+            targetNumbers.splice(targetNumbers.indexOf(val), 1);
+          }
+        });
+      }
+      
+      // Add syllables to include remaining missing numbers
+      let syllableCount = Math.floor(Math.random() * 2) + 1; // 1-2 syllables
+      while (targetNumbers.length > 0 && syllableCount > 0) {
+        const num = targetNumbers[0];
         const letters = numberToLetters[num];
         const letter = letters[Math.floor(Math.random() * letters.length)];
         name += letter;
         usedNumbers.add(num);
-        targetNumbers.splice(targetNumbers.indexOf(num), 1);
-        useVowel = !useVowel;
+        targetNumbers.splice(0, 1);
+        
+        // Add a vowel if the last letter was a consonant
+        if (consonants.includes(letter) && vowels.some(v => numberToLetters[targetNumbers[0]]?.includes(v))) {
+          const vowel = numberToLetters[targetNumbers[0]]?.find(v => vowels.includes(v)) || vowels[Math.floor(Math.random() * vowels.length)];
+          name += vowel;
+          const val = getLetterValue(vowel);
+          if (val && targetNumbers.includes(val)) {
+            usedNumbers.add(val);
+            targetNumbers.splice(targetNumbers.indexOf(val), 1);
+          }
+        }
+        syllableCount--;
       }
       
-      // Fill remaining length with random letters, preferring vowels/consonants alternately
-      while (name.length < nameLength) {
-        const letterPool = useVowel ? vowels : consonants;
-        const letter = letterPool[Math.floor(Math.random() * letterPool.length)];
-        if (numberToLetters[usedNumbers.has(getLetterValue(letter)) ? getLetterValue(letter) : 0]) {
-          name += letter;
-          useVowel = !useVowel;
+      // Add suffix if name is short and no conflicting numbers
+      if (name.length < 6 && Math.random() > 0.5) {
+        const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+        const suffixNumbers = suffix.split('').map(getLetterValue).filter(n => n);
+        if (!suffixNumbers.some(n => presentNumbers.has(n))) {
+          name += suffix;
         }
       }
       
+      // Ensure name length is 4-10 characters
+      while (name.length < 4 && syllableCount > 0) {
+        name += vowels[Math.floor(Math.random() * vowels.length)];
+        syllableCount--;
+      }
+      name = name.slice(0, 10); // Cap at 10 characters
+      
       // Capitalize first letter
-      return name.charAt(0).toUpperCase() + name.slice(1);
+      return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
     };
     
     // Generate candidate names and filter by compatibility
@@ -659,7 +696,7 @@ function calculateNameSuggestions() {
       attempts++;
     }
     
-    // Fallback names if not enough compatible names are found
+    // Fallback names if not enough compatible names
     while (suggestedNames.length < 5) {
       suggestedNames.push({
         name: currentLang === 'vi' ? `Ten${suggestedNames.length + 1}` : `Name${suggestedNames.length + 1}`,

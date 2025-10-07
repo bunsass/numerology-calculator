@@ -607,13 +607,10 @@ function calculateNameSuggestions() {
       33:{1:80,2:90,3:85,4:80,5:70,6:90,7:80,8:75,9:90,11:90,22:80,33:95}
     };
     
-    // Define name components for better pronounceability
-    const prefixes = currentLang === 'vi' ? 
-      ['An', 'Binh', 'Cam', 'Duc', 'Ha', 'Kim', 'Lan', 'Minh', 'Ngoc', 'Tam'] :
-      ['Al', 'Ben', 'Cla', 'Dan', 'Em', 'Fin', 'Grace', 'Han', 'Ivy', 'Jo'];
-    const suffixes = currentLang === 'vi' ? 
-      ['Anh', 'Chi', 'Duy', 'Hanh', 'Linh', 'Nam', 'Nhi', 'Phong', 'Thu', 'Vy'] :
-      ['ah', 'en', 'ia', 'ie', 'is', 'on', 'ra', 'son', 'ta', 'y'];
+    // Define name components for Vietnamese names
+    const prefixes = ['An', 'Binh', 'Cam', 'Duc', 'Ha', 'Kim', 'Lan', 'Minh', 'Ngoc', 'Tam', 'Phuc', 'Thanh', 'Tuan', 'Van', 'Yen'];
+    const suffixes = ['Anh', 'Chi', 'Duy', 'Hanh', 'Linh', 'Nam', 'Nhi', 'Phong', 'Thu', 'Vy', 'Hien', 'Nguyen', 'Tam', 'Trang', 'Vinh'];
+    const middleSyllables = ['la', 'mi', 'fo', 'hu', 'ri', 'do', 'vi', 'co', 'hi', 'xu', 'ma', 'thi', 'lu', 'di', 'ho'];
     
     // Vowels and consonants for syllable construction
     const vowels = ['a', 'e', 'i', 'o', 'u'];
@@ -624,8 +621,8 @@ function calculateNameSuggestions() {
       const targetNumbers = [...missingNumbers];
       const usedNumbers = new Set();
       
-      // Start with a prefix (80% chance) for familiarity
-      const usePrefix = Math.random() > 0.2;
+      // Start with a prefix (90% chance) for familiarity
+      const usePrefix = Math.random() > 0.1;
       if (usePrefix) {
         const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
         name += prefix;
@@ -638,7 +635,7 @@ function calculateNameSuggestions() {
         });
       }
       
-      // Build syllables to include all missing numbers
+      // Add middle syllables to include remaining missing numbers
       let syllableCount = Math.max(2, Math.ceil(targetNumbers.length / 2)); // At least 2 syllables
       let useVowel = name.length === 0 || consonants.includes(name[name.length - 1].toLowerCase());
       
@@ -646,7 +643,6 @@ function calculateNameSuggestions() {
         const num = targetNumbers[0];
         const letters = numberToLetters[num].filter(l => (useVowel ? vowels : consonants).includes(l));
         if (letters.length === 0) {
-          // If no suitable letter for the desired type, relax the constraint
           const letter = numberToLetters[num][Math.floor(Math.random() * numberToLetters[num].length)];
           name += letter;
         } else {
@@ -658,29 +654,30 @@ function calculateNameSuggestions() {
         useVowel = !useVowel;
         syllableCount--;
         
-        // Add a vowel or consonant to complete the syllable
+        // Add a middle syllable or letter to complete the syllable
         if (syllableCount > 0 && name.length < 8) {
-          const nextLetters = useVowel ? vowels : consonants;
-          const available = nextLetters.filter(l => {
-            const val = getLetterValue(l);
-            return !val || !presentNumbers.has(val) || targetNumbers.includes(val);
+          const middle = middleSyllables.filter(syl => {
+            const sylNumbers = syl.split('').map(getLetterValue).filter(n => n);
+            return !sylNumbers.some(n => presentNumbers.has(n) && !usedNumbers.has(n));
           });
-          if (available.length > 0) {
-            const letter = available[Math.floor(Math.random() * available.length)];
-            name += letter;
-            const val = getLetterValue(letter);
-            if (val && targetNumbers.includes(val)) {
-              usedNumbers.add(val);
-              targetNumbers.splice(targetNumbers.indexOf(val), 1);
-            }
-            useVowel = !useVowel;
+          if (middle.length > 0) {
+            const syl = middle[Math.floor(Math.random() * middle.length)];
+            name += syl;
+            syl.split('').forEach(l => {
+              const val = getLetterValue(l);
+              if (val && targetNumbers.includes(val)) {
+                usedNumbers.add(val);
+                targetNumbers.splice(targetNumbers.indexOf(val), 1);
+              }
+            });
+            useVowel = consonants.includes(syl[syl.length - 1].toLowerCase());
             syllableCount--;
           }
         }
       }
       
-      // Add suffix for natural ending (70% chance if name is short)
-      if (name.length < 6 && Math.random() > 0.3) {
+      // Add suffix for natural ending (80% chance if name is short)
+      if (name.length < 7 && Math.random() > 0.2) {
         const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
         const suffixNumbers = suffix.split('').map(getLetterValue).filter(n => n);
         if (!suffixNumbers.some(n => presentNumbers.has(n) && !usedNumbers.has(n))) {
@@ -690,19 +687,25 @@ function calculateNameSuggestions() {
       
       // Ensure minimum length of 5 characters
       while (name.length < 5 && syllableCount > 0) {
-        const letter = (useVowel ? vowels : consonants)[Math.floor(Math.random() * (useVowel ? vowels : consonants).length)];
-        if (!getLetterValue(letter) || !presentNumbers.has(getLetterValue(letter)) || usedNumbers.has(getLetterValue(letter))) {
+        const letter = (useVowel ? vowels : consonants).filter(l => {
+          const val = getLetterValue(l);
+          return !val || !presentNumbers.has(n) || usedNumbers.has(val);
+        })[Math.floor(Math.random() * (useVowel ? vowels : consonants).length)];
+        if (letter) {
           name += letter;
           useVowel = !useVowel;
           syllableCount--;
         }
       }
       
-      // Trim to max 10 characters and avoid awkward endings
+      // Trim to max 10 characters and ensure natural ending
       name = name.slice(0, 10);
-      if (name.length > 4 && consonants.includes(name[name.length - 1].toLowerCase()) && Math.random() > 0.5) {
-        const finalVowel = vowels[Math.floor(Math.random() * vowels.length)];
-        if (!presentNumbers.has(getLetterValue(finalVowel)) || usedNumbers.has(getLetterValue(finalVowel))) {
+      if (name.length > 4 && consonants.includes(name[name.length - 1].toLowerCase())) {
+        const finalVowel = vowels.filter(v => {
+          const val = getLetterValue(v);
+          return !val || !presentNumbers.has(val) || usedNumbers.has(val);
+        })[Math.floor(Math.random() * vowels.length)];
+        if (finalVowel) {
           name = name.slice(0, -1) + finalVowel;
         }
       }
@@ -711,16 +714,16 @@ function calculateNameSuggestions() {
       return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
     };
     
-    // Generate candidate names and filter by compatibility
+    // Generate candidate names and filter by compatibility (prioritize high compatibility)
     const suggestedNames = [];
-    const maxAttempts = 100;
+    const maxAttempts = 150;
     let attempts = 0;
     
     while (suggestedNames.length < 5 && attempts < maxAttempts) {
       const name = generateName();
       const expressionNumber = reduceToSingleDigit(name.split('').reduce((s, l) => s + getLetterValue(l), 0), true);
       const compatibility = cm[lpn][expressionNumber] || 0;
-      if (compatibility >= 70 && !suggestedNames.some(n => n.name === name) && name.length >= 5) {
+      if (compatibility >= 75 && !suggestedNames.some(n => n.name === name) && name.length >= 5) {
         suggestedNames.push({ name, expressionNumber });
       }
       attempts++;
@@ -733,6 +736,9 @@ function calculateNameSuggestions() {
         expressionNumber: lpn
       });
     }
+    
+    // Sort names by compatibility (descending)
+    suggestedNames.sort((a, b) => (cm[lpn][b.expressionNumber] || 0) - (cm[lpn][a.expressionNumber] || 0));
     
     // Display results
     resultDiv.innerHTML = `<div class="result-card"><h2>${t('tabNameSuggest')}</h2>

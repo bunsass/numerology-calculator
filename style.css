@@ -174,11 +174,6 @@ body {
   color: #f0f0f0;
 }
 
-.input-field:focus + .input-label,
-.input-field:not(:placeholder-shown) + .input-label {
-  /* Removed dynamic movement, label stays in place */
-}
-
 .input-field, .select-field {
   transition: all 0.3s ease;
   border: 2px solid #e5e7eb;
@@ -187,7 +182,7 @@ body {
   font-size: 1rem;
   background: white;
   color: #333;
-  width: 100%; /* Ensure full width */
+  width: 100%;
 }
 
 .dark .input-field, .dark .select-field {
@@ -297,6 +292,22 @@ body {
   color: #f0f0f0;
 }
 
+.result-card ul {
+  color: #333;
+}
+
+.dark .result-card ul {
+  color: #f0f0f0;
+}
+
+.result-card li {
+  color: #333;
+}
+
+.dark .result-card li {
+  color: #f0f0f0;
+}
+
 .result-card strong {
   color: #764ba2;
   font-weight: 600;
@@ -304,33 +315,6 @@ body {
 
 .dark .result-card strong {
   color: #a78bfa;
-}
-
-.result-card [data-tooltip]:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 120%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  white-space: nowrap;
-  z-index: 100;
-  animation: fadeIn 0.3s ease;
-}
-
-.result-card [data-tooltip]:hover::before {
-  content: '';
-  position: absolute;
-  bottom: 110%;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 6px solid transparent;
-  border-top-color: rgba(0, 0, 0, 0.9);
-  z-index: 100;
 }
 
 .details-hidden {
@@ -346,7 +330,6 @@ body {
   opacity: 1;
   transition: all 0.5s ease;
 }
-
 
 .button-line {
   display: flex;
@@ -394,54 +377,8 @@ body {
   transform: scale(0.95);
 }
 
-.accordion-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 1rem;
-  border-radius: 12px;
-  cursor: pointer;
-  margin-top: 1rem;
-  font-weight: 600;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.accordion-header:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-}
-
-.accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease, opacity 0.4s ease, padding 0.4s ease;
-  opacity: 0;
-  padding: 0 1rem;
-}
-
-.accordion-content.open {
-  max-height: none;
-  opacity: 1;
-  padding: 1rem;
-}
-
-.number-animate {
-  display: inline-block;
-  min-width: 2em;
-  position: relative;
-}
-
-.number-animate::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%);
-  opacity: 0;
-  animation: glowHighlight 0.5s ease-out;
-}
-
-@keyframes glowHighlight {
-  0% { opacity: 0.5; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.5); }
+.hidden {
+  display: none !important;
 }
 
 @media (max-width: 640px) {

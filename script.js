@@ -1,14 +1,8 @@
-// Ensure GSAP is included via CDN: <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-// Ensure Chart.js is included for pinnacle chart: <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-// Ensure jsPDF is included for PDF download: <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 const CURRENT_YEAR = new Date().getFullYear();
 
-// Global translation object - loaded from JSON
 let translations = {};
 let currentLang = 'vi';
 
-// Load translations from JSON files
 async function loadTranslations(lang) {
   try {
     const response = await fetch(`./i18n/${lang}.json`);
@@ -17,7 +11,6 @@ async function loadTranslations(lang) {
     currentLang = lang;
     updateTranslations();
     
-    // Re-run calculations if results exist
     if(document.getElementById('summary').innerHTML) calculateNumerology();
     if(document.getElementById('dailyForecast').innerHTML) calculateDailyForecast();
     if(document.getElementById('compatForecast').innerHTML) calculateCompatibilityForecast();
@@ -28,9 +21,7 @@ async function loadTranslations(lang) {
   }
 }
 
-// Update UI with current translations
 function updateTranslations() {
-  // Update text content
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (translations.ui && translations.ui[key]) {
@@ -38,7 +29,6 @@ function updateTranslations() {
     }
   });
   
-  // Update placeholders
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
     if (translations.ui && translations.ui[key]) {
@@ -46,7 +36,6 @@ function updateTranslations() {
     }
   });
   
-  // Update tooltips
   const tooltipMap = {
     'langToggle': 'tooltipLangToggle',
     'themeToggle': 'tooltipThemeToggle',
@@ -68,7 +57,6 @@ function updateTranslations() {
     }
   });
   
-  // Update tab tooltips
   const tabs = {
     'main': 'tooltipTabMain',
     'daily': 'tooltipTabDaily',
@@ -83,7 +71,6 @@ function updateTranslations() {
     }
   });
   
-  // Update result button tooltips if they exist
   const resultBtns = {
     'downloadReportBtn': 'tooltipDownload',
     'showMoreBtn': 'tooltipShowDetails',
@@ -101,7 +88,6 @@ function updateTranslations() {
   });
 }
 
-// Helper function to get translated text with placeholder replacement
 function t(key, replacements = {}) {
   let text = translations.ui && translations.ui[key] ? translations.ui[key] : key;
   Object.keys(replacements).forEach(placeholder => {
@@ -110,10 +96,8 @@ function t(key, replacements = {}) {
   return text;
 }
 
-// Normalize Vietnamese text
 const normalizeName = text => text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase();
 
-// Populate dropdowns
 function populateDropdowns() {
   ['day','dailyDay','compatDay1','compatDay2','nameSuggestDay'].forEach(id => {
     const sel = document.getElementById(id);
@@ -125,7 +109,6 @@ function populateDropdowns() {
   });
 }
 
-// Input restrictions
 ['year','dailyYear','compatYear1','compatYear2','nameSuggestYear'].forEach(id => {
   document.getElementById(id).addEventListener('input', e => e.target.value = e.target.value.slice(0,4));
 });
@@ -133,7 +116,6 @@ function populateDropdowns() {
   document.getElementById(id).addEventListener('input', e => e.target.value = normalizeName(e.target.value));
 });
 
-// Debounce function
 const debounce = (func, wait) => {
   let timeout;
   return (...args) => {
@@ -159,7 +141,6 @@ const isVowel = (l, prev, next) => {
 
 const sumDigits = str => String(str).split('').reduce((s,d) => s + +d, 0);
 
-// LocalStorage functions
 const saveData = (key, data) => localStorage.setItem(key, JSON.stringify(data));
 const loadData = key => {
   try { return JSON.parse(localStorage.getItem(key)); } catch { return null; }
@@ -407,7 +388,6 @@ function calculateNumerology() {
       el.classList.add('details-hidden');
     });
 
-    // PDF Download Handler
     document.getElementById('downloadReportBtn').onclick = () => {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
@@ -545,6 +525,7 @@ function calculateDailyForecast() {
       <p><strong>${t('personalDay')}:</strong> ${f.personalMonth}+${cd} → ${f.personalDay}</p></div>`;
 
     document.getElementById('dailyShowCalcBtn').classList.remove('hidden');
+    document.getElementById('dailyCalculationDetails').classList.remove('details-shown');
     document.getElementById('dailyCalculationDetails').classList.add('details-hidden');
     gsap.from(".result-card", { duration: 0.5, y: 20, opacity: 0, stagger: 0.1, ease: "power2.out" });
     document.getElementById('dailyCalculateBtn').disabled = false;
@@ -597,7 +578,8 @@ function calculateCompatibilityForecast() {
       <p><strong>${currentLang === 'vi' ? 'Tương hợp con số tương tác' : 'Expression Compatibility'}:</strong> ${c.expressionCompat}%</p>
       <p><strong>${currentLang === 'vi' ? 'Tương hợp tổng thể' : 'Overall Compatibility'}:</strong> (${c.lifePathCompat}+${c.expressionCompat})/2 = ${c.overallCompat}%</p></div>`;
 
-    ddocument.getElementById('compatShowCalcBtn').classList.remove('hidden');
+    document.getElementById('compatShowCalcBtn').classList.remove('hidden');
+    document.getElementById('compatCalculationDetails').classList.remove('details-shown');
     document.getElementById('compatCalculationDetails').classList.add('details-hidden');
     gsap.from(".result-card", { duration: 0.5, y: 20, opacity: 0, stagger: 0.1, ease: "power2.out" });
     document.getElementById('compatCalculateBtn').disabled = false;
@@ -643,11 +625,9 @@ function calculateNameSuggestions() {
 document.addEventListener('DOMContentLoaded', async () => {
   populateDropdowns();
 
-  // Load translations first
   const savedLang = localStorage.getItem('language') || 'vi';
   await loadTranslations(savedLang);
 
-  // Load saved data
   const mainInputs = loadData('mainInputs');
   if(mainInputs) {
     document.getElementById('fullName').value = mainInputs.name;
@@ -682,7 +662,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('nameSuggestYear').value = nameSuggestInputs.y;
   }
 
-  // Set input containers to final position without animation, even when empty
   ['fullName', 'compatName1', 'compatName2'].forEach(id => {
     const container = document.querySelector(`.input-container input#${id}`).parentElement;
     if (container && !sessionStorage.getItem(`input${id}Positioned`)) {
@@ -691,7 +670,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // Theme toggle
   document.getElementById('themeToggle').addEventListener('click', () => {
     document.documentElement.classList.toggle('dark');
     const isDark = document.documentElement.classList.contains('dark');
@@ -703,19 +681,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('themeIcon').innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"></path>`;
   }
 
-  // Language toggle
   document.getElementById('langToggle').addEventListener('click', async () => {
     const newLang = currentLang === 'vi' ? 'en' : 'vi';
     await loadTranslations(newLang);
     localStorage.setItem('language', newLang);
   });
 
-  // Menu toggle
   document.getElementById('menuToggle').addEventListener('click', () => {
     document.getElementById('menuDropdown').classList.toggle('active');
   });
 
-  // Tab switching
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -724,26 +699,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
-  // Calculate buttons
   document.getElementById('calculateBtn').addEventListener('click', debounce(calculateNumerology, 500));
   document.getElementById('dailyCalculateBtn').addEventListener('click', debounce(calculateDailyForecast, 500));
   document.getElementById('compatCalculateBtn').addEventListener('click', debounce(calculateCompatibilityForecast, 500));
   document.getElementById('nameSuggestCalculateBtn').addEventListener('click', debounce(calculateNameSuggestions, 500));
 
-  // Clear buttons
   document.getElementById('clearBtn').addEventListener('click', () => clearFields(['fullName','day','month','year'], 'summary'));
   document.getElementById('dailyClearBtn').addEventListener('click', () => clearFields(['dailyDay','dailyMonth','dailyYear'], 'dailyForecast'));
   document.getElementById('compatClearBtn').addEventListener('click', () => clearFields(['compatName1','compatDay1','compatMonth1','compatYear1','compatName2','compatDay2','compatMonth2','compatYear2'], 'compatForecast'));
   document.getElementById('nameSuggestClearBtn').addEventListener('click', () => clearFields(['nameSuggestDay','nameSuggestMonth','nameSuggestYear'], 'nameSuggestResult'));
 
-  // Toggle details
   document.getElementById('showMoreBtn').addEventListener('click', () => toggleDetails(document.getElementById('details'), document.getElementById('showMoreBtn'), 'btnHideDetails', 'btnShowDetails'));
   document.getElementById('showCalcBtn').addEventListener('click', () => toggleDetails(document.getElementById('calculationDetails'), document.getElementById('showCalcBtn'), 'btnHideCalc', 'btnShowCalc'));
   document.getElementById('showMeaningsBtn').addEventListener('click', () => toggleDetails(document.getElementById('meanings'), document.getElementById('showMeaningsBtn'), 'btnHideMeanings', 'btnShowMeanings'));
   document.getElementById('dailyShowCalcBtn').addEventListener('click', () => toggleDetails(document.getElementById('dailyCalculationDetails'), document.getElementById('dailyShowCalcBtn'), 'btnHideCalc', 'btnShowCalc'));
   document.getElementById('compatShowCalcBtn').addEventListener('click', () => toggleDetails(document.getElementById('compatCalculationDetails'), document.getElementById('compatShowCalcBtn'), 'btnHideCalc', 'btnShowCalc'));
 
-  // Enter key triggers
   document.getElementById('mainTab').addEventListener('keydown', e => {
     if(e.key === 'Enter') calculateNumerology();
   });

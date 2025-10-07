@@ -12,7 +12,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-  
   <div class="container-main p-8 w-full max-w-2xl">
     <div class="header-container">
       <div class="header-title">
@@ -28,19 +27,12 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
         </svg>
       </button>
-      <button id="menuToggle" class="toggle-btn" data-tooltip-text="Open navigation menu" aria-label="Open menu">
-        <svg class="w-6 h-6 toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
-      <div id="menuDropdown" class="dropdown-menu">
-        <button class="tab-btn" data-tab="main" data-i18n="tabOverview" data-tooltip-text="Calculate core numerology numbers">📊 Overview</button>
-        <button class="tab-btn" data-tab="daily" data-i18n="tabDaily" data-tooltip-text="Get daily numerology forecast">📅 Daily Forecast</button>
-        <button class="tab-btn" data-tab="compat" data-i18n="tabCompat" data-tooltip-text="Check compatibility between two people">💕 Compatibility</button>
-        <button class="tab-btn" data-tab="nameSuggest" data-i18n="tabNameSuggest" data-tooltip-text="Get name suggestions based on numerology">📝 Name Suggestion</button>
-      </div>
     </div>
-
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="main" data-i18n="tabOverview" data-tooltip-text="Calculate core numerology numbers">📊 Overview</button>
+      <button class="tab-btn" data-tab="daily" data-i18n="tabDaily" data-tooltip-text="Get daily numerology forecast">📅 Daily Forecast</button>
+      <button class="tab-btn" data-tab="compat" data-i18n="tabCompat" data-tooltip-text="Check compatibility between two people">💕 Compatibility</button>
+    </div>
     <div id="mainTab" class="tab-content active">
       <div class="space-y-6">
         <div class="input-container">
@@ -69,9 +61,10 @@
         <div id="calculationDetails" class="details-hidden"></div>
         <button id="showMeaningsBtn" class="toggle-details-btn hidden" data-i18n="btnShowMeanings" data-tooltip-text="Learn what each number represents">View Number Meanings</button>
         <div id="meanings" class="details-hidden"></div>
+        <button id="showNameChartBtn" class="toggle-details-btn hidden" data-i18n="btnShowNameChart" data-tooltip-text="View chart based on name numbers">Biểu Đồ Tên</button>
+        <div id="nameChart" class="details-hidden"></div>
       </div>
     </div>
-
     <div id="dailyTab" class="tab-content">
       <div class="space-y-6">
         <div>
@@ -93,7 +86,6 @@
         <div id="dailyCalculationDetails" class="details-hidden"></div>
       </div>
     </div>
-
     <div id="compatTab" class="tab-content">
       <div class="space-y-6">
         <div class="input-container">
@@ -131,26 +123,7 @@
         <div id="compatCalculationDetails" class="details-hidden"></div>
       </div>
     </div>
-
-    <div id="nameSuggestTab" class="tab-content">
-      <div class="space-y-6">
-        <div>
-          <label class="block text-lg font-medium mb-2" data-i18n="labelBirthDate">Birth Date</label>
-          <div class="grid grid-cols-3 gap-3">
-            <select id="nameSuggestDay" class="select-field" aria-label="Birth day"><option value="" disabled selected data-i18n="selectDay">Day</option></select>
-            <select id="nameSuggestMonth" class="select-field" aria-label="Birth month"><option value="" disabled selected data-i18n="selectMonth">Month</option></select>
-            <input type="number" id="nameSuggestYear" data-i18n-placeholder="placeholderYear" placeholder="Year" min="1900" max="2025" class="input-field" aria-label="Birth year">
-          </div>
-        </div>
-        <div class="button-line">
-          <button id="nameSuggestCalculateBtn" class="btn-calculate" data-i18n="btnNameSuggestCalculate" data-tooltip-text="Get name suggestions that match birth date">Suggest Names</button>
-          <button id="nameSuggestClearBtn" class="btn-clear" data-i18n="btnClear" data-tooltip-text="Clear all entered data and results">Clear</button>
-        </div>
-      </div>
-      <div id="nameSuggestResult" class="mt-6"></div>
-    </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
